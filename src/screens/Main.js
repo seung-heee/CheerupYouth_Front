@@ -85,7 +85,7 @@ const Main = ({ navigation }) => {
         <S.ButtonText onPress={ButtonBox}>
           <Text>계약서</Text>
         </S.ButtonText>
-        <S.ButtonText onPress={ButtonBox}>
+        <S.ButtonText onPress={() => navigation.navigate("LawWordList")}>
           <Text>계약 용어 리스트</Text>
         </S.ButtonText>
       </S.Button>

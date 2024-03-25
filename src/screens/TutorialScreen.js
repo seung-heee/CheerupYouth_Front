@@ -18,7 +18,7 @@ const TutorialScreen = () => {
   const [iconState, setIconState] = useState("");
 
   return (
-    <SafeAreaView>
+    <S.Page>
       <SectionList
         sections={TutorialData}
         renderItem={({ item }) => (
@@ -162,7 +162,7 @@ const TutorialScreen = () => {
         )}
         keyExtractor={(item) => `basicListEntry-${item.name}`}
       />
-    </SafeAreaView>
+    </S.Page>
   );
 };
 
