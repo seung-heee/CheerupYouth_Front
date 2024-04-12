@@ -98,7 +98,7 @@ export const LogoContainer = styled.View`
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  margin-top: 150px;
+  margin-top: 40px;
   background-color: white;
 `;
 
