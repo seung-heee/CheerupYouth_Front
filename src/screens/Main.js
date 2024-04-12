@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Searchbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+
+//import BottomTabNavigationApp from "./BottomBar";
 import * as S from "../../style/MainStyle";
 
 const SearchScreen = () => {
@@ -28,12 +30,12 @@ const Main = ({ navigation }) => {
   return (
     <S.Container>
       <S.Header>
+        <TouchableOpacity onPress={ButtonBox}>
+          <Icon name="menu" size={25} />
+        </TouchableOpacity>
         <S.HeaderText>청년 독립 만세</S.HeaderText>
         <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
           <Icon name="person" size={25} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={ButtonBox}>
-          <Icon name="menu" size={25} />
         </TouchableOpacity>
       </S.Header>
 
@@ -54,41 +56,38 @@ const Main = ({ navigation }) => {
 
       <S.Row>
         <S.TextBox>청년님을 위한{"\n"}맞춤 정책을 찾았어요</S.TextBox>
+        <TouchableOpacity onPress={ButtonBox}>
+          <S.InnerText>정책 더보기⮕ </S.InnerText>
+        </TouchableOpacity>
       </S.Row>
 
-      <S.Button>
-        <S.ButtonText onPress={ButtonBox}>
-          <Text>여기에는 박스가 들어갑니다1</Text>
-        </S.ButtonText>
+      <S.Button onPress={ButtonBox}>
+        <Text>여기에는 박스가 들어갑니다1</Text>
       </S.Button>
 
-      <S.Button>
-        <S.ButtonText onPress={ButtonBox}>
-          <Text>여기에는 박스가 들어갑니다2</Text>
-        </S.ButtonText>
+      <S.Button onPress={ButtonBox}>
+        <Text>여기에는 박스가 들어갑니다2</Text>
       </S.Button>
 
-      <S.Button>
-        <S.ButtonText onPress={ButtonBox}>
-          <Text>여기에는 박스가 들어갑니다3</Text>
-        </S.ButtonText>
+      <S.Button onPress={ButtonBox}>
+        <Text>여기에는 박스가 들어갑니다3</Text>
       </S.Button>
 
       <S.Row>
         <S.TextBox> 부동산 계약 관련 정보</S.TextBox>
       </S.Row>
 
-      <S.Button>
-        <S.ButtonText onPress={() => navigation.navigate("TutorialScreen")}>
-          <Text>튜토리얼</Text>
-        </S.ButtonText>
-        <S.ButtonText onPress={ButtonBox}>
-          <Text>계약서</Text>
-        </S.ButtonText>
-        <S.ButtonText onPress={() => navigation.navigate("LawWordList")}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <S.Button onPress={() => navigation.navigate("TutorialScreen")}>
+          <Text> 튜토리얼 </Text>
+        </S.Button>
+        <S.Button onPress={ButtonBox}>
+          <Text> 계약서 </Text>
+        </S.Button>
+        <S.Button onPress={() => navigation.navigate("LawWordList")}>
           <Text>계약 용어 리스트</Text>
-        </S.ButtonText>
-      </S.Button>
+        </S.Button>
+      </View>
     </S.Container>
   );
 };
