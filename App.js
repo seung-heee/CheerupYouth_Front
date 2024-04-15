@@ -8,14 +8,21 @@ import TutorialScreen from "./src/screens/TutorialScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import LawWordList from "./src/screens/LawWordList";
 import LawListSearch from "./src/screens/LawListSearch";
+import BottomBar from "./src/components/BottomBar";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
+      <Stack.Navigator
+        initialRouteName="BottomBar"
+        screenOptions={{
+          headerShown: false, // 상단헤더 숨기기
+        }} //첫 경로를 bottombar을 사용해서 메인페이지에만 나오게 함.
+      >
         <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="BottomBar" component={BottomBar} />
         <Stack.Screen name="TutorialScreen" component={TutorialScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="LawWordList" component={LawWordList} />

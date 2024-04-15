@@ -62,3 +62,22 @@ export const Button = styled.TouchableOpacity`
   shadow-radius: 2px;
   elevation: 2; /* 안드로이드에서 그림자 효과 */
 `;
+
+export const ButtonRow = styled.TouchableOpacity`
+  flex: 1;
+  align-items: center;
+  background-color: white;
+  margin: 5px;
+  border-radius: 10px;
+  padding: 10px;
+  shadow-color: #000;
+  shadow-offset: 0 2px;
+  shadow-opacity: 0.2;
+  shadow-radius: 2px;
+  elevation: 2; /* 안드로이드에서 그림자 효과 */
+`;
+//가로버튼
+
+export const ButtonRowText = styled.Text`
+  text-align: center;
+`;
