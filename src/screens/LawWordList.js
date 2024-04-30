@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import LawWordListData from "../components/LawWordListData";
+import LawWordListData from "../../utils/LawWordListData";
 import { useNavigation } from "@react-navigation/native";
 import * as S from "../../style/LawWordListStyle";
 

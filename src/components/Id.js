@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/native';
+import React, { useState } from "react";
+import styled from "styled-components/native";
 import * as S from "../../style/LoginStyle";
+import { SERVER_URL } from "../components/ServerAddress";
+import axios from "axios";
 
-
-const Login = () => {
-  const [Id, setId] = useState('');
-  const [password, setPassword] = useState('');
-
-  const submitBtn = () => {
-    // 로그인 버튼 클릭 시 실행될 동작
-  };
-
+const Login = ({
+  navigation,
+  onPress,
+  userId,
+  setUserid,
+  password,
+  setPassword,
+}) => {
   return (
     <S.IdContainer>
       <S.LonginPassBox
         placeholder="아이디를 입력해 주세요"
         placeholderTextColor="grey"
-        value={Id}
-        onChangeText={setId}
+        value={userId}
+        onChangeText={setUserid}
       />
 
       <S.LonginPassBox
@@ -27,8 +28,8 @@ const Login = () => {
         onChangeText={setPassword}
         secureTextEntry={true}
       />
-      
-      <S.LoginButton onPress={submitBtn} activeOpacity={0.8}>
+
+      <S.LoginButton onPress={onPress} activeOpacity={0.8}>
         <S.LoginButtonInside>로그인</S.LoginButtonInside>
       </S.LoginButton>
     </S.IdContainer>
