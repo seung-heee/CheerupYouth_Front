@@ -79,7 +79,7 @@ const Main = ({ navigation }) => {
 
       <S.Row>
         <S.TextBox>
-          {userDataP.id ? userDataP : "묘사"} 님을 위한
+        {userDataP.id ? userDataP.id : "묘사"} 님을 위한
           {"\n"}맞춤 정책을 찾았어요
         </S.TextBox>
         <TouchableOpacity onPress={ButtonBox}>

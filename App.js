@@ -6,6 +6,7 @@ import styled from "styled-components/native";
 import Main from "./src/screens/Main";
 import TutorialScreen from "./src/screens/Tutorial/TutorialScreen";
 import LoginScreen from "./src/screens/LoginScreen";
+import SignUp from "./src/screens/SignUp";
 import LawWordList from "./src/screens/LawWordList";
 import LawListSearch from "./src/screens/LawListSearch";
 import BottomBar from "./src/components/BottomBar";
@@ -33,6 +34,7 @@ export default function App() {
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="LawWordList" component={LawWordList} />
         <Stack.Screen name="LawListSearch" component={LawListSearch} />
+        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="TVP1" component={TVP1} />
         <Stack.Screen name="TVP2" component={TVP2} />
         <Stack.Screen name="TVP3" component={TVP3} />
