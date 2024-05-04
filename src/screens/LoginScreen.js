@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+// LoginScreen.js
+
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import Logo from "../components/Logo";
 import Id from "../components/Id";
@@ -13,7 +15,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const LoginScreen = ({ navigation }) => {
   const [userId, setUserid] = useState("");
   const [password, setPassword] = useState("");
-
+  const handlsignup = () => {
+    navigation.navigate('SignUp');
+  }
   const submitBtn = async () => {
     const userData = {
       id: userId,
@@ -29,6 +33,7 @@ const LoginScreen = ({ navigation }) => {
       console.error("데이터를 보내는 중 오류가 발생했습니다:", error);
     }
   };
+  
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -46,7 +51,10 @@ const LoginScreen = ({ navigation }) => {
             password={password}
             setPassword={setPassword}
           />
-          <Id_Pw_Sign />
+          <Id_Pw_Sign 
+            text="아이디찾기"
+            SignUp={() => handlsignup()} // onSignUp으로 변경
+          />
         </S.InputContainer>
         <Division />
       </S.MainContainer>
