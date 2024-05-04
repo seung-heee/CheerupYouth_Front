@@ -11,7 +11,7 @@ import {
 import { Searchbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 //import AsyncStorage from "@react-native-async-storage/async-storage";
-import LawWordListData from "../components/LawWordListData";
+import LawWordListData from "../../utils/LawWordListData";
 import * as S from "../../style/LawWordListStyle";
 
 const LawListSearch = ({ navigation }) => {
