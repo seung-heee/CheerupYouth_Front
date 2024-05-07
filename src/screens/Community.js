@@ -5,48 +5,17 @@ import { Searchbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 
 import * as S from "../../style/MainStyle";
-
-const Menu = () => {
-  // Your Menu component logic here
-};
-
-const SearchScreen = () => {
-  const [searchQuery, setSearchQuery] = React.useState("");
-
-  const onChangeSearch = (query) => setSearchQuery(query);
-
-  return (
-    <Searchbar
-      placeholder="Search"
-      onChangeText={onChangeSearch}
-      value={searchQuery}
-      style={{ backgroundColor: "white" }}
-    />
-  );
-};
-
-const Notice = () => {
-  // Your Notice component logic here
-};
+import Header from "../components/Hearder";
+import SearchScreen from "../components/SearchScreen";
 
 const ButtonBox = () => {
   // Your ButtonBox component logic here
 };
 
-const Community = (navigation) => {
+const Community = ({ navigation }) => {
   return (
     <S.Container>
-      {/* <StatusBar style="auto" /> */}
-
-      <S.Header>
-        <TouchableOpacity onPress={ButtonBox}>
-          <Icon name="menu" size={25} />
-        </TouchableOpacity>
-        <S.HeaderText>청년 독립 만세</S.HeaderText>
-        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
-          <Icon name="person" size={25} />
-        </TouchableOpacity>
-      </S.Header>
+      <Header navigation={navigation} />
 
       <SearchScreen />
 

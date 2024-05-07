@@ -16,6 +16,9 @@ import TVP3 from "./src/screens/Tutorial/TutorialViewPg3";
 import TVP4 from "./src/screens/Tutorial/TutorialViewPg4";
 import TVP5 from "./src/screens/Tutorial/TutorialViewPg5";
 import Login from "./src/components/Id";
+import InfoDetail from "./src/screens/InfoDetail";
+import InfoDetailFull from "./src/screens/InfoDetailFull";
+import PolicyList from "./src/screens/PolicyList";
 
 const Stack = createStackNavigator();
 
@@ -28,7 +31,7 @@ export default function App() {
           headerShown: false, // 상단헤더 숨기기
         }} //첫 경로를 bottombar을 사용해서 메인페이지에만 나오게 함.
       >
-        <Stack.Screen name="Main" component={Main} key={1} />
+        <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="BottomBar" component={BottomBar} />
         <Stack.Screen name="TutorialScreen" component={TutorialScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
@@ -40,6 +43,9 @@ export default function App() {
         <Stack.Screen name="TVP3" component={TVP3} />
         <Stack.Screen name="TVP4" component={TVP4} />
         <Stack.Screen name="TVP5" component={TVP5} />
+        <Stack.Screen name="InfoDetail" component={InfoDetail} />
+        <Stack.Screen name="InfoDetailFull" component={InfoDetailFull} />
+        <Stack.Screen name="PolicyList" component={PolicyList} />
       </Stack.Navigator>
     </NavigationContainer>
   );

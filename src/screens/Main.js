@@ -3,24 +3,12 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Searchbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//import BottomTabNavigationApp from "./BottomBar";
 import * as S from "../../style/MainStyle";
-
-const SearchScreen = () => {
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const onChangeSearch = (query) => setSearchQuery(query);
-
-  return (
-    <Searchbar
-      placeholder="Search"
-      onChangeText={onChangeSearch}
-      value={searchQuery}
-      style={{ backgroundColor: "white" }}
-    />
-  );
-};
+import Header from "../components/Hearder";
+import SearchScreen from "../components/SearchScreen";
 
 const Main = ({ navigation }) => {
   const [userDataP, setUserDataP] = useState({});
@@ -51,17 +39,7 @@ const Main = ({ navigation }) => {
 
   return (
     <S.Container>
-      <S.Header>
-        <TouchableOpacity onPress={ButtonBox}>
-          <Icon name="menu" size={25} />
-        </TouchableOpacity>
-        <S.HeaderText>청년 독립 만세</S.HeaderText>
-
-        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
-          <Icon name="person" size={25} />
-        </TouchableOpacity>
-      </S.Header>
-
+      <Header navigation={navigation} />
       <SearchScreen />
 
       <View style={{ marginTop: 10, marginBottom: 10 }}>
@@ -78,11 +56,8 @@ const Main = ({ navigation }) => {
       </S.Notice>
 
       <S.Row>
-        <S.TextBox>
-        {userDataP.id ? userDataP.id : "묘사"} 님을 위한
-          {"\n"}맞춤 정책을 찾았어요
-        </S.TextBox>
-        <TouchableOpacity onPress={ButtonBox}>
+        <S.TextBox>청년님을 위한{"\n"}맞춤 정책을 찾았어요</S.TextBox>
+        <TouchableOpacity onPress={() => navigation.navigate("PolicyList")}>
           <S.InnerText>정책 더보기⮕ </S.InnerText>
         </TouchableOpacity>
       </S.Row>

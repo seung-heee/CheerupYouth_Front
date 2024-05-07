@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Main from "../screens/Main";
 import Community from "../screens/Community";
+import MyPage from "../screens/MyPage";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,6 +29,15 @@ const BottomBar = ({ navigation }) => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="people" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="MyPage"
+        component={MyPage}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="person" color={color} size={size} />
           ),
         }}
       />
