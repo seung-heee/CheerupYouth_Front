@@ -1,8 +1,6 @@
-// Id_Pw_Sign.js
-
 import React from "react";
-import styled from 'styled-components/native';
-import { TouchableOpacity } from 'react-native';
+import styled from "styled-components/native";
+import { TouchableOpacity } from "react-native";
 import * as S from "../../style/LoginStyle";
 
 const Id_Pw_Sign = ({ SignUp, text }) => {
@@ -16,9 +14,9 @@ const Id_Pw_Sign = ({ SignUp, text }) => {
         <S.WordButtonText>비밀번호 찾기</S.WordButtonText>
       </S.EachButton>
       <S.WordBetweenVerticalLine />
-        <S.EachButton onPress={SignUp}>
-          <S.WordButtonText>회원가입</S.WordButtonText>
-        </S.EachButton>
+      <S.EachButton onPress={SignUp}>
+        <S.WordButtonText>회원가입</S.WordButtonText>
+      </S.EachButton>
     </S.Id_Pw_SignContainer>
   );
 };

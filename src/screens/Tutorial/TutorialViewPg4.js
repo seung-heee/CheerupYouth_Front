@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   View,
@@ -16,12 +16,39 @@ import {
   Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from "@react-navigation/native";
 import { SERVER_URL } from "../../components/ServerAddress";
 import axios from "axios";
+import { UserContext } from "../../components/UserProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function TutorialViewPg4() {
+function TutorialViewPg4({ navigation }) {
   const [dbdata, setDbData] = useState([]);
+  const { userDataP, setUserDataP } = useContext(UserContext);
+  const [styleChange, setStyleChange] = useState([]);
+  const [clickItem, setClickItem] = useState("");
+  const dbControl = (pgname) => {
+    const userPlusChange = {
+      user_id: userDataP.id,
+      user_checkData: styleChange,
+    };
+    axios
+      .post(`${SERVER_URL}/user_T4/insert`, userPlusChange)
+      .then((response) => {
+        navigation.navigate(pgname);
+      })
+      .catch((error) => {
+        console.error("잘못됐어요 ? : ", error);
+      });
+  };
+
+  const nextBtn = () => {
+    dbControl("TVP5");
+  };
+
+  const backBtn = () => {
+    dbControl("TVP4");
+  };
+
   useEffect(() => {
     axios
       .get(`${SERVER_URL}/ch4`)
@@ -29,18 +56,55 @@ function TutorialViewPg4() {
         console.log(response.data);
         const dbdata = response.data;
         setDbData(dbdata);
+        setStyleChange(dbdata.map((item) => item.value));
       })
       .catch((error) => {
         console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
       });
   }, []); // DB 불러오기
-  const [clickItem, setClickItem] = useState("");
-  const [styleChange, setStyleChange] = useState("");
-  const [iconState, setIconState] = useState("");
-  const navigation = useNavigation();
-  handleCancel = () => {
-    navigation.goBack();
-  };
+
+  useEffect(() => {
+    axios
+      .post(`${SERVER_URL}/user_T4/select`, {
+        user_id: userDataP ? userDataP.id : null,
+      })
+      .then((response) => {
+        const userdata = response.data.map((item) => item.user_checkData);
+        if (userdata.length > 0) {
+          setStyleChange(userdata);
+        }
+      });
+  }, [userDataP]);
+
+  useEffect(() => {
+    const checkItemData = async () => {
+      try {
+        const savedStyleChange = await AsyncStorage.getItem("styleChangePg4");
+        if (savedStyleChange !== null) {
+          setStyleChange(JSON.parse(savedStyleChange));
+        }
+      } catch (error) {
+        console.error("로컬 데이터 불러오기 오류:", error);
+      }
+    };
+
+    checkItemData();
+  }, []);
+
+  useEffect(() => {
+    const saveData = async () => {
+      try {
+        await AsyncStorage.setItem(
+          "styleChangePg4",
+          JSON.stringify(styleChange)
+        );
+      } catch (error) {
+        console.error("로컬 데이터 저장 오류:", error);
+      }
+    };
+    saveData();
+  }, [styleChange]);
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <View
@@ -61,7 +125,7 @@ function TutorialViewPg4() {
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack();
+              navigation.navigate("TutorialScreen");
             }}
           >
             <Image
@@ -252,18 +316,17 @@ function TutorialViewPg4() {
                                   <Icon
                                     name={
                                       styleChange.includes(data.value)
-                                        ? "check-box"
-                                        : "check-box-outline-blank"
+                                        ? "check-box-outline-blank"
+                                        : "check-box"
                                     }
                                     size={18}
                                     color={
                                       styleChange.includes(data.value)
-                                        ? "#2D4B8E"
-                                        : "gray"
+                                        ? "gray"
+                                        : "#2D4B8E"
                                     }
-                                    style={{ marginTop: 2.5, marginRight: 5 }}
+                                    style={{ marginTop: 3, marginRight: 5 }}
                                   />
-
                                   <Text
                                     style={{
                                       marginTop: 1,
@@ -344,18 +407,17 @@ function TutorialViewPg4() {
                               <Icon
                                 name={
                                   styleChange.includes(data.value)
-                                    ? "check-box"
-                                    : "check-box-outline-blank"
+                                    ? "check-box-outline-blank"
+                                    : "check-box"
                                 }
                                 size={18}
                                 color={
                                   styleChange.includes(data.value)
-                                    ? "#2D4B8E"
-                                    : "gray"
+                                    ? "gray"
+                                    : "#2D4B8E"
                                 }
-                                style={{ marginTop: 0, marginRight: 5 }}
+                                style={{ marginTop: 3, marginRight: 5 }}
                               />
-
                               <Text style={{ marginTop: 1, fontSize: 16 }}>
                                 {data.value}
                               </Text>
@@ -411,7 +473,7 @@ function TutorialViewPg4() {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={handleCancel}
+          onPress={backBtn}
         >
           <Text
             style={{
@@ -434,7 +496,7 @@ function TutorialViewPg4() {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => navigation.navigate("TVP4")}
+          onPress={nextBtn}
         >
           <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
             다음

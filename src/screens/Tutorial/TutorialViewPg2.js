@@ -1,25 +1,21 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   Text,
   View,
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  StyleSheet,
   Modal,
   Image,
-  ActivityIndicator,
   ScrollView,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useNavigation } from "@react-navigation/native";
 import * as S from "../../../style/TutorialScreenStyle";
 import Postcode from "@actbase/react-daum-postcode";
 import axios from "axios";
 import RNPickerSelect from "react-native-picker-select";
 import * as Font from "expo-font";
 import { SERVER_URL } from "../../components/ServerAddress";
+import { UserContext } from "../../components/UserProvider";
 
 function formatCurrency(amount) {
   if (amount >= 100000000) {
@@ -42,14 +38,14 @@ function formatCurrency(amount) {
     return amount.toString();
   }
 }
-
 function TutorialViewPg2({ navigation }) {
   const [dbdata, setDbData] = useState([]);
+  const { userDataP, setUserDataP } = useContext(UserContext);
   useEffect(() => {
     axios
       .get(`${SERVER_URL}/ch2`)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         const dbdata = response.data;
         setDbData(dbdata);
       })
@@ -57,6 +53,61 @@ function TutorialViewPg2({ navigation }) {
         console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
       });
   }, []); // DB 불러오기
+
+  const [userdata, setUserData] = useState([]);
+  useEffect(() => {
+    axios
+      .post(`${SERVER_URL}/user_T2/select`, {
+        user_id: userDataP ? userDataP.id : null,
+      })
+      .then((response) => {
+        const userdata = response.data;
+        setUserData(userdata);
+      })
+      .catch((error) => {
+        console.error("데이터 가져오는 중 오류가 발생했습니다 : ", error);
+      });
+  }, [userDataP]);
+
+  const dbControl = (pgname) => {
+    const userDataT2 = {
+      user_id: userDataP ? userDataP.id : null,
+      user_inputAddress: inputAddress,
+      user_inputDanji: inputDanji,
+      user_inputDong: inputDong,
+      user_inputHo: inputHo,
+      user_tltp: tltp,
+      user_selectedZoneCode: selectedZoneCode,
+    };
+    if (userdata === null) {
+      navigation.navigate(pgname);
+    } else if (userdata && userdata.length > 0) {
+      axios
+        .post(`${SERVER_URL}/user_T2/update`, userDataT2)
+        .then((response) => {
+          navigation.navigate(pgname);
+        })
+        .catch((error) => {
+          console.error("Error update data:", error);
+        });
+    } else {
+      axios
+        .post(`${SERVER_URL}/user_T2/insert`, userDataT2)
+        .then((response) => {
+          navigation.navigate(pgname);
+        })
+        .catch((error) => {
+          console.error("Error saving data:", error);
+        });
+    }
+  };
+  const nextBtn = () => {
+    dbControl("TVP3");
+  };
+  const backBtn = () => {
+    dbControl("TutorialScreen");
+  };
+
   const [inputAddress, setInputAddress] = useState("");
   const [inputDanji, setInputDanji] = useState("");
   const [inputDong, setInputDong] = useState("");
@@ -80,6 +131,17 @@ function TutorialViewPg2({ navigation }) {
     console.log(JSON.stringify(data));
     setModalVisible(false); // 모달을 닫음
   };
+  useEffect(() => {
+    if (userdata && userdata.length > 0) {
+      setTltp(JSON.stringify(userdata[0].user_tltp));
+      setSelectedZoneCode(userdata[0].user_selectedZoneCode);
+      setInputAddress(userdata[0].user_inputAddress);
+      setInputDanji(userdata[0].user_inputDanji);
+      setInputDong(userdata[0].user_inputDong);
+      setInputHo(userdata[0].user_inputHo);
+    }
+  }, [userdata]);
+
   const addAmount = (tltp) => {
     setTltp((prevValue) =>
       prevValue ? `${parseFloat(prevValue) + tltp}` : `${tltp}`
@@ -114,6 +176,14 @@ function TutorialViewPg2({ navigation }) {
   function handleCancel() {
     navigation.goBack();
   }
+  const scrollViewRef = useRef();
+
+  useEffect(() => {
+    if (scrollViewRef.current && tltp && marketPrice.length === 1) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }, [tltp, marketPrice]);
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <View
@@ -134,7 +204,7 @@ function TutorialViewPg2({ navigation }) {
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack();
+              backBtn();
             }}
           >
             <Image
@@ -161,7 +231,7 @@ function TutorialViewPg2({ navigation }) {
         </View>
       </View>
 
-      <ScrollView style={{ flex: 1, paddingBottom: 50 }}>
+      <ScrollView style={{ flex: 1 }} ref={scrollViewRef}>
         <View style={{ margin: 15, marginTop: 20, marginBottom: 0 }}>
           <View
             style={{
@@ -318,7 +388,13 @@ function TutorialViewPg2({ navigation }) {
             공시가격 알아보기
           </Text>
         </View>
-        <View style={{ margin: 15, marginTop: 0 }}>
+        <View
+          style={{
+            margin: 15,
+            marginTop: 0,
+            marginBottom: tltp && marketPrice.length == 1 ? 15 : 200,
+          }}
+        >
           <Modal
             transparent={true}
             visible={modalVisible}
@@ -433,7 +509,11 @@ function TutorialViewPg2({ navigation }) {
                     onValueChange={(danji) => {
                       setInputDanji(danji);
                     }}
-                    placeholder={{ label: "단지", value: null }}
+                    value={inputDanji}
+                    placeholder={{
+                      label: "단지",
+                      value: null,
+                    }}
                     style={{
                       // 드롭다운 목록 전체의 스타일을 지정합니다.
                       inputIOS: {
@@ -476,6 +556,7 @@ function TutorialViewPg2({ navigation }) {
                     onValueChange={(dong) => {
                       setInputDong(dong);
                     }}
+                    value={inputDong}
                     placeholder={{ label: "동", value: "" }}
                     style={{
                       // 드롭다운 목록 전체의 스타일을 지정합니다.
@@ -519,6 +600,7 @@ function TutorialViewPg2({ navigation }) {
                       value: ho,
                     }))}
                     onValueChange={(ho) => setInputHo(ho)}
+                    value={inputHo}
                     placeholder={{ label: "호", value: "" }}
                     style={{
                       // 드롭다운 목록 전체의 스타일을 지정합니다.
@@ -541,7 +623,7 @@ function TutorialViewPg2({ navigation }) {
           <View
             style={{
               alignItems: "center",
-              marginTop: 30,
+              // marginTop: 30,
               marginBottom: 150,
               padding: 10,
             }}
@@ -632,7 +714,7 @@ function TutorialViewPg2({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => navigation.navigate("TVP3")}
+            onPress={() => nextBtn()}
           >
             <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
               다음

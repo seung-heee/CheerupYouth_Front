@@ -1,22 +1,10 @@
-import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-  ScrollView,
-  Image,
-  SectionList,
-} from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import RNPickerSelect from "react-native-picker-select";
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import { Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 import daechuData from "../../../utils/daechuData";
-import { useNavigation } from "@react-navigation/native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import * as Font from "expo-font";
+
+import axios from "axios";
+import { SERVER_URL } from "../../components/ServerAddress";
+import { UserContext } from "../../components/UserProvider";
 
 function formatCurrency(amount) {
   if (amount >= 100000000) {
@@ -39,32 +27,87 @@ function formatCurrency(amount) {
     return amount.toString();
   }
 }
-
 function TutorialViewPg1({ navigation }) {
-  function handleCancel() {
-    navigation.goBack();
-  }
   const [inputMyValue, setInputMyValue] = useState("");
   const [selectedDaechu, setselectedDaechu] = useState("");
-  const [fontLoaded, setFontLoaded] = useState(false);
+  // const [fontLoaded, setFontLoaded] = useState(false);
+  const { userDataP, setUserDataP } = useContext(UserContext);
+  const [userdata, setUserData] = useState({});
 
   useEffect(() => {
-    const loadFont = async () => {
-      await Font.loadAsync({
-        M: require("../../../assets/fonts/AppleSDGothicNeoM.ttf"),
-        B: require("../../../assets/fonts/AppleSDGothicNeoB.ttf"),
-        SB: require("../../../assets/fonts/AppleSDGothicNeoSB.ttf"),
-        R: require("../../../assets/fonts/AppleSDGothicNeoR.ttf"),
+    axios
+      .post(`${SERVER_URL}/user_T1/select`, {
+        user_id: userDataP ? userDataP.id : null,
+      })
+      .then((response) => {
+        const userdata = response.data;
+        setUserData(userdata);
+        console.log(userdata);
       });
-      setFontLoaded(true);
+  }, [userDataP]);
+
+  useEffect(() => {
+    if (userdata && userdata.length > 0) {
+      setInputMyValue(JSON.stringify(userdata[0].user_inputValue));
+      setselectedDaechu(userdata[0].user_selectedDaechu);
+    }
+  }, [userdata]);
+
+  const dbControl = (pgname) => {
+    const useableMoney = formatCurrency(sum);
+    const userDataT1 = {
+      user_id: userDataP ? userDataP.id : null,
+      user_useableMoney: useableMoney,
+      user_selectedDaechu: selectedDaechu,
+      user_inputValue: inputMyValue,
     };
+    if (userdata === null) {
+      navigation.navigate(pgname);
+    } else if (userdata && userdata.length > 0) {
+      axios
+        .post(`${SERVER_URL}/user_T1/update`, userDataT1)
+        .then((response) => {
+          navigation.navigate(pgname);
+        })
+        .catch((error) => {
+          console.error("Error update data:", error);
+        });
+    } else {
+      axios
+        .post(`${SERVER_URL}/user_T1/insert`, userDataT1)
+        .then((response) => {
+          navigation.navigate(pgname);
+        })
+        .catch((error) => {
+          console.error("Error saving data:", error);
+        });
+    }
+  };
+  const nextBtn = () => {
+    dbControl("TVP2");
+  };
+  const backBtn = () => {
+    dbControl("TutorialScreen");
+  };
 
-    loadFont();
-  }, []);
+  // useEffect(() => {
+  //   const loadFont = async () => {
+  //     await Font.loadAsync({
+  //       M: require('../../../assets/fonts/AppleSDGothicNeoM.ttf'),
+  //       B: require('../../../assets/fonts/AppleSDGothicNeoB.ttf'),
+  //       SB: require('../../../assets/fonts/AppleSDGothicNeoSB.ttf'),
+  //       R: require('../../../assets/fonts/AppleSDGothicNeoR.ttf'),
+  //     });
+  //     setFontLoaded(true);
+  //   };
 
-  if (!fontLoaded) {
-    return null; // or render a loading indicator
-  }
+  //   loadFont();
+  // }, []);
+
+  // if (!fontLoaded) {
+  //   return null; // or render a loading indicator
+  // }
+
   const handleInputChange = (text) => {
     setInputMyValue(text);
   };
@@ -105,7 +148,7 @@ function TutorialViewPg1({ navigation }) {
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack();
+              backBtn();
             }}
           >
             <Image
@@ -187,7 +230,7 @@ function TutorialViewPg1({ navigation }) {
           height: 1,
           backgroundColor: "rgba(237,237,237,1.0)",
         }}
-      ></View>
+      />
 
       <View style={{ margin: 15, marginTop: 20, marginBottom: 15 }}>
         <Text
@@ -377,7 +420,7 @@ function TutorialViewPg1({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => navigation.navigate("TVP2")}
+            onPress={() => nextBtn()}
           >
             <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
               다음

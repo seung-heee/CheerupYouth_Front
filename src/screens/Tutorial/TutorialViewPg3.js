@@ -1,45 +1,96 @@
-import React, { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  StyleSheet,
-  SectionList,
-  Button,
-  Image,
-  Modal,
-  ScrollView,
-  KeyboardAvoidingView,
-  Keyboard,
-  Platform,
-} from "react-native";
+import React, { useState, useRef, useEffect, useContext } from "react";
+import { Text, View, TouchableOpacity, Image, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { PrivateValueStore, useNavigation } from "@react-navigation/native";
 import * as Font from "expo-font";
 import axios from "axios";
 import { SERVER_URL } from "../../components/ServerAddress";
+import { UserContext } from "../../components/UserProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TutorialViewPg3({ navigation }) {
   const [dbdata, setDbData] = useState([]);
+  const { userDataP, setUserDataP } = useContext(UserContext);
+  const [styleChange, setStyleChange] = useState([]);
+  const [fontLoaded, setFontLoaded] = useState(false);
+  const dbControl = (pgname) => {
+    const userPlusChange = {
+      user_id: userDataP.id,
+      user_checkData: styleChange,
+    };
+    axios
+      .post(`${SERVER_URL}/user_T3/insert`, userPlusChange)
+      .then((response) => {
+        navigation.navigate(pgname);
+      })
+      .catch((error) => {
+        console.error("잘못됐어요 ? : ", error);
+      });
+  };
+
+  console.log(styleChange);
+  const nextBtn = () => {
+    dbControl("TVP4");
+  };
+
+  const backBtn = () => {
+    dbControl("TVP3");
+  };
+
   useEffect(() => {
     axios
       .get(`${SERVER_URL}/ch3`)
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         const dbdata = response.data;
         setDbData(dbdata);
+        setStyleChange(dbdata.map((item) => item.value));
       })
       .catch((error) => {
         console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
       });
   }, []); // DB 불러오기
-  const [styleChange, setStyleChange] = useState("");
 
-  const [checkListAdd, setCheckListAdd] = useState(false);
-  const [inputCheckList, setInputCheckList] = useState("");
-  const [fontLoaded, setFontLoaded] = useState(false);
+  useEffect(() => {
+    axios
+      .post(`${SERVER_URL}/user_T3/select`, {
+        user_id: userDataP ? userDataP.id : null,
+      })
+      .then((response) => {
+        const userdata = response.data.map((item) => item.user_checkData);
+        if (userdata.length > 0) {
+          setStyleChange(userdata);
+        }
+      });
+  }, [userDataP]);
+
+  useEffect(() => {
+    const checkItemData = async () => {
+      try {
+        const savedStyleChange = await AsyncStorage.getItem("styleChangePg3");
+        if (savedStyleChange !== null) {
+          setStyleChange(JSON.parse(savedStyleChange));
+        }
+      } catch (error) {
+        console.error("로컬 데이터 불러오기 오류:", error);
+      }
+    };
+
+    checkItemData();
+  }, []);
+
+  useEffect(() => {
+    const saveData = async () => {
+      try {
+        await AsyncStorage.setItem(
+          "styleChangePg3",
+          JSON.stringify(styleChange)
+        );
+      } catch (error) {
+        console.error("로컬 데이터 저장 오류:", error);
+      }
+    };
+    saveData();
+  }, [styleChange]);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -58,24 +109,6 @@ function TutorialViewPg3({ navigation }) {
   if (!fontLoaded) {
     return null; // or render a loading indicator
   }
-  handleCancel = () => {
-    navigation.goBack();
-  };
-  // function sendDataToNode(data) {
-  //   axios
-  //     .post(`${SERVER_URL}/ch3/insert`, data)
-  //     .then((response) => console.log(response.data))
-  //     .catch((error) => {
-  //       console.error("데이터를 보내는 중 오류가 발생했습니다:", error);
-  //     });
-  // }
-
-  // function onSubmit(e) {
-  //   e.preventDefault();
-  //   const data = { title: dbdata.title, value: inputCheckList };
-
-  //   sendDataToNode(data);
-  // }
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -95,11 +128,7 @@ function TutorialViewPg3({ navigation }) {
         }}
       >
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
+          <TouchableOpacity onPress={handleCancel}>
             <Image
               style={{
                 width: 20,
@@ -123,6 +152,7 @@ function TutorialViewPg3({ navigation }) {
           </Text>
         </View>
       </View>
+
       <ScrollView style={{ flex: 1 }}>
         <View style={{ margin: 15, marginTop: 20, marginBottom: 0 }}>
           <View
@@ -254,6 +284,7 @@ function TutorialViewPg3({ navigation }) {
                           key={idx}
                           onPress={() => {
                             setStyleChange((prevState) => {
+                              // 아이콘을 누른 데이터가 이미 styleChange에 있는 경우 제거
                               if (prevState.includes(data.value)) {
                                 return prevState.filter(
                                   (item) => item !== data.value
@@ -268,14 +299,14 @@ function TutorialViewPg3({ navigation }) {
                           <Icon
                             name={
                               styleChange.includes(data.value)
-                                ? "check-box"
-                                : "check-box-outline-blank"
+                                ? "check-box-outline-blank"
+                                : "check-box"
                             }
                             size={18}
                             color={
                               styleChange.includes(data.value)
-                                ? "#2D4B8E"
-                                : "gray"
+                                ? "gray"
+                                : "#2D4B8E"
                             }
                             style={{ marginTop: 3, marginRight: 5 }}
                           />
@@ -338,7 +369,9 @@ function TutorialViewPg3({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={handleCancel}
+            onPress={() => {
+              backBtn();
+            }}
           >
             <Text
               style={{
@@ -361,7 +394,9 @@ function TutorialViewPg3({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => navigation.navigate("TVP4")}
+            onPress={() => {
+              nextBtn();
+            }}
           >
             <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
               다음

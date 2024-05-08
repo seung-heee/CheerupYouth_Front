@@ -1,41 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useCallback } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Searchbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/native";
-
+import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { UserContext } from "../components/UserProvider";
+//import BottomTabNavigationApp from "./BottomBar";
 import * as S from "../../style/MainStyle";
 import Header from "../components/Hearder";
 import SearchScreen from "../components/SearchScreen";
 
 const Main = ({ navigation }) => {
-  const [userDataP, setUserDataP] = useState({});
-
-  const LoginData = async () => {
-    try {
-      const userData = await AsyncStorage.getItem("userData");
-      if (userData) {
-        const userParse = JSON.parse(userData);
-        setUserDataP(userParse);
-        console.log("로그인이 되어 있어요.", userData);
-      }
-    } catch (error) {
-      console.error("로그인 상태 확인 중 오류가 발생했습니다:", error);
-    }
-  };
+  const { userDataP, setUserDataP } = useContext(UserContext);
+  const { userDataPlusP } = useContext(UserContext);
   const ButtonBox = async () => {
     try {
       await AsyncStorage.removeItem("userData");
+      await AsyncStorage.removeItem("styleChange");
       console.log("userData가 삭제되었습니다.");
+      setUserDataP(null); // userDataP 상태를 업데이트하여 화면을 자동으로 새로고침
     } catch (error) {
       console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
     }
-  };
-  useEffect(() => {
-    LoginData();
-  }, []);
+  }; //아이디 삭제 (로그아웃)
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        // 화면이 포커스를 잃을 때 실행할 작업
+      };
+    }, [userDataP]) // userDataP가 변경될 때마다 콜백 함수를 다시 생성
+  );
 
   return (
     <S.Container>
@@ -56,8 +50,11 @@ const Main = ({ navigation }) => {
       </S.Notice>
 
       <S.Row>
-        <S.TextBox>청년님을 위한{"\n"}맞춤 정책을 찾았어요</S.TextBox>
-        <TouchableOpacity onPress={() => navigation.navigate("PolicyList")}>
+        <S.TextBox>
+          {userDataP ? userDataP.id : "묘사"} 님을 위한
+          {"\n"}맞춤 정책을 찾았어요
+        </S.TextBox>
+        <TouchableOpacity onPress={ButtonBox}>
           <S.InnerText>정책 더보기⮕ </S.InnerText>
         </TouchableOpacity>
       </S.Row>
