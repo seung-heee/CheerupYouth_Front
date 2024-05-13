@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -10,9 +10,14 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import TutorialData from "../../../utils/TutorialData";
 import * as Font from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserContext } from "../../components/UserProvider";
 
 const TutorialScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
+  const { userDataP, setUserDataP } = useContext(UserContext);
+
+  console.log("넘어온? :", userDataP);
 
   useEffect(() => {
     const loadFont = async () => {

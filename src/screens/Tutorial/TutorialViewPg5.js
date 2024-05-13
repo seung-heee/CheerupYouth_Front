@@ -2,47 +2,40 @@ import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
-  TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  StyleSheet,
   Image,
   SectionList,
-  Button,
-  Modal,
   ScrollView,
-  KeyboardAvoidingView,
-  Keyboard,
-  Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
-
 import TutorialPg5Data from "../../../utils/TutorialPg5Data.js";
+import Tutorial5Tip from "../../../utils/Tutorial5Tip.js";
 import { SERVER_URL } from "../../components/ServerAddress";
 import axios from "axios";
 
-function TutorialViewPg5() {
-  const [dbdata, setDbData] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`${SERVER_URL}/ch4`)
-      .then((response) => {
-        console.log(response.data);
-        const dbdata = response.data;
-        setDbData(dbdata);
-      })
-      .catch((error) => {
-        console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
-      });
-  }, []); // DB 불러오기
-  const navigation = useNavigation();
+function TutorialViewPg5({ navigation }) {
+  // const [dbdata, setDbData] = useState([]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${SERVER_URL}/ch4`)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       const dbdata = response.data;
+  //       setDbData(dbdata);
+  //     })
+  //     .catch((error) => {
+  //       console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
+  //     });
+  // }, []); // DB 불러오기
   const [styleChange, setStyleChange] = useState("");
-
   const [textItem, setTextItem] = useState("");
-
-  handleCancel = () => {
+  const beforeBtn = () => {
     navigation.goBack();
+  };
+  const nextBtn = () => {};
+  const backBtn = () => {
+    navigation.navigate("TutorialScreen");
   };
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -62,11 +55,7 @@ function TutorialViewPg5() {
         }}
       >
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
+          <TouchableOpacity onPress={backBtn}>
             <Image
               style={{
                 width: 20,
@@ -167,6 +156,7 @@ function TutorialViewPg5() {
             나와있는 사람이 누구인가요?
           </Text>
         </View>
+
         <SectionList
           style={{ paddingBottom: 15 }}
           scrollEnabled={false}
@@ -251,7 +241,7 @@ function TutorialViewPg5() {
                                 marginBottom: 20,
                               }}
                             >
-                              <Text style={{ marginTop: 1, fontSize: 16 }}>
+                              <Text style={{ fontSize: 14, fontFamily: "R" }}>
                                 {value}
                               </Text>
                             </View>
@@ -263,7 +253,7 @@ function TutorialViewPg5() {
               </View>
             </TouchableOpacity>
           )}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, idx) => idx.toString()}
         />
         <View style={{ margin: 15, marginTop: 20, marginBottom: 5 }}>
           <Text
@@ -275,161 +265,63 @@ function TutorialViewPg5() {
             계약서 작성할 때 !
           </Text>
         </View>
+        <SectionList
+          style={{ paddingBottom: 15 }}
+          scrollEnabled={false}
+          sections={Tutorial5Tip}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                backgroundColor: "white",
+                margin: 15,
+                marginTop: 15,
+                marginBottom: 0,
+                paddingTop: 0,
+                borderRadius: 5,
+                shadowColor: "rgba(45, 75, 142,0.3)",
+                shadowOffset: {
+                  width: 1,
+                  height: 0,
+                },
+                shadowOpacity: 5,
+                shadowRadius: 3,
+                elevation: 5,
+              }}
+            >
+              <View style={{ margin: 20, marginBottom: 23 }}>
+                <Text style={{ fontSize: 18, fontFamily: "SB" }}>
+                  {item.name}
+                </Text>
+                {[
+                  item.value1,
+                  item.value2,
+                  item.value3,
+                  item.value4,
+                  item.value5,
+                  item.value6,
+                  item.value7,
+                ].map(
+                  (value, index) =>
+                    value && (
+                      <View style={{ marginTop: 10 }}>
+                        <Text style={{ fontSize: 14, fontFamily: "R" }}>
+                          {value}
+                        </Text>
+                      </View>
+                    )
+                )}
+              </View>
+            </View>
+          )}
+          keyExtractor={(item, idx) => idx.toString()}
+        />
         <View
           style={{
-            backgroundColor: "white",
-            margin: 15,
-            marginTop: 15,
-            marginBottom: 0,
-            paddingTop: 0,
-            borderRadius: 5,
-            shadowColor: "rgba(45, 75, 142,0.3)",
-            shadowOffset: {
-              width: 1,
-              height: 0,
-            },
-            shadowOpacity: 5,
-            shadowRadius: 3,
-            elevation: 5,
-          }}
-        >
-          <View style={{ margin: 20, marginBottom: 23 }}>
-            <Text style={{ fontSize: 18, fontFamily: "SB" }}>
-              협의하고 기록하기
-            </Text>
-            {/* 이걸로 다 바꾸기 */}
-
-            <View style={{ marginTop: 15 }}>
-              <Text style={{ fontSize: 15, fontFamily: "R" }}>
-                모든 것을 협상할 것이고, 모든 대화는 기록으로 남아야해요.
-              </Text>
-            </View>
-            <View style={{ marginTop: 5 }}>
-              <Text style={{ fontSize: 15, fontFamily: "R" }}>
-                분쟁으로부터 나를 지킬 수 있어요.
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            backgroundColor: "white",
-            margin: 15,
-            marginTop: 15,
-            marginBottom: 0,
-            paddingTop: 0,
-            borderRadius: 5,
-            shadowColor: "rgba(45, 75, 142,0.3)",
-            shadowOffset: {
-              width: 1,
-              height: 0,
-            },
-            shadowOpacity: 5,
-            shadowRadius: 3,
-            elevation: 5,
-          }}
-        >
-          <View style={{ margin: 20 }}>
-            <Text style={{ fontSize: 17, fontWeight: "600" }}>
-              입주 전 수리
-            </Text>
-            <View style={{ marginTop: 10 }}>
-              <Text>
-                입주 전 수리를 요청했던 사항에 대하여 계약서에 써야해요.
-              </Text>
-            </View>
-            <View style={{ marginTop: 10 }}>
-              <Text>분쟁으로부터 나를 지킬 수 있어요.</Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            backgroundColor: "white",
-            margin: 15,
-            marginTop: 15,
-            marginBottom: 0,
-            paddingTop: 0,
-            borderRadius: 5,
-            shadowColor: "rgba(45, 75, 142,0.3)",
-            shadowOffset: {
-              width: 1,
-              height: 0,
-            },
-            shadowOpacity: 5,
-            shadowRadius: 3,
-            elevation: 5,
-          }}
-        >
-          <View style={{ margin: 20 }}>
-            <Text style={{ fontSize: 17, fontWeight: "600" }}>수선 의무</Text>
-            <View style={{ marginTop: 10 }}>
-              <Text>
-                생활하다가 무언가 고장났을 떄 어떻게 처리할 것인지 정해야해요.
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            backgroundColor: "white",
-            margin: 15,
-            marginTop: 15,
-            marginBottom: 0,
-            paddingTop: 0,
-            borderRadius: 5,
-            shadowColor: "rgba(45, 75, 142,0.3)",
-            shadowOffset: {
-              width: 1,
-              height: 0,
-            },
-            shadowOpacity: 5,
-            shadowRadius: 3,
-            elevation: 5,
-          }}
-        >
-          <View style={{ margin: 20 }}>
-            <Text style={{ fontSize: 17, fontWeight: "600" }}>관리비</Text>
-            <View style={{ marginTop: 10 }}>
-              <Text>어떤 항목에 대한 관리비를 내는지 계약서에 써야해요.</Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            backgroundColor: "white",
-            margin: 15,
-            marginTop: 15,
-            marginBottom: 0,
-            paddingTop: 0,
-            borderRadius: 5,
-            shadowColor: "rgba(45, 75, 142,0.3)",
-            shadowOffset: {
-              width: 1,
-              height: 0,
-            },
-            shadowOpacity: 5,
-            shadowRadius: 3,
-            elevation: 5,
-          }}
-        >
-          <View style={{ margin: 20 }}>
-            <Text style={{ fontSize: 17, fontWeight: "600" }}>
-              담보권 설정 관련 특약 작성
-            </Text>
-            <View style={{ marginTop: 10 }}>
-              <Text>
-                계약서 작성 날 이후부터 전입신고 + 확정일자를 받게 되는 날
-                사이까지 임대인이 주택을 담보로 대출을 받지 않도록 하는
-                특약사항을 적어야해요.
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
+            // position: "absolute",
             padding: 10,
+            // bottom: 50,
             marginTop: 10,
+            marginBottom: 50,
             width: "100%",
             flexDirection: "row",
             justifyContent: "center",
@@ -446,7 +338,7 @@ function TutorialViewPg5() {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={handleCancel}
+            onPress={beforeBtn}
           >
             <Text
               style={{
@@ -469,7 +361,7 @@ function TutorialViewPg5() {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => navigation.navigate("TT")}
+            onPress={nextBtn}
           >
             <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
               다음
