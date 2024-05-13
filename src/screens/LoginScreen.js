@@ -27,13 +27,15 @@ const LoginScreen = ({ navigation }) => {
     };
 
     try {
-      const response = await axios.post(`${SERVER_URL}/login`, userData);
+      const response = await axios.post(`${SERVER_URL}/users/login`, userData);
       await AsyncStorage.setItem("userData", JSON.stringify(response.data));
+
       setUserDataP((prevUserData) => ({
         ...prevUserData,
         id: userId,
+        name: response.data.name,
       }));
-      navigation.navigate("Main");
+      navigation.navigate("BottomBar");
     } catch (error) {
       console.error("데이터를 보내는 중 오류가 발생했습니다:", error);
     }

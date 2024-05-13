@@ -1,14 +1,32 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import * as S from "../../style/LoginStyle";
-//import axios from 'axios';
+import axios from "axios";
+import { SERVER_URL } from "../components/ServerAddress";
 
 const SignUp = () => {
-  /*const [Firstname, setFirstname] = useState("");
+  const [Firstname, setFirstname] = useState("");
   const [Lastname, setLastname] = useState("");
   const [Id, setId] = useState("");
   const [Password, setPassword] = useState("");
-  const [Phone, setPhone] = useState("");*/
+  const [Phone, setPhone] = useState("");
+
+  const SignUp = () => {
+    axios
+      .post(`${SERVER_URL}/users/login`, {
+        first_name: Firstname,
+        last_name: Lastname,
+        id: Id,
+        password: Password,
+        phone: Phone,
+      })
+      .then((response) => {
+        console.log("회원가입완료");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   /*const SignUp = () => {
     axios.post('http://192.168.35.39:8080/user_info/Signup',{

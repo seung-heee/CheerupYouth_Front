@@ -31,7 +31,7 @@ export default function App() {
             headerShown: false, // 상단헤더 숨기기
           }} //첫 경로를 bottombar을 사용해서 메인페이지에만 나오게 함.
         >
-          <Stack.Screen name="Main" component={Main} key={1} />
+          <Stack.Screen name="Main" component={Main} />
           <Stack.Screen name="BottomBar" component={BottomBar} />
           <Stack.Screen name="TutorialScreen" component={TutorialScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />

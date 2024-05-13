@@ -36,7 +36,7 @@ function TutorialViewPg1({ navigation }) {
 
   useEffect(() => {
     axios
-      .post(`${SERVER_URL}/user_T1/select`, {
+      .post(`${SERVER_URL}/TVP1/select`, {
         user_id: userDataP ? userDataP.id : null,
       })
       .then((response) => {
@@ -65,7 +65,7 @@ function TutorialViewPg1({ navigation }) {
       navigation.navigate(pgname);
     } else if (userdata && userdata.length > 0) {
       axios
-        .post(`${SERVER_URL}/user_T1/update`, userDataT1)
+        .post(`${SERVER_URL}/TVP1/update`, userDataT1)
         .then((response) => {
           navigation.navigate(pgname);
         })
@@ -74,7 +74,7 @@ function TutorialViewPg1({ navigation }) {
         });
     } else {
       axios
-        .post(`${SERVER_URL}/user_T1/insert`, userDataT1)
+        .post(`${SERVER_URL}/TVP1/insert`, userDataT1)
         .then((response) => {
           navigation.navigate(pgname);
         })
@@ -87,7 +87,7 @@ function TutorialViewPg1({ navigation }) {
     dbControl("TVP2");
   };
   const backBtn = () => {
-    dbControl("TutorialScreen");
+    navigation.navigate("TutorialScreen");
   };
 
   // useEffect(() => {
@@ -187,6 +187,7 @@ function TutorialViewPg1({ navigation }) {
           }}
         >
           <Text
+            // allowFontScaling={false}
             style={{
               fontFamily: "SB",
               color: "white",

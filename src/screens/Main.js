@@ -23,6 +23,7 @@ const Main = ({ navigation }) => {
       console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
     }
   }; //아이디 삭제 (로그아웃)
+  
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -35,7 +36,6 @@ const Main = ({ navigation }) => {
     <S.Container>
       <Header navigation={navigation} />
       <SearchScreen />
-
       <View style={{ marginTop: 10, marginBottom: 10 }}>
         <Image
           source={require("../../assets/images/cdm.jpg")}
@@ -51,7 +51,7 @@ const Main = ({ navigation }) => {
 
       <S.Row>
         <S.TextBox>
-          {userDataP ? userDataP.id : "묘사"} 님을 위한
+          {userDataP ? userDataP.name : "묘사"} 님을 위한
           {"\n"}맞춤 정책을 찾았어요
         </S.TextBox>
         <TouchableOpacity onPress={ButtonBox}>

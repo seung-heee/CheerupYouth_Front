@@ -15,10 +15,15 @@ function TutorialViewPg3({ navigation }) {
   const dbControl = (pgname) => {
     const userPlusChange = {
       user_id: userDataP.id,
-      user_checkData: styleChange,
+      user_checkData: styleChange.includes("check")
+        ? styleChange.filter((item) => item !== "check")
+        : styleChange.length > 0
+        ? styleChange
+        : ["check"],
     };
+
     axios
-      .post(`${SERVER_URL}/user_T3/insert`, userPlusChange)
+      .post(`${SERVER_URL}/TVP3/insert`, userPlusChange)
       .then((response) => {
         navigation.navigate(pgname);
       })
@@ -26,22 +31,24 @@ function TutorialViewPg3({ navigation }) {
         console.error("잘못됐어요 ? : ", error);
       });
   };
-
-  console.log(styleChange);
   const nextBtn = () => {
     dbControl("TVP4");
+    AsyncStorage.removeItem("styleChangePg3");
   };
-
   const backBtn = () => {
-    dbControl("TVP3");
+    navigation.navigate("TutorialScreen");
+    AsyncStorage.removeItem("styleChangePg3");
+  };
+  const beforeBtn = () => {
+    navigation.goBack();
   };
 
   useEffect(() => {
     axios
-      .get(`${SERVER_URL}/ch3`)
+      .get(`${SERVER_URL}/TVP3/data`)
       .then((response) => {
-        //console.log(response.data);
         const dbdata = response.data;
+
         setDbData(dbdata);
         setStyleChange(dbdata.map((item) => item.value));
       })
@@ -52,14 +59,18 @@ function TutorialViewPg3({ navigation }) {
 
   useEffect(() => {
     axios
-      .post(`${SERVER_URL}/user_T3/select`, {
+      .post(`${SERVER_URL}/TVP3/select`, {
         user_id: userDataP ? userDataP.id : null,
       })
       .then((response) => {
         const userdata = response.data.map((item) => item.user_checkData);
-        if (userdata.length > 0) {
+        const user = response.data.map((item) => item.user_id);
+        if (user.length > 0) {
           setStyleChange(userdata);
         }
+      })
+      .catch((error) => {
+        console.error("비동기 작업 중 오류가 발생했습니다:", error);
       });
   }, [userDataP]);
 
@@ -109,7 +120,7 @@ function TutorialViewPg3({ navigation }) {
   if (!fontLoaded) {
     return null; // or render a loading indicator
   }
-
+  
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <View
@@ -128,7 +139,7 @@ function TutorialViewPg3({ navigation }) {
         }}
       >
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={handleCancel}>
+          <TouchableOpacity onPress={backBtn}>
             <Image
               style={{
                 width: 20,
@@ -369,9 +380,7 @@ function TutorialViewPg3({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => {
-              backBtn();
-            }}
+            onPress={beforeBtn}
           >
             <Text
               style={{
@@ -394,9 +403,8 @@ function TutorialViewPg3({ navigation }) {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => {
-              nextBtn();
-            }}
+            onPress={nextBtn}
+
           >
             <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
               다음
