@@ -1,29 +1,58 @@
 import React, { useState } from "react";
 import { TouchableOpacity, Text } from "react-native";
 import * as S from "../../style/InfoDetailFullStyle";
+import {
+  OptionsEdu,
+  OptionsCareer,
+  OptionsMember,
+  OptionsTarget,
+} from "../../utils/InfoDetailFullData";
 
-const Options1 = ["직장인", "대학생", "신혼부부", "취업 준비생"];
-const Options2 = ["1인가구", "2인가구", "3인가구", "4인가구", "기타"];
+import axios from "axios";
 
 const InfoDetailFull = ({ navigation }) => {
-  const [selectedOptions1, setSelectedOptions1] = useState([]);
-  const [selectedOptions2, setSelectedOptions2] = useState([]);
+  const [selectedOptionsEdu, setSelectedOptionsEdu] = useState([]);
+  const [selectedOptionsCareer, setSelectedOptionsCareer] = useState([]);
+  const [selectedOptionsMember, setSelectedOptionsMember] = useState([]);
+  const [selectedOptionsTarget, setSelectedOptionsTarget] = useState([]);
 
-  const toggleOption1 = (option) => {
-    if (selectedOptions1.includes(option)) {
-      setSelectedOptions1(selectedOptions1.filter((item) => item !== option));
+  const toggleOptionEdu = (option) => {
+    if (selectedOptionsEdu.includes(option)) {
+      setSelectedOptionsEdu(
+        selectedOptionsEdu.filter((item) => item !== option)
+      );
     } else {
-      setSelectedOptions1([...selectedOptions1, option]);
+      setSelectedOptionsEdu([option]);
     }
   };
 
-  const toggleOption2 = (option) => {
-    if (selectedOptions2.includes(option)) {
-      // 이미 선택된 경우, 선택을 해제합니다.
-      setSelectedOptions2(selectedOptions2.filter((item) => item !== option));
+  const toggleOptionCareer = (option) => {
+    if (selectedOptionsCareer.includes(option)) {
+      setSelectedOptionsCareer(
+        selectedOptionsCareer.filter((item) => item !== option)
+      );
     } else {
-      // 선택되지 않은 경우에만 선택합니다.
-      setSelectedOptions2([option]);
+      setSelectedOptionsCareer([...selectedOptionsCareer, option]);
+    }
+  };
+
+  const toggleOptionMember = (option) => {
+    if (selectedOptionsMember.includes(option)) {
+      setSelectedOptionsMember(
+        selectedOptionsMember.filter((item) => item !== option)
+      );
+    } else {
+      setSelectedOptionsMember([option]);
+    }
+  };
+
+  const toggleOptionTarget = (option) => {
+    if (selectedOptionsTarget.includes(option)) {
+      setSelectedOptionsTarget(
+        selectedOptionsTarget.filter((item) => item !== option)
+      );
+    } else {
+      setSelectedOptionsTarget([option]);
     }
   };
 
@@ -35,12 +64,12 @@ const InfoDetailFull = ({ navigation }) => {
 
       <S.TitleText>현재 직업 (중복선택 가능)</S.TitleText>
       <S.OptionsContainer>
-        {Options1.map((option, index) => (
+        {OptionsEdu.map((option, index) => (
           <S.Option
             key={index}
-            onPress={() => toggleOption1(option)}
+            onPress={() => toggleOptionEdu(option)}
             style={{
-              backgroundColor: selectedOptions1.includes(option)
+              backgroundColor: selectedOptionsEdu.includes(option)
                 ? "#d1d1d1"
                 : "transparent",
             }}
@@ -50,14 +79,48 @@ const InfoDetailFull = ({ navigation }) => {
         ))}
       </S.OptionsContainer>
 
-      <S.TitleText>가구 수</S.TitleText>
+      <S.TitleText>직장 (중복선택 가능)</S.TitleText>
       <S.OptionsContainer>
-        {Options2.map((option, index) => (
+        {OptionsCareer.map((option, index) => (
           <S.Option
             key={index}
-            onPress={() => toggleOption2(option)}
+            onPress={() => toggleOptionCareer(option)}
             style={{
-              backgroundColor: selectedOptions2.includes(option)
+              backgroundColor: selectedOptionsCareer.includes(option)
+                ? "#d1d1d1"
+                : "transparent",
+            }}
+          >
+            <S.TextCenter>{option}</S.TextCenter>
+          </S.Option>
+        ))}
+      </S.OptionsContainer>
+
+      <S.TitleText>가구원</S.TitleText>
+      <S.OptionsContainer>
+        {OptionsMember.map((option, index) => (
+          <S.Option
+            key={index}
+            onPress={() => toggleOptionMember(option)}
+            style={{
+              backgroundColor: selectedOptionsMember.includes(option)
+                ? "#d1d1d1"
+                : "transparent",
+            }}
+          >
+            <S.TextCenter>{option}</S.TextCenter>
+          </S.Option>
+        ))}
+      </S.OptionsContainer>
+
+      <S.TitleText>대상 특성</S.TitleText>
+      <S.OptionsContainer>
+        {OptionsTarget.map((option, index) => (
+          <S.Option
+            key={index}
+            onPress={() => toggleOptionTarget(option)}
+            style={{
+              backgroundColor: selectedOptionsTarget.includes(option)
                 ? "#d1d1d1"
                 : "transparent",
             }}

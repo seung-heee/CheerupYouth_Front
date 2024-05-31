@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Container = styled.View`
   flex: 1;
   background-color: #f2f3f8;
-  padding-horizontal: 20px;
+  margin-horizontal: 20px;
   margin-top: 50px;
 `;
 
@@ -79,5 +79,9 @@ export const ButtonRow = styled.TouchableOpacity`
 //가로버튼
 
 export const ButtonRowText = styled.Text`
+  text-align: center;
+`;
+
+export const perButton = styled.TouchableOpacity`
   text-align: center;
 `;

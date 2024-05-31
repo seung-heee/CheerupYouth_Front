@@ -6,18 +6,24 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  StyleSheet,
 } from "react-native";
 import DatePicker from "@react-native-community/datetimepicker";
 import * as S from "../../style/InfoDetailStyle";
+import { cities, districts } from "../../utils/InfoDetailData";
+import RNPickerSelect from "react-native-picker-select";
+import axios from "axios";
 
 const InfoDetail = ({ navigation }) => {
   const [name, setName] = useState("");
   const [married, setMarried] = useState("");
   const [gender, setGender] = useState("");
   const [birthDate, setBirthDate] = useState(new Date());
-  const [location, setLocation] = useState("");
   const [income, setIncome] = useState("");
-  const [consentGiven, setConsentGiven] = useState(false);
+  const [consentGiven, setConsentGiven] = useState(false); //개인정보 동의
+  const [selectedCity, setSelectedCity] = useState(null); //시/도
+  const [selectedDistrict, setSelectedDistrict] = useState(null); //null 이었는데 일단 바꿈
+  const [selectedbtn, setSelectedbtn] = useState(null); 
 
   const handleNameChange = (text) => {
     setName(text);
@@ -36,10 +42,6 @@ const InfoDetail = ({ navigation }) => {
     setBirthDate(currentDate);
   };
 
-  const handleLocationChange = (text) => {
-    setLocation(text);
-  };
-
   const handleIncomeChange = (text) => {
     setIncome(text);
   };
@@ -48,21 +50,52 @@ const InfoDetail = ({ navigation }) => {
     setConsentGiven(!consentGiven);
   };
 
-  const handleSubmit = () => {
-    if (!name || !gender || !birthDate || !location || !income) {
-      Alert.alert("모든 항목을 입력하세요.");
-      return;
-    }
-
-    console.log("Name:", name);
-    console.log("Married:", married);
-    console.log("Gender:", gender);
-    console.log("Birth Date:", birthDate);
-    console.log("Location:", location);
-    console.log("Income:", income);
-
-    navigation.navigate("InfoDetailFull");
+  const handleCityChange = (city) => {
+    setSelectedCity(city);
+    setSelectedDistrict(null);
   };
+
+  const handleDistrictChange = (district) => {
+    setSelectedDistrict(district);
+  };
+
+  const handlebtnChange = (btn) => {
+    setSelectedbtn(btn);
+  };
+
+  const InfoDetailSubmit = () => {
+    axios
+      .post("http://localhost:8082/Detail/insert", {
+        Name: name,
+        Married: married,
+        Gender: gender,
+        BirthDate: birthDate,
+        Income: income,
+        ConsentGiven: consentGiven,
+        City: selectedCity,
+        District: selectedDistrict,
+      })
+      .then((response) => {
+        console.log("회원정보입력완료");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // const handleSubmit = () => {
+  //   if (!name || !gender || !birthDate || !location || !income) {
+  //     Alert.alert("모든 항목을 입력하세요.");
+  //     return;
+  //   }
+  //   console.log("Name:", name);
+  //   console.log("Married:", married);
+  //   console.log("Gender:", gender);
+  //   console.log("Birth Date:", birthDate);
+  //   console.log("District:", selectedDistrict);
+  //   console.log("Income:", income);
+  //   navigation.navigate("InfoDetailFull");
+  // };
 
   return (
     <S.Container>
@@ -120,12 +153,35 @@ const InfoDetail = ({ navigation }) => {
       </S.Box>
       <S.Box>
         <S.TitleText>거주지역</S.TitleText>
-        <TextInput
-          onChangeText={handleLocationChange}
-          value={location}
-          placeholder="주소"
-          returnKeyType="done"
-        />
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ marginRight: 10 }}>
+            <View style={styles.Picker}>
+              <RNPickerSelect
+                onValueChange={handleCityChange}
+                items={cities}
+                placeholder={{ label: "시/도", value: null }}
+                value={selectedCity}
+              />
+            </View>
+          </View>
+
+          <View style={styles.Picker}>
+            <RNPickerSelect
+              onValueChange={handleDistrictChange}
+              items={
+                selectedCity
+                  ? districts[selectedCity].map((d) => ({
+                      label: d,
+                      value: d,
+                    }))
+                  : []
+              }
+              placeholder={{ label: "구/군", value: null }}
+              value={selectedDistrict}
+              disabled={!selectedCity}
+            />
+          </View>
+        </View>
       </S.Box>
       <S.LastBox>
         <S.TitleText>연소득</S.TitleText>
@@ -155,12 +211,24 @@ const InfoDetail = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <S.BlueButtonBox>
-        <TouchableOpacity onPress={handleSubmit}>
+        <TouchableOpacity onPress={() => InfoDetailSubmit()}>
           <S.BlueButtonText>다음</S.BlueButtonText>
         </TouchableOpacity>
       </S.BlueButtonBox>
     </S.Container>
   );
 };
+
+const styles = StyleSheet.create({
+  Picker: {
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#c4c3c3",
+    marginTop: 5,
+    marginBottom: 10,
+    //backgroundColor: "white",
+  },
+});
 
 export default InfoDetail;
