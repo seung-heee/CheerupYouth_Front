@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Button,
@@ -13,6 +13,8 @@ import * as S from "../../style/InfoDetailStyle";
 import { cities, districts } from "../../utils/InfoDetailData";
 import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
+import { SERVER_URL } from "../components/ServerAddress";
+import { UserContext } from "../components/UserProvider";
 
 const InfoDetail = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -23,27 +25,11 @@ const InfoDetail = ({ navigation }) => {
   const [consentGiven, setConsentGiven] = useState(false); //개인정보 동의
   const [selectedCity, setSelectedCity] = useState(null); //시/도
   const [selectedDistrict, setSelectedDistrict] = useState(null); //null 이었는데 일단 바꿈
-  const [selectedbtn, setSelectedbtn] = useState(null); 
-
-  const handleNameChange = (text) => {
-    setName(text);
-  };
-
-  const handleMarriedChange = (value) => {
-    setMarried(value);
-  };
-
-  const handleGenderChange = (value) => {
-    setGender(value);
-  };
+  const { userDataP, setUserDataP } = useContext(UserContext);
 
   const handleBirthDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || birthDate;
     setBirthDate(currentDate);
-  };
-
-  const handleIncomeChange = (text) => {
-    setIncome(text);
   };
 
   const handleConsentToggle = () => {
@@ -59,13 +45,21 @@ const InfoDetail = ({ navigation }) => {
     setSelectedDistrict(district);
   };
 
-  const handlebtnChange = (btn) => {
-    setSelectedbtn(btn);
-  };
-
   const InfoDetailSubmit = () => {
+    console.log("보내는 데이터:", {
+      Name: name,
+      Married: married,
+      Gender: gender,
+      BirthDate: birthDate,
+      Income: income,
+      ConsentGiven: consentGiven,
+      City: selectedCity,
+      District: selectedDistrict,
+    });
+    //서버 연결은 안되는데 콘솔에서는 정보 받아옴.
+
     axios
-      .post("http://localhost:8082/Detail/insert", {
+      .post(`${SERVER_URL}/detail/insert`, {
         Name: name,
         Married: married,
         Gender: gender,
@@ -76,15 +70,15 @@ const InfoDetail = ({ navigation }) => {
         District: selectedDistrict,
       })
       .then((response) => {
-        console.log("회원정보입력완료");
+        console.log("회원정보 입력 완료");
       })
       .catch((error) => {
-        console.log(error);
+        console.log("에러 발생:", error);
       });
   };
 
   // const handleSubmit = () => {
-  //   if (!name || !gender || !birthDate || !location || !income) {
+  //   if (!name || !gender || !birthDate || !income) {
   //     Alert.alert("모든 항목을 입력하세요.");
   //     return;
   //   }
@@ -96,18 +90,25 @@ const InfoDetail = ({ navigation }) => {
   //   console.log("Income:", income);
   //   navigation.navigate("InfoDetailFull");
   // };
+  useEffect(() => {
+    if (userDataP && userDataP.name) {
+      setName(userDataP.name);
+    }
+  }, [userDataP]);
 
+  console.log(name);
   return (
     <S.Container>
       <View>
         <S.MainText>
-          정보를 입력하시면 {"\n"}동준님과 딱 맞는 정책을 알려드려요
+          정보를 입력하시면 {"\n"}
+          {userDataP ? userDataP.name : "묘사"}님과 딱 맞는 정책을 알려드려요
         </S.MainText>
       </View>
       <S.Box>
         <S.TitleText>이름</S.TitleText>
         <TextInput
-          onChangeText={handleNameChange}
+          onChangeText={setName}
           value={name}
           placeholder="홍길동"
           returnKeyType="done"
@@ -118,12 +119,12 @@ const InfoDetail = ({ navigation }) => {
         <S.Row>
           <Button
             title="미혼"
-            onPress={() => handleMarriedChange("미혼")}
+            onPress={() => setMarried("미혼")}
             color={married === "미혼" ? "#2e4b8f" : "gray"}
           />
           <Button
             title="기혼"
-            onPress={() => handleMarriedChange("기혼")}
+            onPress={() => setMarried("기혼")}
             color={married === "기혼" ? "#2e4b8f" : "gray"}
           />
         </S.Row>
@@ -133,12 +134,12 @@ const InfoDetail = ({ navigation }) => {
         <S.Row>
           <Button
             title="남성"
-            onPress={() => handleGenderChange("남성")}
+            onPress={() => setGender("남성")}
             color={gender === "남성" ? "#2e4b8f" : "gray"}
           />
           <Button
             title="여성"
-            onPress={() => handleGenderChange("여성")}
+            onPress={() => setGender("여성")}
             color={gender === "여성" ? "#2e4b8f" : "gray"}
           />
         </S.Row>
@@ -187,7 +188,7 @@ const InfoDetail = ({ navigation }) => {
         <S.TitleText>연소득</S.TitleText>
         <S.Row>
           <TextInput
-            onChangeText={handleIncomeChange}
+            onChangeText={setIncome}
             value={income}
             placeholder="0"
             keyboardType="numeric"

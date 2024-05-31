@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   View,
@@ -16,31 +16,109 @@ import {
   Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from "@react-navigation/native";
 import { SERVER_URL } from "../../components/ServerAddress";
 import axios from "axios";
+import { UserContext } from "../../components/UserProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function TutorialViewPg4() {
+function TutorialViewPg4({ navigation }) {
   const [dbdata, setDbData] = useState([]);
+  const { userDataP, setUserDataP } = useContext(UserContext);
+  const [styleChange, setStyleChange] = useState([]);
+  const [clickItem, setClickItem] = useState("");
+  const dbControl = (pgname) => {
+    const userPlusChange = {
+      user_id: userDataP.id,
+      user_checkData: styleChange.includes("check")
+        ? styleChange.filter((item) => item !== "check")
+        : styleChange.length > 0
+        ? styleChange
+        : ["check"],
+    };
+    axios
+      .post(`${SERVER_URL}/TVP4/insert`, userPlusChange)
+      .then((response) => {
+        navigation.navigate(pgname);
+      })
+      .catch((error) => {
+        console.error("잘못됐어요 ? : ", error);
+      });
+  };
+
+  const nextBtn = () => {
+    dbControl("TVP5");
+    AsyncStorage.removeItem("styleChangePg4");
+  };
+
+  const backBtn = () => {
+    navigation.navigate("TutorialScreen");
+    AsyncStorage.removeItem("styleChangePg4");
+  };
+  const beforeBtn = () => {
+    navigation.goBack();
+  };
+
   useEffect(() => {
     axios
-      .get(`${SERVER_URL}/ch4`)
+      .get(`${SERVER_URL}/TVP4/data`)
       .then((response) => {
-        console.log(response.data);
         const dbdata = response.data;
+        const markingData = response.data.map((item) => item.marking);
         setDbData(dbdata);
+        setStyleChange(dbdata.map((item) => item.value));
       })
       .catch((error) => {
         console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
       });
   }, []); // DB 불러오기
-  const [clickItem, setClickItem] = useState("");
-  const [styleChange, setStyleChange] = useState("");
-  const [iconState, setIconState] = useState("");
-  const navigation = useNavigation();
-  handleCancel = () => {
-    navigation.goBack();
-  };
+
+  useEffect(() => {
+    axios
+      .post(`${SERVER_URL}/TVP4/select`, {
+        user_id: userDataP ? userDataP.id : null,
+      })
+      .then((response) => {
+        const dbdata = response.data;
+        const userdata = dbdata.map((item) => item.marking);
+        const user = dbdata.map((item) => item.user_id);
+        if (user.length > 0) {
+          setStyleChange(userdata);
+        }
+      })
+      .catch((error) => {
+        console.error("비동기 작업 중 오류가 발생했습니다:", error);
+      });
+  }, [userDataP]);
+
+  useEffect(() => {
+    const checkItemData = async () => {
+      try {
+        const savedStyleChange = await AsyncStorage.getItem("styleChangePg4");
+        if (savedStyleChange !== null) {
+          setStyleChange(JSON.parse(savedStyleChange));
+        }
+      } catch (error) {
+        console.error("로컬 데이터 불러오기 오류:", error);
+      }
+    };
+
+    checkItemData();
+  }, []);
+
+  useEffect(() => {
+    const saveData = async () => {
+      try {
+        await AsyncStorage.setItem(
+          "styleChangePg4",
+          JSON.stringify(styleChange)
+        );
+      } catch (error) {
+        console.error("로컬 데이터 저장 오류:", error);
+      }
+    };
+    saveData();
+  }, [styleChange]);
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <View
@@ -59,11 +137,7 @@ function TutorialViewPg4() {
         }}
       >
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
+          <TouchableOpacity onPress={backBtn}>
             <Image
               style={{
                 width: 20,
@@ -165,7 +239,7 @@ function TutorialViewPg4() {
                       backgroundColor: "white",
                       margin: 15,
                       marginTop: 15,
-                      marginBottom: title === "주의사항" ? 130 : 0,
+                      marginBottom: title === "등기부등본" ? 0 : 0,
                       borderRadius: 5,
                       shadowColor:
                         clickItem === title
@@ -235,12 +309,12 @@ function TutorialViewPg4() {
                                   key={idx}
                                   onPress={() => {
                                     setStyleChange((prevState) => {
-                                      if (prevState.includes(data.value)) {
+                                      if (prevState.includes(data.marking)) {
                                         return prevState.filter(
-                                          (item) => item !== data.value
+                                          (item) => item !== data.marking
                                         );
                                       } else {
-                                        return [...prevState, data.value];
+                                        return [...prevState, data.marking];
                                       }
                                     });
                                   }}
@@ -252,18 +326,17 @@ function TutorialViewPg4() {
                                   <Icon
                                     name={
                                       styleChange.includes(data.value)
-                                        ? "check-box"
-                                        : "check-box-outline-blank"
+                                        ? "check-box-outline-blank"
+                                        : "check-box"
                                     }
                                     size={18}
                                     color={
                                       styleChange.includes(data.value)
-                                        ? "#2D4B8E"
-                                        : "gray"
+                                        ? "gray"
+                                        : "#2D4B8E"
                                     }
-                                    style={{ marginTop: 2.5, marginRight: 5 }}
+                                    style={{ marginTop: 3, marginRight: 5 }}
                                   />
-
                                   <Text
                                     style={{
                                       marginTop: 1,
@@ -286,7 +359,7 @@ function TutorialViewPg4() {
                       backgroundColor: "white",
                       margin: 15,
                       marginTop: 20,
-                      marginBottom: title === "주의사항" ? 150 : 0,
+                      marginBottom: title === "등기부등본" ? 150 : 0,
                       borderRadius: 5,
                       shadowColor: "rgba(45, 75, 142,0.3)",
                       shadowOffset: {
@@ -323,12 +396,12 @@ function TutorialViewPg4() {
                               key={idx}
                               onPress={() => {
                                 setStyleChange((prevState) => {
-                                  if (prevState.includes(data.value)) {
+                                  if (prevState.includes(data.marking)) {
                                     return prevState.filter(
-                                      (item) => item !== data.value
+                                      (item) => item !== data.marking
                                     );
                                   } else {
-                                    return [...prevState, data.value];
+                                    return [...prevState, data.marking];
                                   }
                                 });
                               }}
@@ -344,18 +417,17 @@ function TutorialViewPg4() {
                               <Icon
                                 name={
                                   styleChange.includes(data.value)
-                                    ? "check-box"
-                                    : "check-box-outline-blank"
+                                    ? "check-box-outline-blank"
+                                    : "check-box"
                                 }
                                 size={18}
                                 color={
                                   styleChange.includes(data.value)
-                                    ? "#2D4B8E"
-                                    : "gray"
+                                    ? "gray"
+                                    : "#2D4B8E"
                                 }
-                                style={{ marginTop: 0, marginRight: 5 }}
+                                style={{ marginTop: 3, marginRight: 5 }}
                               />
-
                               <Text style={{ marginTop: 1, fontSize: 16 }}>
                                 {data.value}
                               </Text>
@@ -389,58 +461,61 @@ function TutorialViewPg4() {
               </View>
             )
         )}
-      </ScrollView>
-      <View
-        style={{
-          position: "absolute",
-          padding: 10,
-          bottom: 50,
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <TouchableOpacity
+        <View
           style={{
-            width: "45%",
-            marginRight: 14,
-            height: 55,
-            padding: 15,
-            backgroundColor: "#DEDEDE",
-            borderRadius: 30,
-            alignItems: "center",
+            // position: "absolute",
+            padding: 10,
+            // bottom: 50,
+            marginTop: clickItem == "등기부등본" ? 30 : 90,
+            marginBottom: 50,
+            width: "100%",
+            flexDirection: "row",
             justifyContent: "center",
           }}
-          onPress={handleCancel}
+          onPress={backBtn}
         >
-          <Text
+          <TouchableOpacity
             style={{
-              color: "rgba(112,112,112,1.0)",
-              fontSize: 20,
-              fontFamily: "B",
+              width: "45%",
+              marginRight: 14,
+              height: 55,
+              padding: 15,
+              backgroundColor: "#DEDEDE",
+              borderRadius: 30,
+              alignItems: "center",
+              justifyContent: "center",
             }}
+            onPress={beforeBtn}
           >
-            이전
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width: "45%",
-            height: 55,
-            marginLeft: 14,
-            padding: 15,
-            backgroundColor: "#2D4B8E",
-            borderRadius: 30,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onPress={() => navigation.navigate("TVP4")}
-        >
-          <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
-            다음
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <Text
+              style={{
+                color: "rgba(112,112,112,1.0)",
+                fontSize: 20,
+                fontFamily: "B",
+              }}
+            >
+              이전
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: "45%",
+              height: 55,
+              marginLeft: 14,
+              padding: 15,
+              backgroundColor: "#2D4B8E",
+              borderRadius: 30,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={nextBtn}
+          >
+            <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
+              다음
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </View>
   );
 }
