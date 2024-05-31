@@ -4,8 +4,10 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import Main from "../screens/Main";
 import Community from "../screens/Community";
 import MyPage from "../screens/MyPage";
+
 import { useFocusEffect } from "@react-navigation/native";
 import { UserContext } from "../components/UserProvider";
+
 const Tab = createBottomTabNavigator();
 
 const BottomBar = ({ navigation }) => {

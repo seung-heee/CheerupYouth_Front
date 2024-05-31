@@ -1,14 +1,17 @@
+
 import React, { useContext } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import * as S from "../../style/MyPageStyle";
 import Header from "../components/Hearder";
 import { UserContext } from "../components/UserProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const ButtonBox = () => {
   // 오류 안나게 하려고 만들어 놓은 버튼 박스 입니당
 };
 
 const MyPage = ({ navigation }) => {
+
   const { userDataP, setUserDataP } = useContext(UserContext);
   const LogoutBtn = async () => {
     try {
@@ -23,6 +26,7 @@ const MyPage = ({ navigation }) => {
     }
     navigation.navigate("InfoDetail"); //아이디 삭제 (로그아웃)
   };
+
   return (
     <S.Container>
       <Header navigation={navigation} />
@@ -31,7 +35,9 @@ const MyPage = ({ navigation }) => {
           <S.ProfileImage
             source={require("../../assets/images/adaptive-icon.png")}
           />
+
           <S.ProfileText>{userDataP ? userDataP.name : "묘사"}</S.ProfileText>
+
         </S.Center>
         <S.ButtonWrapper>
           <S.Button onPress={() => navigation.navigate("InfoDetail")}>
@@ -40,7 +46,9 @@ const MyPage = ({ navigation }) => {
           <S.Button onPress={ButtonBox}>
             <S.ButtonText>내 정보 관리</S.ButtonText>
           </S.Button>
+
           <S.Button onPress={LogoutBtn}>
+
             <S.ButtonText>로그아웃</S.ButtonText>
           </S.Button>
         </S.ButtonWrapper>
