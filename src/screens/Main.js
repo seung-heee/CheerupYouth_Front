@@ -6,20 +6,15 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import { FlatList } from "react-native";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../components/UserProvider";
 //import BottomTabNavigationApp from "./BottomBar";
-
 import * as S from "../../style/MainStyle";
 import Header from "../components/Hearder";
 import SearchScreen from "../components/SearchScreen";
 
-const Main = ({ navigation }) => {
+const Main = ({ navigation }) => {  
   const { userDataP, setUserDataP } = useContext(UserContext);
   const { userDataPlusP } = useContext(UserContext);
   const ButtonBox = async () => {
@@ -100,7 +95,7 @@ const Main = ({ navigation }) => {
               </View>
             ))}
             <TouchableOpacity onPress={() => navigation.navigate("PolicyList")}>
-              <S.InnerText>정책 더보기⮕ </S.InnerText>
+              <S.InnerText onPress={() => navigation.navigate("policy_main")}>정책 더보기⮕ </S.InnerText>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -114,33 +109,30 @@ const Main = ({ navigation }) => {
           marginRight: -20,
         }}
       >
+        <SearchScreen />
+        <View style={{ marginTop: 10, marginBottom: 10 }}>
+          <Image
+            source={require("../../assets/images/ex1.jpeg")}
+            style={{ height: 90, width: "100%" }}
+            resizeMode="cover"
+          />
+        </View>
 
-      <SearchScreen />
-      <View style={{ marginTop: 10, marginBottom: 10 }}>
+        <S.Row>
+          <S.TextBox>복잡한 부동산 계약{"\n"}조금 더 쉽게 준비해요!</S.TextBox>
+        </S.Row>
 
-        <Image
-          source={require("../../assets/images/ex1.jpeg")}
-          style={{ height: 90, width: "100%" }}
-          resizeMode="cover"
-        />
-      </View>
-
-      <S.Row>
-
-        <S.TextBox>복잡한 부동산 계약{"\n"}조금 더 쉽게 준비해요!</S.TextBox>
-
-      </S.Row>
-
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <S.ButtonRow onPress={ButtonBox}>
-          <S.ButtonRowText>나만의{"\n"}맞춤정책</S.ButtonRowText>
-        </S.ButtonRow>
-        <S.ButtonRow onPress={() => navigation.navigate("TutorialScreen")}>
-          <S.ButtonRowText>튜토리얼</S.ButtonRowText>
-        </S.ButtonRow>
-        <S.ButtonRow onPress={() => navigation.navigate("LawWordList")}>
-          <S.ButtonRowText>용어 리스트</S.ButtonRowText>
-        </S.ButtonRow>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <S.ButtonRow onPress={ButtonBox}>
+            <S.ButtonRowText>나만의{"\n"}맞춤정책</S.ButtonRowText>
+          </S.ButtonRow>
+          <S.ButtonRow onPress={() => navigation.navigate("TutorialScreen")}>
+            <S.ButtonRowText>튜토리얼</S.ButtonRowText>
+          </S.ButtonRow>
+          <S.ButtonRow onPress={() => navigation.navigate("LawWordList")}>
+            <S.ButtonRowText>용어 리스트</S.ButtonRowText>
+          </S.ButtonRow>
+        </View>
       </View>
     </S.Container>
   );
