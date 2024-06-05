@@ -2,7 +2,6 @@ import React, { useContext, useCallback } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Searchbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
-
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import { FlatList } from "react-native";
@@ -13,8 +12,10 @@ import { UserContext } from "../components/UserProvider";
 import * as S from "../../style/MainStyle";
 import Header from "../components/Hearder";
 import SearchScreen from "../components/SearchScreen";
+import MainHeader from "../components/MainHeader";
 
 const Main = ({ navigation }) => {  
+  const { user } = useContext(UserContext);
   const { userDataP, setUserDataP } = useContext(UserContext);
   const { userDataPlusP } = useContext(UserContext);
   const ButtonBox = async () => {
@@ -33,7 +34,7 @@ const Main = ({ navigation }) => {
       return () => {
         // 화면이 포커스를 잃을 때 실행할 작업
       };
-    }, [userDataP]) // userDataP가 변경될 때마다 콜백 함수를 다시 생성
+    }, [user]) // userDataP가 변경될 때마다 콜백 함수를 다시 생성
   );
 
   const data = [
@@ -61,10 +62,11 @@ const Main = ({ navigation }) => {
 
   return (
     <S.Container>
-      <Header navigation={navigation} />
+      {/* <Header navigation={navigation} /> */}
+      <MainHeader navigation={navigation} />
 
       <S.TextBox>
-        안녕하세요, 동준님{"\n"}부동산 정보와 정책을 검색해 보세요.
+        안녕하세요, {user ? user.name : '로그인'}님{"\n"}부동산 정보와 정책을 검색해 보세요.
       </S.TextBox>
       <SearchScreen />
 
@@ -73,7 +75,7 @@ const Main = ({ navigation }) => {
         <Text>오늘의 새로운 청년 주택 공고가 올라왔어요!</Text>
       </S.Notice> */}
 
-      <S.TextBox>"동준"님의 맞춤 정책 추천</S.TextBox>
+      <S.TextBox>{user ? user.name : '로그인'}님의 맞춤 정책 추천</S.TextBox>
       <Text style={{ marginBottom: 10 }}>
         나의 정보를 입력 후 더욱 자세한 맞춤 정보를 확인하세요.
       </Text>

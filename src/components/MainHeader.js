@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { UserContext } from "./UserProvider";
 
 const ButtonBox = () => {
   // 오류 안나게 하려고 만들어 놓은 버튼 박스 입니당
 };
 
 const MainHeader = ({ navigation }) => {
+  const { user } = useContext(UserContext);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     navigation.navigate('mypage');
+  //   } else {
+  //     navigation.navigate('LoginScreen');
+  //   }
+  // }, [user]);
+
+  const handleMyPage = () => {
+    if (user) {
+      navigation.navigate('mypage');
+    } else {
+      navigation.navigate('LoginScreen');
+    }
+  }
+
   return (
       <View style={styles.Container}>
         <TouchableOpacity onPress={() => navigation.navigate("Main")}>
@@ -15,7 +34,7 @@ const MainHeader = ({ navigation }) => {
             style={styles.image}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+        <TouchableOpacity onPress={() => handleMyPage()}>
           <Icon name="person" size={25} color={'#264886'} />
         </TouchableOpacity>
       </View>
@@ -24,8 +43,8 @@ const MainHeader = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   Container: {
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',

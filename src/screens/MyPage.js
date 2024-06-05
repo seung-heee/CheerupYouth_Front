@@ -11,8 +11,14 @@ const ButtonBox = () => {
 };
 
 const MyPage = ({ navigation }) => {
-
   const { userDataP, setUserDataP } = useContext(UserContext);
+  const { user, logout} = useContext(UserContext);
+
+  const handleLogout = () => {
+    logout();
+    navigation.navigate('Main');
+  };
+
   const LogoutBtn = async () => {
     try {
       await AsyncStorage.removeItem("userData");
@@ -24,7 +30,7 @@ const MyPage = ({ navigation }) => {
     } catch (error) {
       console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
     }
-    navigation.navigate("InfoDetail"); //아이디 삭제 (로그아웃)
+    navigation.navigate("InfoDetail"); // 아이디 삭제 (로그아웃)
   };
 
   return (
@@ -36,7 +42,7 @@ const MyPage = ({ navigation }) => {
             source={require("../../assets/images/adaptive-icon.png")}
           />
 
-          <S.ProfileText>{userDataP ? userDataP.name : "묘사"}</S.ProfileText>
+          <S.ProfileText>{user ? user.name : "로그인이 필요합니다."}</S.ProfileText>
 
         </S.Center>
         <S.ButtonWrapper>
@@ -47,8 +53,8 @@ const MyPage = ({ navigation }) => {
             <S.ButtonText>내 정보 관리</S.ButtonText>
           </S.Button>
 
-          <S.Button onPress={LogoutBtn}>
-
+          {/* <S.Button onPress={LogoutBtn}> */}
+          <S.Button onPress={handleLogout}>
             <S.ButtonText>로그아웃</S.ButtonText>
           </S.Button>
         </S.ButtonWrapper>

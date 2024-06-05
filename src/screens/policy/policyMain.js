@@ -16,7 +16,7 @@ const PolicyMain = ({ navigation }) => {
   // 모든 정책 조회
   const getPolicy = async () => {
     try {
-      const response = await axios.get('http://192.168.45.118:3000/policy');
+      const response = await axios.get(`${SERVER_URL}/policy`);
       console.log("Response data:", response.data);
       setAllPolicy(response.data);
       return response.data;
@@ -38,7 +38,7 @@ const PolicyMain = ({ navigation }) => {
   // 정책 신청 가능 여부 확인
   const getPolicyMatch = async (email) => {
     try {
-      const response = await axios.get(`http://192.168.45.118:3000/policy/match?email=${email}`);
+      const response = await axios.get(`${SERVER_URL}/policy/match?email=${email}`);
       console.log(response.data, '가능여부')
       return response.data;
     } catch (error) {

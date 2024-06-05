@@ -14,7 +14,8 @@ import { UserContext } from "../components/UserProvider";
 const LoginScreen = ({ navigation }) => {
   const [userId, setUserid] = useState("");
   const [password, setPassword] = useState("");
-  const { userDataP, setUserDataP } = useContext(UserContext);
+  // const { userDataP, setUserDataP } = useContext(UserContext);
+  const { login } = useContext(UserContext);
 
   const handlsignup = () => {
     navigation.navigate("SignUp");
@@ -28,14 +29,17 @@ const LoginScreen = ({ navigation }) => {
 
     try {
       const response = await axios.post(`${SERVER_URL}/users/login`, userData);
-      await AsyncStorage.setItem("userData", JSON.stringify(response.data));
+      const { token, user } = response.data;
+      login(token, user.name);
+      navigation.navigate('Main'); // 로그인 성공시 메인으로 이동
 
-      setUserDataP((prevUserData) => ({
-        ...prevUserData,
-        id: userId,
-        name: response.data.name,
-      }));
-      navigation.navigate("BottomBar");
+      // await AsyncStorage.setItem("userData", JSON.stringify(response.data));
+      // setUserDataP((prevUserData) => ({
+      //   ...prevUserData,
+      //   id: userId,
+      //   name: response.data.name,
+      // }));
+      // navigation.navigate("BottomBar");
     } catch (error) {
       console.error("데이터를 보내는 중 오류가 발생했습니다:", error);
     }

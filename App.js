@@ -20,6 +20,7 @@ import PolicyList from "./src/screens/PolicyList";
 import { UserProvider } from "./src/components/UserProvider";
 import policyMain from "./src/screens/policy/policyMain";
 import policyDetail from './src/screens/policy/policyDetail';
+import MyPage from "./src/screens/MyPage";
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,7 @@ export default function App() {
           <Stack.Screen name="TVP3" component={TVP3} />
           <Stack.Screen name="TVP4" component={TVP4} />
           <Stack.Screen name="TVP5" component={TVP5} />
+          <Stack.Screen name="mypage" component={MyPage} />
           {/* 정책 */}
           <Stack.Screen name="policy_main" component={policyMain} />
           <Stack.Screen name="policy_detail" component={policyDetail} />

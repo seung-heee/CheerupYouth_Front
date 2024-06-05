@@ -13,7 +13,7 @@ const SignUp = () => {
 
   const SignUp = async () => {
     try {
-      const response = await axios.post(`http://192.168.45.118:3000/users/signUp`, {
+      const response = await axios.post(`${SERVER_URL}/users/signUp`, {
         name: Firstname + Lastname,
         id: Id,
         password: Password,
@@ -21,7 +21,11 @@ const SignUp = () => {
       });
       console.log("회원가입 완료", response.data);
     } catch (error) {
-      console.error("회원가입 실패");
+      if (error.response && error.response.status === 400) {
+        console.error("이미 존재하는 회원입니다.");
+      } else {
+        console.error("회원가입 중 오류가 발생했습니다.", error);
+      }
     }
   };
 
