@@ -56,15 +56,6 @@ const SignUp = () => {
       .catch((error) => {
         console.log(error);
       });
-      console.log("회원가입 완료", response.data);
-    } 
-    // .catch (error) {
-    //   if (error.response && error.response.status === 400) {
-    //     console.error("이미 존재하는 회원입니다.");
-    //   } else {
-    //     console.error("회원가입 중 오류가 발생했습니다.", error);
-    //   }
-    // }
   };
 
   const validatePassword = (password) => {
@@ -94,9 +85,8 @@ const SignUp = () => {
   const handleSignUp = () => {
     if (Firstname && Lastname && Email && Password && Contact) {
       axios
-        .post(`${SERVER_URL}/signup/insert`, {
-          first_name: Firstname,
-          last_name: Lastname,
+        .post(`${SERVER_URL}/users/signUp`, {
+          name: Firstname + Lastname,
           id: Email,
           password: Password,
           contact: Contact,
@@ -117,32 +107,18 @@ const SignUp = () => {
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
+
   const backBtn = () => {
     navigation.navigate("LoginScreen");
   };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "white",
-      }}
-    >
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       <HeaderComponent onPress={backBtn} headerText="회원가입" />
       <View style={{ margin: 25, marginBottom: 0, marginTop: 10 }}>
         <View style={{ marginBottom: 10 }}>
-          <Text
-            style={{
-              margin: 10,
-              fontSize: 17,
-            }}
-          >
-            이름
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
+          <Text style={{ margin: 10, fontSize: 17 }}>이름</Text>
+          <View style={{ flexDirection: "row" }}>
             <TextInput
               style={{
                 backgroundColor: "#F7F7F7",
@@ -174,14 +150,7 @@ const SignUp = () => {
         </View>
 
         <View style={{ marginBottom: 10 }}>
-          <Text
-            style={{
-              fontSize: 17,
-              margin: 10,
-            }}
-          >
-            이메일
-          </Text>
+          <Text style={{ fontSize: 17, margin: 10 }}>이메일</Text>
           <View style={{ flexDirection: "row" }}>
             <TextInput
               placeholder="이메일을 입력해주세요."
@@ -213,11 +182,7 @@ const SignUp = () => {
           </View>
 
           {!EmailStyle && (
-            <View
-              style={{
-                margin: 10,
-              }}
-            >
+            <View style={{ margin: 10 }}>
               <Text
                 style={{
                   fontSize: 12,
@@ -231,14 +196,7 @@ const SignUp = () => {
         </View>
 
         <View style={{ marginBottom: 10 }}>
-          <Text
-            style={{
-              fontSize: 17,
-              margin: 10,
-            }}
-          >
-            비밀번호
-          </Text>
+          <Text style={{ fontSize: 17, margin: 10 }}>비밀번호</Text>
           <View style={{ flexDirection: "row" }}>
             <TextInput
               style={{
@@ -302,14 +260,7 @@ const SignUp = () => {
         </View>
 
         <View>
-          <Text
-            style={{
-              fontSize: 17,
-              margin: 10,
-            }}
-          >
-            휴대폰번호
-          </Text>
+          <Text style={{ fontSize: 17, margin: 10 }}>휴대폰번호</Text>
           <View style={{ flexDirection: "row" }}>
             <TextInput
               style={{
@@ -373,5 +324,6 @@ const SignUp = () => {
       </View>
     </View>
   );
+};
 
 export default SignUp;
