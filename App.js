@@ -19,8 +19,8 @@ import InfoDetail from "./src/screens/InfoDetail";
 import InfoDetailFull from "./src/screens/InfoDetailFull";
 import PolicyList from "./src/screens/PolicyList";
 import { UserProvider } from "./src/components/UserProvider";
-import policyMain from "./src/screens/policy/policyMain";
-import policyDetail from './src/screens/policy/policyDetail';
+//import policyMain from "./src/screens/policy/policyMain";
+//import policyDetail from './src/screens/policy/policyDetail';
 import MyPage from "./src/screens/MyPage";
 
 const Stack = createStackNavigator();
@@ -51,8 +51,8 @@ export default function App() {
           <Stack.Screen name="InfoDetail" component={InfoDetail} />
           <Stack.Screen name="InfoDetailFull" component={InfoDetailFull} />
           {/* 정책 */}
-          <Stack.Screen name="policyMain" component={policyMain} />
-          <Stack.Screen name="policyDetail" component={policyDetail} />
+          {/* <Stack.Screen name="policyMain" component={policyMain} /> */}
+          {/* <Stack.Screen name="policyDetail" component={policyDetail} /> */}
           {/* 마이페이지 */}
           <Stack.Screen name="mypage" component={MyPage} />
           <Stack.Screen name="infoDetail" component={InfoDetail} />

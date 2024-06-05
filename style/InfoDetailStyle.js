@@ -12,7 +12,8 @@ export const MainText = styled.Text`
   font-weight: bold;
   color: #2e4b8f;
   padding: 5px;
-  margin-bottom: 50px;
+  margin-top: 50px;
+  margin-bottom: 20px;
 `;
 
 export const TitleText = styled.Text`
@@ -23,15 +24,19 @@ export const TitleText = styled.Text`
 `;
 
 export const Box = styled.View`
+  height: 65px;
   border-width: 1px;
   border-color: #c4c3c3;
   padding: 10px;
   flex-direction: row;
   justify-content: space-between;
   border-bottom-width: 0;
+  align-items: center;
 `;
 
 export const LastBox = styled.View`
+  align-items: center;
+  height: 65px;
   border-width: 1px;
   border-color: #c4c3c3;
   padding: 10px;
@@ -89,17 +94,3 @@ export const WonText = styled.Text`
   color: #626262;
   padding: 5px;
 `;
-
-// export const radioContainer = styled.View`
-//   flexdirection: "row";
-//   justifycontent: "space-around";
-//   marginbottom: 16;
-// `;
-
-// export const Input = styled.Text`
-//   height: 40;
-//   bordercolor: "gray";
-//   borderwidth: 1;
-//   marginbottom: 16;
-//   paddinghorizontal: 10;
-// `;

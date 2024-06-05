@@ -79,8 +79,12 @@ export const districts = {
   ],
 };
 
-export const Income = [
-  { label: "서울", value: "서울" },
-  { label: "경기도", value: "경기도" },
-  { label: "인천", value: "인천" },
+export const incomeOptions = [
+  { label: "100만원 이하", value: "1000000" },
+  { label: "100만원 - 200만원", value: "1000000-2000000" },
+  { label: "200만원 - 300만원", value: "2000000-3000000" },
+  { label: "300만원 - 400만원", value: "3000000-4000000" },
+  { label: "400만원 - 500만원", value: "4000000-5000000" },
+  { label: "500만원 이상", value: "5000000" },
+  // 다른 소득 구간에 대한 데이터도 추가할 수 있습니다.
 ];
