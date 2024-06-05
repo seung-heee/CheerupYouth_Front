@@ -14,7 +14,7 @@ import * as S from "../../style/MainStyle";
 import Header from "../components/Hearder";
 import SearchScreen from "../components/SearchScreen";
 
-const Main = ({ navigation }) => {  
+const Main = ({ navigation }) => {
   const { userDataP, setUserDataP } = useContext(UserContext);
   const { userDataPlusP } = useContext(UserContext);
   const ButtonBox = async () => {
@@ -27,7 +27,7 @@ const Main = ({ navigation }) => {
       console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
     }
   }; //아이디 삭제 (로그아웃)
-  
+
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -68,11 +68,6 @@ const Main = ({ navigation }) => {
       </S.TextBox>
       <SearchScreen />
 
-      {/* <S.Notice onPress={ButtonBox}>
-        <Icon name="notifications" size={20} color="#2e4b8f" />
-        <Text>오늘의 새로운 청년 주택 공고가 올라왔어요!</Text>
-      </S.Notice> */}
-
       <S.TextBox>"동준"님의 맞춤 정책 추천</S.TextBox>
       <Text style={{ marginBottom: 10 }}>
         나의 정보를 입력 후 더욱 자세한 맞춤 정보를 확인하세요.
@@ -95,7 +90,9 @@ const Main = ({ navigation }) => {
               </View>
             ))}
             <TouchableOpacity onPress={() => navigation.navigate("PolicyList")}>
-              <S.InnerText onPress={() => navigation.navigate("policy_main")}>정책 더보기⮕ </S.InnerText>
+              <S.InnerText onPress={() => navigation.navigate("policy_main")}>
+                정책 더보기⮕{" "}
+              </S.InnerText>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -109,7 +106,6 @@ const Main = ({ navigation }) => {
           marginRight: -20,
         }}
       >
-        <SearchScreen />
         <View style={{ marginTop: 10, marginBottom: 10 }}>
           <Image
             source={require("../../assets/images/ex1.jpeg")}
@@ -117,22 +113,22 @@ const Main = ({ navigation }) => {
             resizeMode="cover"
           />
         </View>
+      </View>
 
-        <S.Row>
-          <S.TextBox>복잡한 부동산 계약{"\n"}조금 더 쉽게 준비해요!</S.TextBox>
-        </S.Row>
+      <S.Row>
+        <S.TextBox>복잡한 부동산 계약{"\n"}조금 더 쉽게 준비해요!</S.TextBox>
+      </S.Row>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <S.ButtonRow onPress={ButtonBox}>
-            <S.ButtonRowText>나만의{"\n"}맞춤정책</S.ButtonRowText>
-          </S.ButtonRow>
-          <S.ButtonRow onPress={() => navigation.navigate("TutorialScreen")}>
-            <S.ButtonRowText>튜토리얼</S.ButtonRowText>
-          </S.ButtonRow>
-          <S.ButtonRow onPress={() => navigation.navigate("LawWordList")}>
-            <S.ButtonRowText>용어 리스트</S.ButtonRowText>
-          </S.ButtonRow>
-        </View>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <S.ButtonRow onPress={ButtonBox}>
+          <S.ButtonRowText>나만의{"\n"}맞춤정책</S.ButtonRowText>
+        </S.ButtonRow>
+        <S.ButtonRow onPress={() => navigation.navigate("TutorialScreen")}>
+          <S.ButtonRowText>튜토리얼</S.ButtonRowText>
+        </S.ButtonRow>
+        <S.ButtonRow onPress={() => navigation.navigate("LawWordList")}>
+          <S.ButtonRowText>용어 리스트</S.ButtonRowText>
+        </S.ButtonRow>
       </View>
     </S.Container>
   );
