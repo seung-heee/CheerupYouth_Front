@@ -9,23 +9,20 @@ const SignUp = () => {
   const [Lastname, setLastname] = useState("");
   const [Id, setId] = useState("");
   const [Password, setPassword] = useState("");
-  const [Phone, setPhone] = useState("");
+  const [contact, setContact] = useState("");
 
-  const SignUp = () => {
-    axios
-      .post(`${SERVER_URL}/users/login`, {
-        first_name: Firstname,
-        last_name: Lastname,
+  const SignUp = async () => {
+    try {
+      const response = await axios.post(`http://192.168.45.118:3000/users/signUp`, {
+        name: Firstname + Lastname,
         id: Id,
         password: Password,
-        phone: Phone,
-      })
-      .then((response) => {
-        console.log("회원가입완료");
-      })
-      .catch((error) => {
-        console.log(error);
+        contact: contact,
       });
+      console.log("회원가입 완료", response.data);
+    } catch (error) {
+      console.error("회원가입 실패");
+    }
   };
 
   /*const SignUp = () => {
@@ -34,7 +31,7 @@ const SignUp = () => {
       last_name:Lastname,
       id:Id,
       password:Password,
-      phone:Phone,
+      contact:contact,
     })
     .then(response=>{
       console.log('회원가입완료')
@@ -77,10 +74,10 @@ const SignUp = () => {
             style={{ flexDirection: "row", paddingStart: 9, marginBottom: 15 }}
           >
             <S.Signup_FstName
-              placeholder="성을 입력해주세요." /*value={Firstname} onChangeText={setFirstname}*/
+              placeholder="성을 입력해주세요." value={Firstname} onChangeText={setFirstname}
             ></S.Signup_FstName>
             <S.Signup_lstName
-              placeholder="이름을 입력해주세요." /*value={Lastname} onChangeText={setLastname}*/
+              placeholder="이름을 입력해주세요." value={Lastname} onChangeText={setLastname}
             ></S.Signup_lstName>
           </View>
         </View>
@@ -116,7 +113,7 @@ const SignUp = () => {
             }}
           >
             <S.Signup_Id
-              placeholder="아이디를 입력해주세요." /*value={Id} onChangeText={setId}*/
+              placeholder="아이디를 입력해주세요." value={Id} onChangeText={setId}
             ></S.Signup_Id>
 
             <TouchableOpacity>
@@ -175,7 +172,7 @@ const SignUp = () => {
               placeholder="비밀번호를 입력해주세요."
               secureTextEntry={
                 true
-              } /*value={Password}*/ /*onChangeText={setPassword}*/
+              } value={Password} onChangeText={setPassword}
             ></S.Signup_password>
             <S.Signup_passwordChk
               placeholder="비밀번호 확인"
@@ -219,7 +216,7 @@ const SignUp = () => {
               }}
             >
               <S.Signup_Phone
-                placeholder="휴대폰번호를 입력해주세요." /*value={Phone} onChangeText={setPhone}*/
+                placeholder="휴대폰번호를 입력해주세요." value={contact} onChangeText={setContact}
               ></S.Signup_Phone>
 
               <S.Auth_get

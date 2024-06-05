@@ -14,7 +14,7 @@ const policyDetail = ({route, navigation}) => {
 
   const getSelectPolicy = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/policy/${key}`);
+      const response = await axios.get(`http://192.168.45.118:3000/policy/${key}`);
       console.log(response.data)
       setPolicy(response.data)
       setImgLink(response.data.img)
@@ -55,7 +55,7 @@ const policyDetail = ({route, navigation}) => {
        showsHorizontalScrollIndicator={false} // 가로 스크롤바 숨기기
       >
         <View>
-          <Image source={{uri: 'https://reactjs.org/logo-og.png' }}
+          <Image source={{uri: policy.img }}
           style={{ width: '100%', height: 300 }} />
         </View>
 
