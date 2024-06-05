@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
   Button,
@@ -16,7 +17,7 @@ import axios from "axios";
 import { SERVER_URL } from "../components/ServerAddress";
 import { UserContext } from "../components/UserProvider";
 
-const InfoDetail = ({ navigation }) => {
+const InfoDetail = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
   const [name, setName] = useState(user.name);
   const [married, setMarried] = useState("");
@@ -62,25 +63,25 @@ const InfoDetail = ({ navigation }) => {
     });
     //서버 연결은 안되는데 콘솔에서는 정보 받아옴.
 
-    navigation.navigate('infoDetailFull'); // 로그인 성공시 메인으로 이동
-    // axios
-    //   .post(`${SERVER_URL}/users/insert`, {
-    //     id: userId,
-    //     Name: name,
-    //     Married: married,
-    //     Gender: gender,
-    //     BirthDate: birthDate,
-    //     Income: income,
-    //     ConsentGiven: consentGiven,
-    //     City: selectedCity,
-    //     District: selectedDistrict,
-    //   })
-    //   .then((response) => {
-    //     console.log("회원정보 입력 완료");
-    //   })
-    //   .catch((error) => {
-    //     console.log("에러 발생:", error);
-      // });
+    navigation.navigate('infoDetailFull'); 
+    axios
+      .post(`${SERVER_URL}/users/insert`, {
+        id: userId,
+        Name: name,
+        Married: married,
+        Gender: gender,
+        BirthDate: birthDate,
+        Income: income,
+        ConsentGiven: consentGiven,
+        City: selectedCity,
+        District: selectedDistrict,
+      })
+      .then((response) => {
+        console.log("회원정보 입력 완료");
+      })
+      .catch((error) => {
+        console.log("에러 발생:", error);
+      });
   };
 
   // const handleSubmit = () => {
@@ -96,11 +97,39 @@ const InfoDetail = ({ navigation }) => {
   //   console.log("Income:", income);
   //   navigation.navigate("InfoDetailFull");
   // };
+
   useEffect(() => {
     if (user && user.name) {
       setName(user.name);
     }
-  }, [user]);
+
+    const fetchUserDetails = async () => {
+      try {
+        const id = await AsyncStorage.getItem('id');
+        const response = await axios.get(`${SERVER_URL}/users/select`, {
+          params: {
+            userId: id,
+          },
+        });
+        const data = response.data;
+        console.log("User details:", data);
+        
+        if (data && data.length > 0) {
+          setName(data[0].Name);
+          setMarried(data[0].Married);
+          setGender(data[0].Gender);
+          setIncome(data[0].Income);
+          setSelectedCity(data[0].City);
+          setSelectedDistrict(data[0].District);
+          setBirthDate(new Date(data[0].BirthDate));
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };    
+
+    fetchUserDetails();
+  }, []);
 
   return (
     <S.Container>
