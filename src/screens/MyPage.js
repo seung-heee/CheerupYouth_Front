@@ -12,7 +12,7 @@ const ButtonBox = () => {
 
 const MyPage = ({ navigation }) => {
   const { userDataP, setUserDataP } = useContext(UserContext);
-  const { user, logout} = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   const handleLogout = () => {
     logout();
@@ -41,12 +41,11 @@ const MyPage = ({ navigation }) => {
           <S.ProfileImage
             source={require("../../assets/images/adaptive-icon.png")}
           />
-
           <S.ProfileText>{user ? user.name : "로그인이 필요합니다."}</S.ProfileText>
 
         </S.Center>
         <S.ButtonWrapper>
-          <S.Button onPress={() => navigation.navigate("InfoDetail")}>
+          <S.Button onPress={() => navigation.navigate("infoDetail")}>
             <S.ButtonText>상세정보 수정</S.ButtonText>
           </S.Button>
           <S.Button onPress={ButtonBox}>

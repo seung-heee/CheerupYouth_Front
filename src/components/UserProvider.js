@@ -6,16 +6,20 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const login = async (token, name) => {
+  const login = async (token, user) => {
+    const name = user.name
+    const id = user.id
+
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('name', name);
-    setUser({ token, name });
-    console.log(user, 'provider')
+    await AsyncStorage.setItem('id', id);
+    setUser({ token, id, name});
   };
 
   const logout = async () => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('name');
+    await AsyncStorage.removeItem('id');
     setUser(null);
   };
   
@@ -23,6 +27,7 @@ export const UserProvider = ({ children }) => {
     const loadUser = async () => {
       const token = await AsyncStorage.getItem('token');
       const name = await AsyncStorage.getItem('name');
+      const id = await AsyncStorage.getItem('id');
       if (token && name) {
         setUser({ token, name });
       }

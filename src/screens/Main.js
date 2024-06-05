@@ -97,7 +97,7 @@ const Main = ({ navigation }) => {
               </View>
             ))}
             <TouchableOpacity onPress={() => navigation.navigate("PolicyList")}>
-              <S.InnerText onPress={() => navigation.navigate("policy_main")}>정책 더보기⮕ </S.InnerText>
+              <S.InnerText onPress={() => navigation.navigate("policyMain")}>정책 더보기⮕ </S.InnerText>
             </TouchableOpacity>
           </View>
         </ScrollView>

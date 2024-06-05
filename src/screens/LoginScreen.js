@@ -30,7 +30,8 @@ const LoginScreen = ({ navigation }) => {
     try {
       const response = await axios.post(`${SERVER_URL}/users/login`, userData);
       const { token, user } = response.data;
-      login(token, user.name);
+      console.log(token, user, '로그인')
+      login(token, user);
       navigation.navigate('Main'); // 로그인 성공시 메인으로 이동
 
       // await AsyncStorage.setItem("userData", JSON.stringify(response.data));

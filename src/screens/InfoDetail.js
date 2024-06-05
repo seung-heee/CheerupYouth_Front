@@ -17,7 +17,8 @@ import { SERVER_URL } from "../components/ServerAddress";
 import { UserContext } from "../components/UserProvider";
 
 const InfoDetail = ({ navigation }) => {
-  const [name, setName] = useState("");
+  const { user } = useContext(UserContext);
+  const [name, setName] = useState(user.name);
   const [married, setMarried] = useState("");
   const [gender, setGender] = useState("");
   const [birthDate, setBirthDate] = useState(new Date());
@@ -25,7 +26,9 @@ const InfoDetail = ({ navigation }) => {
   const [consentGiven, setConsentGiven] = useState(false); //개인정보 동의
   const [selectedCity, setSelectedCity] = useState(null); //시/도
   const [selectedDistrict, setSelectedDistrict] = useState(null); //null 이었는데 일단 바꿈
-  const { userDataP, setUserDataP } = useContext(UserContext);
+  // const { userDataP, setUserDataP } = useContext(UserContext);
+
+  const userId = user.id
 
   const handleBirthDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || birthDate;
@@ -47,6 +50,7 @@ const InfoDetail = ({ navigation }) => {
 
   const InfoDetailSubmit = () => {
     console.log("보내는 데이터:", {
+      Id: userId,
       Name: name,
       Married: married,
       Gender: gender,
@@ -58,23 +62,25 @@ const InfoDetail = ({ navigation }) => {
     });
     //서버 연결은 안되는데 콘솔에서는 정보 받아옴.
 
-    axios
-      .post(`${SERVER_URL}/detail/insert`, {
-        Name: name,
-        Married: married,
-        Gender: gender,
-        BirthDate: birthDate,
-        Income: income,
-        ConsentGiven: consentGiven,
-        City: selectedCity,
-        District: selectedDistrict,
-      })
-      .then((response) => {
-        console.log("회원정보 입력 완료");
-      })
-      .catch((error) => {
-        console.log("에러 발생:", error);
-      });
+    navigation.navigate('infoDetailFull'); // 로그인 성공시 메인으로 이동
+    // axios
+    //   .post(`${SERVER_URL}/users/insert`, {
+    //     id: userId,
+    //     Name: name,
+    //     Married: married,
+    //     Gender: gender,
+    //     BirthDate: birthDate,
+    //     Income: income,
+    //     ConsentGiven: consentGiven,
+    //     City: selectedCity,
+    //     District: selectedDistrict,
+    //   })
+    //   .then((response) => {
+    //     console.log("회원정보 입력 완료");
+    //   })
+    //   .catch((error) => {
+    //     console.log("에러 발생:", error);
+      // });
   };
 
   // const handleSubmit = () => {
@@ -91,18 +97,17 @@ const InfoDetail = ({ navigation }) => {
   //   navigation.navigate("InfoDetailFull");
   // };
   useEffect(() => {
-    if (userDataP && userDataP.name) {
-      setName(userDataP.name);
+    if (user && user.name) {
+      setName(user.name);
     }
-  }, [userDataP]);
+  }, [user]);
 
-  console.log(name);
   return (
     <S.Container>
       <View>
         <S.MainText>
           정보를 입력하시면 {"\n"}
-          {userDataP ? userDataP.name : "묘사"}님과 딱 맞는 정책을 알려드려요
+          {user ? user.name : "로그인"}님과 딱 맞는 정책을 알려드려요
         </S.MainText>
       </View>
       <S.Box>
@@ -110,7 +115,7 @@ const InfoDetail = ({ navigation }) => {
         <TextInput
           onChangeText={setName}
           value={name}
-          placeholder="홍길동"
+          placeholder="이름"
           returnKeyType="done"
         />
       </S.Box>

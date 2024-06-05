@@ -97,7 +97,7 @@ const PolicyMain = ({ navigation }) => {
       <MainHeader navigation={navigation} />
       <PolicyTop allPolicy={allPolicy} setFilteredPolicy={setFilteredPolicy} />
       {filteredPolicy.map((policy) => (
-        <P.policyBox key={policy.key} onPress={() => navigation.navigate('policy_detail', { key: policy.key })}>
+        <P.policyBox key={policy.key} onPress={() => navigation.navigate('policyDetail', { key: policy.key })}>
           <Image source={{ uri: policy.img }} style={{ width: '30%', height: 100 }} />
           <View style={{ marginLeft: 10 }}>
             <P.title>{policy.title}</P.title>

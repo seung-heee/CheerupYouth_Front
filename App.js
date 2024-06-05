@@ -46,10 +46,13 @@ export default function App() {
           <Stack.Screen name="TVP3" component={TVP3} />
           <Stack.Screen name="TVP4" component={TVP4} />
           <Stack.Screen name="TVP5" component={TVP5} />
-          <Stack.Screen name="mypage" component={MyPage} />
           {/* 정책 */}
-          <Stack.Screen name="policy_main" component={policyMain} />
-          <Stack.Screen name="policy_detail" component={policyDetail} />
+          <Stack.Screen name="policyMain" component={policyMain} />
+          <Stack.Screen name="policyDetail" component={policyDetail} />
+          {/* 마이페이지 */}
+          <Stack.Screen name="mypage" component={MyPage} />
+          <Stack.Screen name="infoDetail" component={InfoDetail} />
+          <Stack.Screen name="infoDetailFull" component={InfoDetailFull} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>

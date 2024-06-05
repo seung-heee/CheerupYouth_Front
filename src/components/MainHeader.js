@@ -10,14 +10,6 @@ const ButtonBox = () => {
 const MainHeader = ({ navigation }) => {
   const { user } = useContext(UserContext);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     navigation.navigate('mypage');
-  //   } else {
-  //     navigation.navigate('LoginScreen');
-  //   }
-  // }, [user]);
-
   const handleMyPage = () => {
     if (user) {
       navigation.navigate('mypage');
