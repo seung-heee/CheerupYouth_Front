@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
@@ -7,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  StyleSheet,
   StyleSheet,
 } from "react-native";
 import DatePicker from "@react-native-community/datetimepicker";
@@ -193,6 +195,35 @@ const InfoDetail = ({ navigation, route }) => {
       </S.Box>
       <S.Box>
         <S.TitleText>거주지역</S.TitleText>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ marginRight: 10 }}>
+            <View style={styles.Picker}>
+              <RNPickerSelect
+                onValueChange={handleCityChange}
+                items={cities}
+                placeholder={{ label: "시/도", value: null }}
+                value={selectedCity}
+              />
+            </View>
+          </View>
+
+          <View style={styles.Picker}>
+            <RNPickerSelect
+              onValueChange={handleDistrictChange}
+              items={
+                selectedCity
+                  ? districts[selectedCity].map((d) => ({
+                      label: d,
+                      value: d,
+                    }))
+                  : []
+              }
+              placeholder={{ label: "구/군", value: null }}
+              value={selectedDistrict}
+              disabled={!selectedCity}
+            />
+          </View>
+        </View>
         <View style={{ flexDirection: "row" }}>
           <View style={{ marginRight: 10 }}>
             <View style={styles.Picker}>

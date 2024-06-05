@@ -34,11 +34,11 @@ const Main = ({ navigation }) => {
 
   const handleMyPage = () => {
     if (user) {
-      navigation.navigate('mypage');
+      navigation.navigate("mypage");
     } else {
-      navigation.navigate('LoginScreen');
+      navigation.navigate("LoginScreen");
     }
-  }
+  };
 
   const data = [
     {
@@ -118,9 +118,7 @@ const Main = ({ navigation }) => {
             source={require("../../assets/images/mainLogo.png")}
           />
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              onPress={() => handleMyPage()}
-            >
+            <TouchableOpacity onPress={() => handleMyPage()}>
               <Image
                 style={{
                   width: 25,
@@ -152,7 +150,7 @@ const Main = ({ navigation }) => {
               color: "#2E4B8F",
             }}
           >
-            안녕하세요. {user ? user.name : '로그인'}님
+            안녕하세요. {user ? user.name : "로그인"}님
           </Text>
           <Text style={{ fontSize: 20, fontWeight: "bold", color: "#2E4B8F" }}>
             부동산 정보와 정책을 검색해보세요.
@@ -195,7 +193,7 @@ const Main = ({ navigation }) => {
       <ScrollView>
         <View style={{ margin: 15, padding: 5 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold", color: "#2E4B8F" }}>
-            {user ? user.name : '로그인'} 님의 맞춤 정책 추천
+            {user ? user.name : "로그인"} 님의 맞춤 정책 추천
           </Text>
           <Text style={{ marginTop: 5, color: "gray" }}>
             나의 정보를 입력하시면 더욱 자세한 맞춤 정보를 확인할 수 있어요.

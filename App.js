@@ -18,6 +18,7 @@ import Login from "./src/components/Id";
 import InfoDetail from "./src/screens/InfoDetail";
 import InfoDetailFull from "./src/screens/InfoDetailFull";
 import PolicyList from "./src/screens/PolicyList";
+
 import { UserProvider } from "./src/components/UserProvider";
 //import policyMain from "./src/screens/policy/policyMain";
 //import policyDetail from './src/screens/policy/policyDetail';
@@ -27,6 +28,8 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
+
+
     <UserProvider>
       <NavigationContainer>
         <Stack.Navigator
@@ -60,5 +63,6 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
+
   );
 }
