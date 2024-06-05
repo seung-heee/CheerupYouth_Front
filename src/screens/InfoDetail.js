@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
@@ -8,10 +9,11 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  StyleSheet,
 } from "react-native";
 import DatePicker from "@react-native-community/datetimepicker";
 import * as S from "../../style/InfoDetailStyle";
-import { cities, districts } from "../../utils/InfoDetailData";
+import { cities, districts, incomeOptions } from "../../utils/InfoDetailData";
 import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
 import { SERVER_URL } from "../components/ServerAddress";
@@ -23,13 +25,14 @@ const InfoDetail = ({ navigation, route }) => {
   const [married, setMarried] = useState("");
   const [gender, setGender] = useState("");
   const [birthDate, setBirthDate] = useState(new Date());
-  const [income, setIncome] = useState("");
+  const [selectedIncome, setSelectedIncome] = useState(null);
+
   const [consentGiven, setConsentGiven] = useState(false); //개인정보 동의
   const [selectedCity, setSelectedCity] = useState(null); //시/도
   const [selectedDistrict, setSelectedDistrict] = useState(null); //null 이었는데 일단 바꿈
   // const { userDataP, setUserDataP } = useContext(UserContext);
 
-  const userId = user.id
+  const userId = user.id;
 
   const handleBirthDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || birthDate;
@@ -49,6 +52,10 @@ const InfoDetail = ({ navigation, route }) => {
     setSelectedDistrict(district);
   };
 
+  const handleIncomeSelect = (income) => {
+    setSelectedIncome(income);
+  };
+
   const InfoDetailSubmit = () => {
     console.log("보내는 데이터:", {
       Id: userId,
@@ -63,7 +70,7 @@ const InfoDetail = ({ navigation, route }) => {
     });
     //서버 연결은 안되는데 콘솔에서는 정보 받아옴.
 
-    navigation.navigate('infoDetailFull'); 
+    navigation.navigate("infoDetailFull");
     axios
       .post(`${SERVER_URL}/users/insert`, {
         id: userId,
@@ -105,7 +112,7 @@ const InfoDetail = ({ navigation, route }) => {
 
     const fetchUserDetails = async () => {
       try {
-        const id = await AsyncStorage.getItem('id');
+        const id = await AsyncStorage.getItem("id");
         const response = await axios.get(`${SERVER_URL}/users/select`, {
           params: {
             userId: id,
@@ -113,12 +120,12 @@ const InfoDetail = ({ navigation, route }) => {
         });
         const data = response.data;
         console.log("User details:", data);
-        
+
         if (data && data.length > 0) {
           setName(data[0].Name);
           setMarried(data[0].Married);
           setGender(data[0].Gender);
-          setIncome(data[0].Income);
+          setSelectedIncome(data[0].Income);
           setSelectedCity(data[0].City);
           setSelectedDistrict(data[0].District);
           setBirthDate(new Date(data[0].BirthDate));
@@ -126,7 +133,7 @@ const InfoDetail = ({ navigation, route }) => {
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
-    };    
+    };
 
     fetchUserDetails();
   }, []);
@@ -217,32 +224,90 @@ const InfoDetail = ({ navigation, route }) => {
             />
           </View>
         </View>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ marginRight: 10 }}>
+            <View style={styles.Picker}>
+              <RNPickerSelect
+                onValueChange={handleCityChange}
+                items={cities}
+                placeholder={{ label: "시/도", value: null }}
+                value={selectedCity}
+              />
+            </View>
+          </View>
+
+          <View style={styles.Picker}>
+            <RNPickerSelect
+              onValueChange={handleDistrictChange}
+              items={
+                selectedCity
+                  ? districts[selectedCity].map((d) => ({
+                      label: d,
+                      value: d,
+                    }))
+                  : []
+              }
+              placeholder={{ label: "구/군", value: null }}
+              value={selectedDistrict}
+              disabled={!selectedCity}
+            />
+          </View>
+        </View>
       </S.Box>
       <S.LastBox>
-        <S.TitleText>연소득</S.TitleText>
+        <S.TitleText>월소득</S.TitleText>
         <S.Row>
-          <TextInput
+          {/* <TextInput
             onChangeText={setIncome}
             value={income}
             placeholder="0"
             keyboardType="numeric"
             returnKeyType="done"
           />
-          <S.WonText>만원</S.WonText>
+          <S.WonText>만원</S.WonText> */}
+          <View style={styles.Picker}>
+            <RNPickerSelect
+              onValueChange={handleIncomeSelect}
+              items={incomeOptions}
+              placeholder={{ label: "소득 구간을 선택하세요", value: null }}
+              value={selectedIncome}
+            />
+          </View>
         </S.Row>
       </S.LastBox>
       <S.Text>
         입력해주신 정보를 기반으로 맞춤 정책을 추천해 드립니다.{"\n"}다른
         목적으로 사용되거나 제 3자에게 공개되지 않습니다.
       </S.Text>
-      <TouchableOpacity onPress={handleConsentToggle}>
-        <S.AgreementText consentGiven={consentGiven}>
-          개인정보 수집 및 이용 동의
-        </S.AgreementText>
-      </TouchableOpacity>
-      <View>
+      <View
+        style={{
+          alignItems: "center",
+          padding: 5,
+          marginTop: 20,
+          marginBottom: 20,
+        }}
+      >
+        <TouchableOpacity onPress={handleConsentToggle}>
+          <Text
+            style={{
+              color: consentGiven ? "#2e4b8f" : "#626262",
+              fontWeight: "bold",
+            }}
+          >
+            [필수] 개인정보 수집 및 이용 동의
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View
+        style={{ alignItems: "center", justifyContent: "center", padding: 15 }}
+      >
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <S.TouchText>다음에 입력하기</S.TouchText>
+          <Text
+            style={{ textAlign: "center", textDecorationLine: "underline" }}
+          >
+            다음에 입력하기
+          </Text>
         </TouchableOpacity>
       </View>
       <S.BlueButtonBox>

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { TouchableOpacity, Text, ScrollView } from "react-native";
+import { ScrollView, TouchableOpacity, Text } from "react-native";
 import * as S from "../../style/InfoDetailFullStyle";
 import {
   OptionsEdu,
@@ -19,46 +18,14 @@ const InfoDetailFull = ({ navigation }) => {
   const [selectedOptionsMember, setSelectedOptionsMember] = useState([]);
   const [selectedOptionsTarget, setSelectedOptionsTarget] = useState([]);
 
-  const userId = user.id
+  const userId = user.id;
 
-  const toggleOptionEdu = (option) => {
-    if (selectedOptionsEdu.includes(option)) {
-      setSelectedOptionsEdu(
-        selectedOptionsEdu.filter((item) => item !== option)
-      );
-    } else {
-      setSelectedOptionsEdu([option]);
-    }
-  };
-
-  const toggleOptionCareer = (option) => {
-    if (selectedOptionsCareer.includes(option)) {
-      setSelectedOptionsCareer(
-        selectedOptionsCareer.filter((item) => item !== option)
-      );
-    } else {
-      setSelectedOptionsCareer([option]);
-    }
-  };
-
-  const toggleOptionMember = (option) => {
-    if (selectedOptionsMember.includes(option)) {
-      setSelectedOptionsMember(
-        selectedOptionsMember.filter((item) => item !== option)
-      );
-    } else {
-      setSelectedOptionsMember([option]);
-    }
-  };
-
-  const toggleOptionTarget = (option) => {
-    if (selectedOptionsTarget.includes(option)) {
-      setSelectedOptionsTarget(
-        selectedOptionsTarget.filter((item) => item !== option)
-      );
-    } else {
-      setSelectedOptionsTarget([...selectedOptionsTarget, option]);
-    }
+  const toggleOption = (option, setSelectedOptions) => {
+    setSelectedOptions((prevOptions) =>
+      prevOptions.includes(option)
+        ? prevOptions.filter((item) => item !== option)
+        : [option]
+    );
   };
 
   const InfoDetailFullSubmit = () => {
@@ -68,7 +35,7 @@ const InfoDetailFull = ({ navigation }) => {
         HighestEducation: selectedOptionsEdu,
         CurrentJob: selectedOptionsCareer,
         ResidentialStatus: selectedOptionsMember,
-        Special: selectedOptionsTarget
+        Special: selectedOptionsTarget,
       })
       .then((response) => {
         console.log("회원정보 입력 완료");
@@ -77,22 +44,20 @@ const InfoDetailFull = ({ navigation }) => {
         console.log("에러 발생:", error);
       });
 
-    navigation.navigate('mypage'); // 로그인 성공시 메인으로 이동
+    navigation.navigate("mypage"); // 로그인 성공시 메인으로 이동
   };
-
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const id = await AsyncStorage.getItem('id');
         const response = await axios.get(`${SERVER_URL}/users/selectFull`, {
           params: {
-            userId: id
+            userId: userId,
           },
         });
         const data = response.data;
         console.log("User details:", data);
-        
+
         if (data && data.length > 0) {
           setSelectedOptionsEdu(data[0].HighestEducation);
           setSelectedOptionsCareer(data[0].CurrentJob);
@@ -102,10 +67,10 @@ const InfoDetailFull = ({ navigation }) => {
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
-    };    
+    };
 
     fetchUserDetails();
-  }, [user]);
+  }, [userId]);
 
   return (
     <ScrollView>
@@ -119,7 +84,7 @@ const InfoDetailFull = ({ navigation }) => {
           {OptionsEdu.map((option, index) => (
             <S.Option
               key={index}
-              onPress={() => toggleOptionEdu(option)}
+              onPress={() => toggleOption(option, setSelectedOptionsEdu)}
               style={{
                 backgroundColor: selectedOptionsEdu.includes(option)
                   ? "#d1d1d1"
@@ -136,7 +101,7 @@ const InfoDetailFull = ({ navigation }) => {
           {OptionsCareer.map((option, index) => (
             <S.Option
               key={index}
-              onPress={() => toggleOptionCareer(option)}
+              onPress={() => toggleOption(option, setSelectedOptionsCareer)}
               style={{
                 backgroundColor: selectedOptionsCareer.includes(option)
                   ? "#d1d1d1"
@@ -153,7 +118,7 @@ const InfoDetailFull = ({ navigation }) => {
           {OptionsMember.map((option, index) => (
             <S.Option
               key={index}
-              onPress={() => toggleOptionMember(option)}
+              onPress={() => toggleOption(option, setSelectedOptionsMember)}
               style={{
                 backgroundColor: selectedOptionsMember.includes(option)
                   ? "#d1d1d1"
@@ -170,7 +135,7 @@ const InfoDetailFull = ({ navigation }) => {
           {OptionsTarget.map((option, index) => (
             <S.Option
               key={index}
-              onPress={() => toggleOptionTarget(option)}
+              onPress={() => toggleOption(option, setSelectedOptionsTarget)}
               style={{
                 backgroundColor: selectedOptionsTarget.includes(option)
                   ? "#d1d1d1"
@@ -182,7 +147,7 @@ const InfoDetailFull = ({ navigation }) => {
           ))}
         </S.OptionsContainer>
         <S.BlueButtonBox>
-          <TouchableOpacity onPress={() => InfoDetailFullSubmit()}>
+          <TouchableOpacity onPress={InfoDetailFullSubmit}>
             <S.BlueButtonText>완료</S.BlueButtonText>
           </TouchableOpacity>
         </S.BlueButtonBox>
@@ -190,6 +155,5 @@ const InfoDetailFull = ({ navigation }) => {
     </ScrollView>
   );
 };
-
 
 export default InfoDetailFull;
