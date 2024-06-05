@@ -5,14 +5,15 @@ import Main from "./src/screens/Main";
 import TutorialScreen from "./src/screens/Tutorial/TutorialScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignUp from "./src/screens/SignUp";
-import LawWordList from "./src/screens/LawWordList";
-import LawListSearch from "./src/screens/LawListSearch";
+import LawWordList from "./src/screens/LawWord/LawWordList";
+import LawListSearch from "./src/screens/LawWord/LawListSearch";
 import BottomBar from "./src/components/BottomBar";
 import TVP1 from "./src/screens/Tutorial/TutorialViewPg1";
 import TVP2 from "./src/screens/Tutorial/TutorialViewPg2";
 import TVP3 from "./src/screens/Tutorial/TutorialViewPg3";
 import TVP4 from "./src/screens/Tutorial/TutorialViewPg4";
 import TVP5 from "./src/screens/Tutorial/TutorialViewPg5";
+import TVP6 from "./src/screens/Tutorial/TutorialViewPg6";
 import Login from "./src/components/Id";
 import InfoDetail from "./src/screens/InfoDetail";
 import InfoDetailFull from "./src/screens/InfoDetailFull";
@@ -46,6 +47,9 @@ export default function App() {
           <Stack.Screen name="TVP3" component={TVP3} />
           <Stack.Screen name="TVP4" component={TVP4} />
           <Stack.Screen name="TVP5" component={TVP5} />
+          <Stack.Screen name="TVP6" component={TVP6} />
+          <Stack.Screen name="InfoDetail" component={InfoDetail} />
+          <Stack.Screen name="InfoDetailFull" component={InfoDetailFull} />
           {/* 정책 */}
           <Stack.Screen name="policyMain" component={policyMain} />
           <Stack.Screen name="policyDetail" component={policyDetail} />

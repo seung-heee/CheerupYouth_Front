@@ -28,7 +28,7 @@ const Main = ({ navigation }) => {
       console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
     }
   }; //아이디 삭제 (로그아웃)
-  
+
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -111,7 +111,6 @@ const Main = ({ navigation }) => {
           marginRight: -20,
         }}
       >
-        <SearchScreen />
         <View style={{ marginTop: 10, marginBottom: 10 }}>
           <Image
             source={require("../../assets/images/ex1.jpeg")}
@@ -119,22 +118,22 @@ const Main = ({ navigation }) => {
             resizeMode="cover"
           />
         </View>
+      </View>
 
-        <S.Row>
-          <S.TextBox>복잡한 부동산 계약{"\n"}조금 더 쉽게 준비해요!</S.TextBox>
-        </S.Row>
+      <S.Row>
+        <S.TextBox>복잡한 부동산 계약{"\n"}조금 더 쉽게 준비해요!</S.TextBox>
+      </S.Row>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <S.ButtonRow onPress={ButtonBox}>
-            <S.ButtonRowText>나만의{"\n"}맞춤정책</S.ButtonRowText>
-          </S.ButtonRow>
-          <S.ButtonRow onPress={() => navigation.navigate("TutorialScreen")}>
-            <S.ButtonRowText>튜토리얼</S.ButtonRowText>
-          </S.ButtonRow>
-          <S.ButtonRow onPress={() => navigation.navigate("LawWordList")}>
-            <S.ButtonRowText>용어 리스트</S.ButtonRowText>
-          </S.ButtonRow>
-        </View>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <S.ButtonRow onPress={ButtonBox}>
+          <S.ButtonRowText>나만의{"\n"}맞춤정책</S.ButtonRowText>
+        </S.ButtonRow>
+        <S.ButtonRow onPress={() => navigation.navigate("TutorialScreen")}>
+          <S.ButtonRowText>튜토리얼</S.ButtonRowText>
+        </S.ButtonRow>
+        <S.ButtonRow onPress={() => navigation.navigate("LawWordList")}>
+          <S.ButtonRowText>용어 리스트</S.ButtonRowText>
+        </S.ButtonRow>
       </View>
     </S.Container>
   );

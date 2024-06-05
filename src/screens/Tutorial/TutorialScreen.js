@@ -7,18 +7,15 @@ import {
   Image,
   SectionList,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
+
 import TutorialData from "../../../utils/TutorialData";
+import HeaderComponent from "../../components/HeaderComponent";
 import * as Font from "expo-font";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../../components/UserProvider";
 
 const TutorialScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const { userDataP, setUserDataP } = useContext(UserContext);
-
-  console.log("넘어온? :", userDataP);
-
   useEffect(() => {
     const loadFont = async () => {
       await Font.loadAsync({
@@ -36,56 +33,13 @@ const TutorialScreen = ({ navigation }) => {
   if (!fontLoaded) {
     return null; // or render a loading indicator
   }
+
+  const beforeBtn = () => {
+    navigation.goBack();
+  };
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <View
-        style={{
-          backgroundColor: "white",
-          paddingTop: 70,
-          marginBottom: 1,
-          shadowColor: "rgba(180,180,180,0.4)",
-          shadowOffset: {
-            width: 2,
-            height: 2,
-          },
-          shadowOpacity: 10,
-          shadowRadius: 3,
-          elevation: 5,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            <Image
-              style={{
-                width: 20,
-                height: 20,
-                marginTop: 7,
-                marginLeft: 14,
-                marginBottom: 20,
-              }}
-              source={require("../../../assets/images/arrowLeft.png")}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: "M",
-              marginTop: 4,
-              marginLeft: 15,
-            }}
-          >
-            전세 계약 튜토리얼
-          </Text>
-        </View>
-      </View>
+      <HeaderComponent onPress={beforeBtn} headerText="전세 계약 튜토리얼" />
 
       <ScrollView style={{ flex: 1, marginBottom: 10 }}>
         <SectionList
@@ -96,9 +50,9 @@ const TutorialScreen = ({ navigation }) => {
               style={{
                 backgroundColor: "white",
                 marginTop: 20,
-                margin: 15,
+                margin: 25,
                 height: 115,
-                marginBottom: item.name === "계약하기" ? 50 : -8,
+                marginBottom: item.name === "특약사항 알아보기" ? 50 : -8,
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: 8,

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 import daechuData from "../../../utils/daechuData";
-
 import axios from "axios";
 import { SERVER_URL } from "../../components/ServerAddress";
 import { UserContext } from "../../components/UserProvider";
+import HeaderComponent from "../../components/HeaderComponent";
 
 function formatCurrency(amount) {
   if (amount >= 100000000) {
@@ -130,52 +130,9 @@ function TutorialViewPg1({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <View
-        style={{
-          backgroundColor: "white",
-          paddingTop: 70,
-          marginBottom: 1,
-          shadowColor: "rgba(180,180,180,0.4)",
-          shadowOffset: {
-            width: 2,
-            height: 2,
-          },
-          shadowOpacity: 10,
-          shadowRadius: 3,
-          elevation: 5,
-        }}
-      >
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity
-            onPress={() => {
-              backBtn();
-            }}
-          >
-            <Image
-              style={{
-                width: 20,
-                height: 20,
-                marginTop: 7,
-                marginLeft: 14,
-                marginBottom: 20,
-              }}
-              source={require("../../../assets/images/arrowLeft.png")}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: "M",
-              marginTop: 4,
-              marginLeft: 15,
-            }}
-          >
-            전세 계약 튜토리얼
-          </Text>
-        </View>
-      </View>
+      <HeaderComponent onPress={backBtn} headerText="전세 계약 튜토리얼" />
 
-      <View style={{ margin: 15, marginTop: 20, marginBottom: 0 }}>
+      <View style={{ margin: 25, marginTop: 20, marginBottom: 0 }}>
         <View
           style={{
             backgroundColor: "rgba(45,75,145,1.0)",
@@ -198,7 +155,7 @@ function TutorialViewPg1({ navigation }) {
           </Text>
         </View>
       </View>
-      <View style={{ margin: 15, marginBottom: 10, marginTop: 5 }}>
+      <View style={{ margin: 25, marginBottom: 10, marginTop: 5 }}>
         <Text
           style={{
             fontFamily: "B",
@@ -208,7 +165,7 @@ function TutorialViewPg1({ navigation }) {
           나의 예산 알아보기
         </Text>
       </View>
-      <View style={{ width: "80%" }}>
+      <View style={{ width: "80%", margin: 10, marginTop: 0, marginBottom: 0 }}>
         <Text
           style={{
             color: "gray",
@@ -233,7 +190,7 @@ function TutorialViewPg1({ navigation }) {
         }}
       />
 
-      <View style={{ margin: 15, marginTop: 20, marginBottom: 15 }}>
+      <View style={{ margin: 25, marginTop: 20, marginBottom: 15 }}>
         <Text
           style={{
             fontFamily: "SB",
@@ -248,12 +205,13 @@ function TutorialViewPg1({ navigation }) {
           marginLeft: 15,
           flexDirection: "row",
           alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <TextInput
           placeholder="여기에 입력하세요"
           style={{
-            width: "70%",
+            width: "65%",
             height: 50,
             borderColor: "#333",
             borderRadius: 5,
@@ -272,7 +230,7 @@ function TutorialViewPg1({ navigation }) {
             justifyContent: "center",
             alignItems: "flex-end",
             right: 15,
-            width: "30%",
+            width: "35%",
             height: 50,
             backgroundColor: "#F7F7F7",
             borderRadius: 5,
@@ -290,7 +248,7 @@ function TutorialViewPg1({ navigation }) {
           </Text>
         </View>
       </View>
-      <View style={{ margin: 15, marginTop: 30 }}>
+      <View style={{ margin: 25, marginTop: 30 }}>
         <Text
           style={{
             fontSize: 20,
@@ -328,7 +286,7 @@ function TutorialViewPg1({ navigation }) {
         style={{
           flexDirection: "row",
           flexWrap: "wrap",
-          margin: 15,
+          margin: 25,
           marginTop: 5,
           width: "100%",
         }}
@@ -413,7 +371,7 @@ function TutorialViewPg1({ navigation }) {
         >
           <TouchableOpacity
             style={{
-              width: "100%",
+              width: "90%",
               height: 55,
               padding: 15,
               backgroundColor: "#2D4B8E",
@@ -441,7 +399,7 @@ function TutorialViewPg1({ navigation }) {
         >
           <View
             style={{
-              width: "100%",
+              width: "90%",
               height: 55,
               padding: 15,
               backgroundColor: "#DEDEDE",

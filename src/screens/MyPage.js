@@ -30,7 +30,7 @@ const MyPage = ({ navigation }) => {
     } catch (error) {
       console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
     }
-    navigation.navigate("InfoDetail"); // 아이디 삭제 (로그아웃)
+    navigation.navigate("BottomBar"); //아이디 삭제 (로그아웃)
   };
 
   return (

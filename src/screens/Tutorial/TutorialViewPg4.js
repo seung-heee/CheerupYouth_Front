@@ -2,30 +2,23 @@ import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   View,
-  TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   StyleSheet,
-  SectionList,
-  Button,
-  Modal,
   ScrollView,
-  Image,
-  KeyboardAvoidingView,
-  Keyboard,
-  Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { SERVER_URL } from "../../components/ServerAddress";
 import axios from "axios";
 import { UserContext } from "../../components/UserProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import HeaderComponent from "../../components/HeaderComponent";
+import { SERVER_URL } from "../../components/ServerAddress";
 
 function TutorialViewPg4({ navigation }) {
   const [dbdata, setDbData] = useState([]);
-  const { userDataP, setUserDataP } = useContext(UserContext);
+  const { userDataP } = useContext(UserContext);
   const [styleChange, setStyleChange] = useState([]);
   const [clickItem, setClickItem] = useState("");
+
   const dbControl = (pgname) => {
     const userPlusChange = {
       user_id: userDataP.id,
@@ -37,7 +30,7 @@ function TutorialViewPg4({ navigation }) {
     };
     axios
       .post(`${SERVER_URL}/TVP4/insert`, userPlusChange)
-      .then((response) => {
+      .then(() => {
         navigation.navigate(pgname);
       })
       .catch((error) => {
@@ -54,6 +47,7 @@ function TutorialViewPg4({ navigation }) {
     navigation.navigate("TutorialScreen");
     AsyncStorage.removeItem("styleChangePg4");
   };
+
   const beforeBtn = () => {
     navigation.goBack();
   };
@@ -63,9 +57,9 @@ function TutorialViewPg4({ navigation }) {
       .get(`${SERVER_URL}/TVP4/data`)
       .then((response) => {
         const dbdata = response.data;
-        const markingData = response.data.map((item) => item.marking);
+        const valueData = response.data.map((item) => item.value);
         setDbData(dbdata);
-        setStyleChange(dbdata.map((item) => item.value));
+        setStyleChange(valueData);
       })
       .catch((error) => {
         console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
@@ -79,7 +73,7 @@ function TutorialViewPg4({ navigation }) {
       })
       .then((response) => {
         const dbdata = response.data;
-        const userdata = dbdata.map((item) => item.marking);
+        const userdata = dbdata.map((item) => item.value);
         const user = dbdata.map((item) => item.user_id);
         if (user.length > 0) {
           setStyleChange(userdata);
@@ -121,48 +115,9 @@ function TutorialViewPg4({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <View
-        style={{
-          backgroundColor: "white",
-          paddingTop: 70,
-          marginBottom: 1,
-          shadowColor: "rgba(180,180,180,0.4)",
-          shadowOffset: {
-            width: 2,
-            height: 2,
-          },
-          shadowOpacity: 10,
-          shadowRadius: 3,
-          elevation: 5,
-        }}
-      >
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={backBtn}>
-            <Image
-              style={{
-                width: 20,
-                height: 20,
-                marginTop: 7,
-                marginLeft: 14,
-                marginBottom: 20,
-              }}
-              source={require("../../../assets/images/arrowLeft.png")}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: "M",
-              marginTop: 4,
-              marginLeft: 15,
-            }}
-          >
-            전세 계약 튜토리얼
-          </Text>
-        </View>
-      </View>
+      <HeaderComponent onPress={backBtn} headerText="전세 계약 튜토리얼" />
       <ScrollView>
-        <View style={{ margin: 15, marginTop: 20, marginBottom: 0 }}>
+        <View style={{ margin: 25, marginTop: 20, marginBottom: 0 }}>
           <View
             style={{
               backgroundColor: "rgba(45,75,145,1.0)",
@@ -184,7 +139,7 @@ function TutorialViewPg4({ navigation }) {
             </Text>
           </View>
         </View>
-        <View style={{ margin: 15, marginBottom: 10, marginTop: 5 }}>
+        <View style={{ margin: 25, marginBottom: 10, marginTop: 5 }}>
           <Text
             style={{
               fontFamily: "B",
@@ -195,7 +150,9 @@ function TutorialViewPg4({ navigation }) {
           </Text>
         </View>
 
-        <View style={{ width: "80%" }}>
+        <View
+          style={{ width: "85%", margin: 10, marginTop: 0, marginBottom: 0 }}
+        >
           <Text
             style={{
               color: "gray",
@@ -237,7 +194,7 @@ function TutorialViewPg4({ navigation }) {
                   <TouchableOpacity
                     style={{
                       backgroundColor: "white",
-                      margin: 15,
+                      margin: 25,
                       marginTop: 15,
                       marginBottom: title === "등기부등본" ? 0 : 0,
                       borderRadius: 5,
@@ -306,15 +263,15 @@ function TutorialViewPg4({ navigation }) {
                               .filter((data) => data.title.includes(title))
                               .map((data, idx) => (
                                 <TouchableOpacity
-                                  key={idx}
+                                  key={`${title}-${idx}`}
                                   onPress={() => {
                                     setStyleChange((prevState) => {
-                                      if (prevState.includes(data.marking)) {
+                                      if (prevState.includes(data.value)) {
                                         return prevState.filter(
-                                          (item) => item !== data.marking
+                                          (item) => item !== data.value
                                         );
                                       } else {
-                                        return [...prevState, data.marking];
+                                        return [...prevState, data.value];
                                       }
                                     });
                                   }}
@@ -357,7 +314,7 @@ function TutorialViewPg4({ navigation }) {
                   <View
                     style={{
                       backgroundColor: "white",
-                      margin: 15,
+                      margin: 25,
                       marginTop: 20,
                       marginBottom: title === "등기부등본" ? 150 : 0,
                       borderRadius: 5,
@@ -393,15 +350,15 @@ function TutorialViewPg4({ navigation }) {
                           .filter((data) => data.title.includes(title))
                           .map((data, idx) => (
                             <TouchableOpacity
-                              key={idx}
+                              key={`${title}-${idx}`}
                               onPress={() => {
                                 setStyleChange((prevState) => {
-                                  if (prevState.includes(data.marking)) {
+                                  if (prevState.includes(data.value)) {
                                     return prevState.filter(
-                                      (item) => item !== data.marking
+                                      (item) => item !== data.value
                                     );
                                   } else {
-                                    return [...prevState, data.marking];
+                                    return [...prevState, data.value];
                                   }
                                 });
                               }}
@@ -428,32 +385,17 @@ function TutorialViewPg4({ navigation }) {
                                 }
                                 style={{ marginTop: 3, marginRight: 5 }}
                               />
-                              <Text style={{ marginTop: 1, fontSize: 16 }}>
+                              <Text
+                                style={{
+                                  marginTop: 1,
+                                  fontSize: 17,
+                                  fontFamily: "M",
+                                }}
+                              >
                                 {data.value}
                               </Text>
                             </TouchableOpacity>
                           ))}
-                        {/* {checkListAdd == true && (
-                      <View>
-                        <TextInput
-                          style={{ padding: 10 }}
-                          placeholder="내용 입력"
-                          onChangeText={(text) => setInputCheckList(text)}
-                          value={inputCheckList} //이거 하고 나서 초기화 시켜야함
-                          returnKeyType="done"
-                          onSubmitEditing={onSubmit}
-                        ></TextInput>
-                      </View>
-                    )}
-                    <TouchableOpacity
-                      onPress={() => {
-                        setCheckListAdd((prev) => !prev);
-                      }}
-                    >
-                      <Text style={{ color: "#2D4B8E" }}>
-                        + Check List 추가하기
-                      </Text>
-                    </TouchableOpacity> */}
                       </View>
                     </View>
                   </View>
@@ -463,9 +405,7 @@ function TutorialViewPg4({ navigation }) {
         )}
         <View
           style={{
-            // position: "absolute",
             padding: 10,
-            // bottom: 50,
             marginTop: clickItem == "등기부등본" ? 30 : 90,
             marginBottom: 50,
             width: "100%",
@@ -476,7 +416,7 @@ function TutorialViewPg4({ navigation }) {
         >
           <TouchableOpacity
             style={{
-              width: "45%",
+              width: "42%",
               marginRight: 14,
               height: 55,
               padding: 15,
@@ -499,7 +439,7 @@ function TutorialViewPg4({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              width: "45%",
+              width: "42%",
               height: 55,
               marginLeft: 14,
               padding: 15,

@@ -6,6 +6,7 @@ import axios from "axios";
 import { SERVER_URL } from "../../components/ServerAddress";
 import { UserContext } from "../../components/UserProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import HeaderComponent from "../../components/HeaderComponent";
 
 function TutorialViewPg3({ navigation }) {
   const [dbdata, setDbData] = useState([]);
@@ -120,52 +121,13 @@ function TutorialViewPg3({ navigation }) {
   if (!fontLoaded) {
     return null; // or render a loading indicator
   }
-  
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <View
-        style={{
-          backgroundColor: "white",
-          paddingTop: 70,
-          marginBottom: 1,
-          shadowColor: "rgba(180,180,180,0.4)",
-          shadowOffset: {
-            width: 2,
-            height: 2,
-          },
-          shadowOpacity: 10,
-          shadowRadius: 3,
-          elevation: 5,
-        }}
-      >
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={backBtn}>
-            <Image
-              style={{
-                width: 20,
-                height: 20,
-                marginTop: 7,
-                marginLeft: 14,
-                marginBottom: 20,
-              }}
-              source={require("../../../assets/images/arrowLeft.png")}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: "M",
-              marginTop: 4,
-              marginLeft: 15,
-            }}
-          >
-            전세 계약 튜토리얼
-          </Text>
-        </View>
-      </View>
+      <HeaderComponent onPress={backBtn} headerText="전세 계약 튜토리얼" />
 
       <ScrollView style={{ flex: 1 }}>
-        <View style={{ margin: 15, marginTop: 20, marginBottom: 0 }}>
+        <View style={{ margin: 25, marginTop: 20, marginBottom: 0 }}>
           <View
             style={{
               backgroundColor: "rgba(45,75,145,1.0)",
@@ -187,7 +149,7 @@ function TutorialViewPg3({ navigation }) {
             </Text>
           </View>
         </View>
-        <View style={{ margin: 15, marginBottom: 10, marginTop: 5 }}>
+        <View style={{ margin: 25, marginBottom: 10, marginTop: 5 }}>
           <Text
             style={{
               fontFamily: "B",
@@ -198,7 +160,9 @@ function TutorialViewPg3({ navigation }) {
           </Text>
         </View>
 
-        <View style={{ width: "80%" }}>
+        <View
+          style={{ width: "85%", margin: 10, marginTop: 0, marginBottom: 0 }}
+        >
           <Text
             style={{
               color: "gray",
@@ -251,7 +215,7 @@ function TutorialViewPg3({ navigation }) {
                 key={index}
                 style={{
                   backgroundColor: "white",
-                  margin: 15,
+                  margin: 25,
                   marginTop: 20,
                   marginBottom: title === "집 주변 Check List" ? 150 : -5,
                   borderRadius: 5,
@@ -371,7 +335,7 @@ function TutorialViewPg3({ navigation }) {
         >
           <TouchableOpacity
             style={{
-              width: "45%",
+              width: "42%",
               marginRight: 14,
               height: 55,
               padding: 15,
@@ -394,7 +358,7 @@ function TutorialViewPg3({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              width: "45%",
+              width: "42%",
               height: 55,
               marginLeft: 14,
               padding: 15,
@@ -404,7 +368,6 @@ function TutorialViewPg3({ navigation }) {
               justifyContent: "center",
             }}
             onPress={nextBtn}
-
           >
             <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
               다음

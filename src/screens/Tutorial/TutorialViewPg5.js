@@ -13,6 +13,7 @@ import TutorialPg5Data from "../../../utils/TutorialPg5Data.js";
 import Tutorial5Tip from "../../../utils/Tutorial5Tip.js";
 import { SERVER_URL } from "../../components/ServerAddress";
 import axios from "axios";
+import HeaderComponent from "../../components/HeaderComponent";
 
 function TutorialViewPg5({ navigation }) {
   // const [dbdata, setDbData] = useState([]);
@@ -28,59 +29,33 @@ function TutorialViewPg5({ navigation }) {
   //       console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
   //     });
   // }, []); // DB 불러오기
+
+  const tvp6DataInsert = () => {
+    axios
+      .post(`${SERVER_URL}/TVP6/insert`, user_id)
+      .then((response) => {
+        navigation.navigate("TVP5");
+      })
+      .catch((error) => {
+        console.error("잘못됐어요 ? : ", error);
+      });
+  };
   const [styleChange, setStyleChange] = useState("");
   const [textItem, setTextItem] = useState("");
   const beforeBtn = () => {
     navigation.goBack();
   };
-  const nextBtn = () => {};
+  const nextBtn = () => {
+    navigation.navigate("TVP6");
+  };
   const backBtn = () => {
     navigation.navigate("TutorialScreen");
   };
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      <View
-        style={{
-          backgroundColor: "white",
-          paddingTop: 70,
-          marginBottom: 1,
-          shadowColor: "rgba(180,180,180,0.4)",
-          shadowOffset: {
-            width: 2,
-            height: 2,
-          },
-          shadowOpacity: 10,
-          shadowRadius: 3,
-          elevation: 5,
-        }}
-      >
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={backBtn}>
-            <Image
-              style={{
-                width: 20,
-                height: 20,
-                marginTop: 7,
-                marginLeft: 14,
-                marginBottom: 20,
-              }}
-              source={require("../../../assets/images/arrowLeft.png")}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: "M",
-              marginTop: 4,
-              marginLeft: 15,
-            }}
-          >
-            전세 계약 튜토리얼
-          </Text>
-        </View>
-      </View>
+      <HeaderComponent onPress={backBtn} headerText="전세 계약 튜토리얼" />
       <ScrollView>
-        <View style={{ margin: 15, marginTop: 20, marginBottom: 0 }}>
+        <View style={{ margin: 25, marginTop: 20, marginBottom: 0 }}>
           <View
             style={{
               backgroundColor: "rgba(45,75,145,1.0)",
@@ -102,7 +77,7 @@ function TutorialViewPg5({ navigation }) {
             </Text>
           </View>
         </View>
-        <View style={{ margin: 15, marginBottom: 10, marginTop: 5 }}>
+        <View style={{ margin: 25, marginBottom: 10, marginTop: 5 }}>
           <Text
             style={{
               fontFamily: "B",
@@ -112,7 +87,9 @@ function TutorialViewPg5({ navigation }) {
             계약하기
           </Text>
         </View>
-        <View style={{ width: "80%" }}>
+        <View
+          style={{ width: "85%", margin: 10, marginTop: 0, marginBottom: 0 }}
+        >
           <Text
             style={{
               color: "gray",
@@ -146,7 +123,7 @@ function TutorialViewPg5({ navigation }) {
             backgroundColor: "rgba(237,237,237,1.0)",
           }}
         ></View>
-        <View style={{ margin: 15, marginTop: 20, marginBottom: 5 }}>
+        <View style={{ margin: 25, marginTop: 20, marginBottom: 5 }}>
           <Text
             style={{
               fontFamily: "SB",
@@ -156,7 +133,6 @@ function TutorialViewPg5({ navigation }) {
             나와있는 사람이 누구인가요?
           </Text>
         </View>
-
         <SectionList
           style={{ paddingBottom: 15 }}
           scrollEnabled={false}
@@ -165,7 +141,7 @@ function TutorialViewPg5({ navigation }) {
             <TouchableOpacity
               style={{
                 backgroundColor: "white",
-                margin: 15,
+                margin: 25,
                 marginTop: 15,
                 marginBottom: 0,
                 borderRadius: 5,
@@ -221,7 +197,7 @@ function TutorialViewPg5({ navigation }) {
                     <View
                       style={{
                         marginTop: 20,
-                        marginRight: 20,
+                        marginRight: 0,
                         marginBottom: -20,
                       }}
                     >
@@ -241,7 +217,7 @@ function TutorialViewPg5({ navigation }) {
                                 marginBottom: 20,
                               }}
                             >
-                              <Text style={{ fontSize: 14, fontFamily: "R" }}>
+                              <Text style={{ fontSize: 15, fontFamily: "R" }}>
                                 {value}
                               </Text>
                             </View>
@@ -255,7 +231,7 @@ function TutorialViewPg5({ navigation }) {
           )}
           keyExtractor={(item, idx) => idx.toString()}
         />
-        <View style={{ margin: 15, marginTop: 20, marginBottom: 5 }}>
+        <View style={{ margin: 25, marginTop: 20, marginBottom: 5 }}>
           <Text
             style={{
               fontFamily: "SB",
@@ -265,15 +241,17 @@ function TutorialViewPg5({ navigation }) {
             계약서 작성할 때 !
           </Text>
         </View>
+
         <SectionList
           style={{ paddingBottom: 15 }}
           scrollEnabled={false}
           sections={Tutorial5Tip}
           renderItem={({ item }) => (
             <View
+              key={item.title}
               style={{
                 backgroundColor: "white",
-                margin: 15,
+                margin: 25,
                 marginTop: 15,
                 marginBottom: 0,
                 paddingTop: 0,
@@ -290,22 +268,22 @@ function TutorialViewPg5({ navigation }) {
             >
               <View style={{ margin: 20, marginBottom: 23 }}>
                 <Text style={{ fontSize: 18, fontFamily: "SB" }}>
-                  {item.name}
+                  {item.title}
                 </Text>
                 {[
-                  item.value1,
-                  item.value2,
-                  item.value3,
-                  item.value4,
-                  item.value5,
-                  item.value6,
-                  item.value7,
+                  item.tip1,
+                  item.tip2,
+                  item.tip3,
+                  item.tip4,
+                  item.tip5,
+                  item.tip6,
+                  item.tip7,
                 ].map(
-                  (value, index) =>
-                    value && (
-                      <View style={{ marginTop: 10 }}>
+                  (tip, index) =>
+                    tip && (
+                      <View style={{ marginTop: 10 }} key={index}>
                         <Text style={{ fontSize: 14, fontFamily: "R" }}>
-                          {value}
+                          {tip}
                         </Text>
                       </View>
                     )
@@ -313,7 +291,7 @@ function TutorialViewPg5({ navigation }) {
               </View>
             </View>
           )}
-          keyExtractor={(item, idx) => idx.toString()}
+          keyExtractor={(item, index) => index.toString()}
         />
         <View
           style={{
@@ -329,7 +307,7 @@ function TutorialViewPg5({ navigation }) {
         >
           <TouchableOpacity
             style={{
-              width: "45%",
+              width: "42%",
               marginRight: 14,
               height: 55,
               padding: 15,
@@ -352,7 +330,7 @@ function TutorialViewPg5({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              width: "45%",
+              width: "42%",
               height: 55,
               marginLeft: 14,
               padding: 15,
