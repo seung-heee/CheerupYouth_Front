@@ -13,10 +13,9 @@ const Main = ({ navigation }) => {
   const { userDataP, setUserDataP } = useContext(UserContext);
   const { userDataPlusP } = useContext(UserContext);
 
-
   const handleLogout = () => {
     logout();
-    navigation.navigate('Main');
+    navigation.navigate("BottomBar");
   };
 
   const LogoutBtn = async () => {

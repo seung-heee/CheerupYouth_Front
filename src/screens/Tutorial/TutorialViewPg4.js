@@ -15,13 +15,13 @@ import { SERVER_URL } from "../../components/ServerAddress";
 
 function TutorialViewPg4({ navigation }) {
   const [dbdata, setDbData] = useState([]);
-  const { userDataP } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [styleChange, setStyleChange] = useState([]);
   const [clickItem, setClickItem] = useState("");
 
   const dbControl = (pgname) => {
     const userPlusChange = {
-      user_id: userDataP.id,
+      user_id: user.id,
       user_checkData: styleChange.includes("check")
         ? styleChange.filter((item) => item !== "check")
         : styleChange.length > 0
@@ -69,7 +69,7 @@ function TutorialViewPg4({ navigation }) {
   useEffect(() => {
     axios
       .post(`${SERVER_URL}/TVP4/select`, {
-        user_id: userDataP ? userDataP.id : null,
+        user_id: user ? user.id : null,
       })
       .then((response) => {
         const dbdata = response.data;
@@ -82,7 +82,7 @@ function TutorialViewPg4({ navigation }) {
       .catch((error) => {
         console.error("비동기 작업 중 오류가 발생했습니다:", error);
       });
-  }, [userDataP]);
+  }, [user]);
 
   useEffect(() => {
     const checkItemData = async () => {

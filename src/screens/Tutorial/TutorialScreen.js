@@ -15,7 +15,9 @@ import { UserContext } from "../../components/UserProvider";
 
 const TutorialScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
-  const { userDataP, setUserDataP } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+
+  console.log(user);
   useEffect(() => {
     const loadFont = async () => {
       await Font.loadAsync({

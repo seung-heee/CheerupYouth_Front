@@ -30,16 +30,17 @@ function TutorialViewPg5({ navigation }) {
   //     });
   // }, []); // DB 불러오기
 
-  const tvp6DataInsert = () => {
-    axios
-      .post(`${SERVER_URL}/TVP6/insert`, user_id)
-      .then((response) => {
-        navigation.navigate("TVP5");
-      })
-      .catch((error) => {
-        console.error("잘못됐어요 ? : ", error);
-      });
-  };
+  // const tvp6DataInsert = () => {
+  //   axios
+  //     .post(`${SERVER_URL}/TVP6/insert`, user_id)
+  //     .then((response) => {
+  //       navigation.navigate("TVP5");
+  //     })
+  //     .catch((error) => {
+  //       console.error("잘못됐어요 ? : ", error);
+  //     });
+  // };
+
   const [styleChange, setStyleChange] = useState("");
   const [textItem, setTextItem] = useState("");
   const beforeBtn = () => {

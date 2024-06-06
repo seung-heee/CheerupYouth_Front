@@ -8,9 +8,10 @@ import HeaderComponent from "../../components/HeaderComponent";
 
 function TutorialViewPg6({ navigation }) {
   const [dbdata, setDbData] = useState([]);
-  const { userDataP, setUserDataP } = useContext(UserContext);
+
+  const { user } = useContext(UserContext);
   useEffect(() => {
-    const user_id = userDataP ? userDataP.id : null;
+    const user_id = user ? user.id : null;
     axios
       .post(`${SERVER_URL}/TVP6/insert`, { user_id })
       .then((response) => {
