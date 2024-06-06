@@ -179,7 +179,7 @@ const Main = ({ navigation }) => {
               color: "#2E4B8F",
             }}
           >
-            안녕하세요. {user ? user.name : "로그인"}님
+            안녕하세요. {user ? user.name : "묘사"}님
           </Text>
           <Text style={{ fontSize: 20, fontWeight: "bold", color: "#2E4B8F" }}>
             부동산 정보와 정책을 검색해보세요.
@@ -222,7 +222,7 @@ const Main = ({ navigation }) => {
       <ScrollView>
         <View style={{ margin: 15, padding: 5 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold", color: "#2E4B8F" }}>
-            {user ? user.name : "로그인"} 님의 맞춤 정책 추천
+            {user ? user.name : "묘사"} 님의 맞춤 정책 추천
           </Text>
           <Text style={{ marginTop: 5, color: "gray" }}>
             나의 정보를 입력하시면 더욱 자세한 맞춤 정보를 확인할 수 있어요.
@@ -238,7 +238,8 @@ const Main = ({ navigation }) => {
         >
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {mainPolicy.slice(0, 4).map((item) => (
+              {data.map((item) => (
+              // {mainPolicy.slice(0, 4).map((item) => (
                 <TouchableOpacity key={item.key} onPress={() => navigation.navigate('policyDetail', { key: item.key })} style={{ marginLeft: 15 }} >
                   <Image
                     source={{ uri: item.img }}

@@ -1,11 +1,39 @@
 import React, { useState } from 'react';
 import { SafeAreaView, TextInput, Button, Text, StyleSheet, View } from 'react-native';
 import axios from 'axios';
+import { OPENAI_API_KEY } from '@env';
 
 const PracAI = () => {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
 
+  const handleSubmit = async () => {
+    try {
+      const result = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          model: 'gpt-3.5-turbo', // chat용 최신 모델 사용
+          messages: [
+            {"role": "system", "content": "You are a helpful assistant who matches user conditions with appropriate housing policies."},
+            {"role": "user", "content": "To tell you my conditions, please let me know if they match the conditions of the following policy"},
+            {"role": "assistant", "content": "Of course. Please give me specific information such as where you live, year of birth, gender, marital status, etc"},
+            { role: 'user', content: input }, // 사용자 메시지
+          ],
+          max_tokens: 100,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${OPENAI_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log(result.data.choices[0].message.content)
+      setResponse(result.data.choices[0].message.content);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
