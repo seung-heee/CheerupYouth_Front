@@ -8,7 +8,7 @@ import { SERVER_URL } from "../../components/ServerAddress";
 import PolicyTop from '../../components/PolicyTop';
 import MainHeader from '../../components/MainHeader';
 
-const PolicyMain = ({ navigation }) => {
+const PolicyMain_fin = ({ navigation }) => {
   const [allPolicy, setAllPolicy] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filteredPolicy, setFilteredPolicy] = useState([]);
@@ -109,4 +109,4 @@ const PolicyMain = ({ navigation }) => {
   );
 };
 
-export default PolicyMain;
+export default PolicyMain_fin;

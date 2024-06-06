@@ -5,15 +5,16 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ScrollView } from 'react-native-gesture-handler';
+import { SERVER_URL } from "../../components/ServerAddress";
 
-const policyDetail = ({route, navigation}) => {
+const PolicyDetail_fin = ({route, navigation}) => {
 
   const { key } = route.params;
   const [ policy, setPolicy ] = useState({})
 
   const getSelectPolicy = async () => {
     try {
-      const response = await axios.get(`/policy/${key}`);
+      const response = await axios.get(`${SERVER_URL}/policy/${key}`);
       console.log(response.data)
       setPolicy(response.data)
     } catch (error) {
@@ -30,7 +31,7 @@ const policyDetail = ({route, navigation}) => {
     <P.Container style={{flex:1}}>
       {/* 세부정책 헤더 */}
       <P.DetailHeader>
-        <TouchableOpacity onPress={() => navigation.navigate('policy_main')}>
+        <TouchableOpacity onPress={() => navigation.navigate('policyMain')}>
           <Text>뒤</Text>
         </TouchableOpacity>
         <P.headerTitle>{policy.title}</P.headerTitle>
@@ -133,4 +134,4 @@ const policyDetail = ({route, navigation}) => {
   );
 };
 
-export default policyDetail;
+export default PolicyDetail_fin;

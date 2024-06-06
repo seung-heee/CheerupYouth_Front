@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from "react";
+import React, { useContext, useCallback, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
 import { ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
@@ -8,11 +8,14 @@ import { UserContext } from "../components/UserProvider";
 import * as S from "../../style/MainStyle";
 import Header from "../components/Hearder";
 import SearchScreen from "../components/SearchScreen";
+import axios from "axios";
+import { SERVER_URL } from "../components/ServerAddress";
 
 const Main = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const { userDataP, setUserDataP } = useContext(UserContext);
   const { userDataPlusP } = useContext(UserContext);
+  const [ mainPolicy, setMainPolicy ] = useState([])
   const ButtonBox = async () => {
     try {
       await AsyncStorage.removeItem("userData");
@@ -23,6 +26,32 @@ const Main = ({ navigation }) => {
       console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
     }
   }; //아이디 삭제 (로그아웃)
+
+  const getPolicy = async () => {
+    try {
+      const response = await axios.get(`${SERVER_URL}/policy`);
+      console.log("Response data:", response.data);
+      setMainPolicy(response.data);
+
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        // 서버가 응답했지만 상태 코드가 2xx 범위가 아닙니다.
+        console.error('Response error:', error.response.data);
+      } else if (error.request) {
+        // 요청이 이루어졌지만 응답을 받지 못했습니다.
+        console.error('Request error:', error.request);
+      } else {
+        // 요청을 설정하는 동안 발생한 문제
+        console.error('Error:', error.message);
+      }
+      console.error('Error config:', error.config, error.message);
+    }
+  }
+
+  useEffect(() => {
+    getPolicy()
+  }, [])
 
   useFocusEffect(
     useCallback(() => {
@@ -68,7 +97,7 @@ const Main = ({ navigation }) => {
       id: 1,
       imageSource: require("../../assets/images/icon-25.png"),
       title: "나만의 맞춤 정책",
-      url: "",
+      url: "policyMain",
     },
     {
       id: 2,
@@ -198,6 +227,7 @@ const Main = ({ navigation }) => {
           <Text style={{ marginTop: 5, color: "gray" }}>
             나의 정보를 입력하시면 더욱 자세한 맞춤 정보를 확인할 수 있어요.
           </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('pracAI')}><Text>openAI 연습</Text></TouchableOpacity>
         </View>
 
         <View
@@ -208,18 +238,18 @@ const Main = ({ navigation }) => {
         >
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {data.map((item) => (
-                <View key={item.id} style={{ marginLeft: 15 }}>
+              {mainPolicy.slice(0, 4).map((item) => (
+                <TouchableOpacity key={item.key} onPress={() => navigation.navigate('policyDetail', { key: item.key })} style={{ marginLeft: 15 }} >
                   <Image
-                    source={item.imageSource}
+                    source={{ uri: item.img }}
                     style={{ width: 120, height: 120, borderRadius: 10 }}
                   />
                   <View style={{ maxWidth: 120 }}>
-                    <S.perButton onPress={() => ButtonBox(item.id)}>
+                    <S.perButton onPress={() => ButtonBox(item.key)}>
                       <Text style={{ marginTop: 5 }}>{item.title}</Text>
                     </S.perButton>
                   </View>
-                </View>
+                </TouchableOpacity>
               ))}
               <View
                 style={{
@@ -229,7 +259,7 @@ const Main = ({ navigation }) => {
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("PolicyMain")}
+                  onPress={() => navigation.navigate("policyMain")}
                 >
                   <Text style={{ fontWeight: "bold" }}>정책 더보기⮕</Text>
                 </TouchableOpacity>
