@@ -48,12 +48,12 @@ function formatCurrency(amount) {
 }
 function TutorialViewPg2({ navigation }) {
   const [dbdata, setDbData] = useState([]);
-  const { userDataP, setUserDataP } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [userdata, setUserData] = useState([]);
 
   const dbControl = (pgname) => {
     const userDataT2 = {
-      user_id: userDataP ? userDataP.id : null,
+      user_id: user ? user.id : null,
       user_inputAddress: inputAddress,
       user_inputDanji: inputDanji,
       user_inputDong: inputDong,
@@ -178,7 +178,7 @@ function TutorialViewPg2({ navigation }) {
   useEffect(() => {
     axios
       .post(`${SERVER_URL}/TVP2/select`, {
-        user_id: userDataP ? userDataP.id : null,
+        user_id: user ? user.id : null,
       })
       .then((response) => {
         const userdata = response.data;
@@ -187,7 +187,7 @@ function TutorialViewPg2({ navigation }) {
       .catch((error) => {
         console.error("데이터 가져오는 중 오류가 발생했습니다 : ", error);
       });
-  }, [userDataP]);
+  }, [user]);
 
   useEffect(() => {
     scrollToBottom();

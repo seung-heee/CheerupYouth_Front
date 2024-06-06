@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import React, { useState, useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
@@ -8,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  StyleSheet,
   StyleSheet,
 } from "react-native";
 import DatePicker from "@react-native-community/datetimepicker";

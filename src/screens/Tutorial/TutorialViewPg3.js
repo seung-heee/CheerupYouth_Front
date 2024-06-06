@@ -10,12 +10,13 @@ import HeaderComponent from "../../components/HeaderComponent";
 
 function TutorialViewPg3({ navigation }) {
   const [dbdata, setDbData] = useState([]);
-  const { userDataP, setUserDataP } = useContext(UserContext);
+
+  const { user } = useContext(UserContext);
   const [styleChange, setStyleChange] = useState([]);
   const [fontLoaded, setFontLoaded] = useState(false);
   const dbControl = (pgname) => {
     const userPlusChange = {
-      user_id: userDataP.id,
+      user_id: user.id,
       user_checkData: styleChange.includes("check")
         ? styleChange.filter((item) => item !== "check")
         : styleChange.length > 0
@@ -61,7 +62,7 @@ function TutorialViewPg3({ navigation }) {
   useEffect(() => {
     axios
       .post(`${SERVER_URL}/TVP3/select`, {
-        user_id: userDataP ? userDataP.id : null,
+        user_id: user ? user.id : null,
       })
       .then((response) => {
         const userdata = response.data.map((item) => item.user_checkData);
@@ -73,7 +74,7 @@ function TutorialViewPg3({ navigation }) {
       .catch((error) => {
         console.error("비동기 작업 중 오류가 발생했습니다:", error);
       });
-  }, [userDataP]);
+  }, [user]);
 
   useEffect(() => {
     const checkItemData = async () => {

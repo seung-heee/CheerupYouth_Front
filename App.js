@@ -28,8 +28,6 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-
-
     <UserProvider>
       <NavigationContainer>
         <Stack.Navigator
@@ -51,8 +49,6 @@ export default function App() {
           <Stack.Screen name="TVP4" component={TVP4} />
           <Stack.Screen name="TVP5" component={TVP5} />
           <Stack.Screen name="TVP6" component={TVP6} />
-          <Stack.Screen name="InfoDetail" component={InfoDetail} />
-          <Stack.Screen name="InfoDetailFull" component={InfoDetailFull} />
           {/* 정책 */}
           {/* <Stack.Screen name="policyMain" component={policyMain} /> */}
           {/* <Stack.Screen name="policyDetail" component={policyDetail} /> */}
@@ -63,6 +59,5 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
-
   );
 }

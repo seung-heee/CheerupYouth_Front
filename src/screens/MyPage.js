@@ -9,9 +9,14 @@ import { UserContext } from "../components/UserProvider";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const Main = ({ navigation }) => {
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
   const { userDataP, setUserDataP } = useContext(UserContext);
   const { userDataPlusP } = useContext(UserContext);
+
+  const handleLogout = () => {
+    logout();
+    navigation.navigate("BottomBar");
+  };
 
   const LogoutBtn = async () => {
     try {
@@ -171,7 +176,7 @@ const Main = ({ navigation }) => {
               padding: 20,
               borderBottomWidth: 0,
             }}
-            onPress={LogoutBtn}
+            onPress={handleLogout}
           >
             <Icon name="sign-out" size={20} color="#626262" />
             <Text

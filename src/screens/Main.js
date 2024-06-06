@@ -11,25 +11,27 @@ import SearchScreen from "../components/SearchScreen";
 
 const Main = ({ navigation }) => {
   const { user } = useContext(UserContext);
-  const { userDataP, setUserDataP } = useContext(UserContext);
-  const { userDataPlusP } = useContext(UserContext);
-  const ButtonBox = async () => {
-    try {
-      await AsyncStorage.removeItem("userData");
-      await AsyncStorage.removeItem("styleChange");
-      console.log("userData가 삭제되었습니다.");
-      setUserDataP(null); // userDataP 상태를 업데이트하여 화면을 자동으로 새로고침
-    } catch (error) {
-      console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
-    }
-  }; //아이디 삭제 (로그아웃)
+
+  // const { userDataP, setUserDataP } = useContext(UserContext);
+  // const { userDataPlusP } = useContext(UserContext);
+
+  // const ButtonBox = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem("userData");
+  //     await AsyncStorage.removeItem("styleChange");
+  //     console.log("userData가 삭제되었습니다.");
+  //     setUserDataP(null); // userDataP 상태를 업데이트하여 화면을 자동으로 새로고침
+  //   } catch (error) {
+  //     console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
+  //   }
+  // }; //아이디 삭제 (로그아웃)
 
   useFocusEffect(
     useCallback(() => {
       return () => {
         // 화면이 포커스를 잃을 때 실행할 작업
       };
-    }, [userDataP]) // userDataP가 변경될 때마다 콜백 함수를 다시 생성
+    }, [user]) // user가 변경될 때마다 콜백 함수를 다시 생성
   );
 
   const handleMyPage = () => {
@@ -215,7 +217,7 @@ const Main = ({ navigation }) => {
                     style={{ width: 120, height: 120, borderRadius: 10 }}
                   />
                   <View style={{ maxWidth: 120 }}>
-                    <S.perButton onPress={() => ButtonBox(item.id)}>
+                    <S.perButton onPress={() => {}}>
                       <Text style={{ marginTop: 5 }}>{item.title}</Text>
                     </S.perButton>
                   </View>

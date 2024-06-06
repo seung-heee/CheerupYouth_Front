@@ -31,20 +31,21 @@ function TutorialViewPg1({ navigation }) {
   const [inputMyValue, setInputMyValue] = useState("");
   const [selectedDaechu, setselectedDaechu] = useState("");
   // const [fontLoaded, setFontLoaded] = useState(false);
-  const { userDataP, setUserDataP } = useContext(UserContext);
+  // const { userDataP, setUserDataP } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [userdata, setUserData] = useState({});
 
   useEffect(() => {
     axios
       .post(`${SERVER_URL}/TVP1/select`, {
-        user_id: userDataP ? userDataP.id : null,
+        user_id: user ? user.id : null,
       })
       .then((response) => {
         const userdata = response.data;
         setUserData(userdata);
         console.log(userdata);
       });
-  }, [userDataP]);
+  }, [user]);
 
   useEffect(() => {
     if (userdata && userdata.length > 0) {
@@ -56,7 +57,7 @@ function TutorialViewPg1({ navigation }) {
   const dbControl = (pgname) => {
     const useableMoney = formatCurrency(sum);
     const userDataT1 = {
-      user_id: userDataP ? userDataP.id : null,
+      user_id: user ? user.id : null,
       user_useableMoney: useableMoney,
       user_selectedDaechu: selectedDaechu,
       user_inputValue: inputMyValue,
