@@ -23,6 +23,9 @@ import { UserProvider } from "./src/components/UserProvider";
 //import policyMain from "./src/screens/policy/policyMain";
 //import policyDetail from './src/screens/policy/policyDetail';
 import MyPage from "./src/screens/MyPage";
+import PolicyMain_fin from "./src/screens/policy/PolicyMain_fin";
+import PolicyDetail_fin from "./src/screens/policy/PolicyDetail_fin";
+import PracAI from "./src/screens/openAI/PracAI";
 
 const Stack = createStackNavigator();
 
@@ -50,12 +53,14 @@ export default function App() {
           <Stack.Screen name="TVP5" component={TVP5} />
           <Stack.Screen name="TVP6" component={TVP6} />
           {/* 정책 */}
-          {/* <Stack.Screen name="policyMain" component={policyMain} /> */}
-          {/* <Stack.Screen name="policyDetail" component={policyDetail} /> */}
+          <Stack.Screen name="policyMain" component={PolicyMain_fin} />
+          <Stack.Screen name="policyDetail" component={PolicyDetail_fin} />
           {/* 마이페이지 */}
           <Stack.Screen name="mypage" component={MyPage} />
           <Stack.Screen name="infoDetail" component={InfoDetail} />
           <Stack.Screen name="infoDetailFull" component={InfoDetailFull} />
+          {/* openAI 연습 */}
+          <Stack.Screen name="pracAI" component={PracAI} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>
