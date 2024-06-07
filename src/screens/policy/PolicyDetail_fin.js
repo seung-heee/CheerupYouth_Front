@@ -8,7 +8,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { SERVER_URL } from "../../components/ServerAddress";
 
 const PolicyDetail_fin = ({route, navigation}) => {
-
   const { key } = route.params;
   const [ policy, setPolicy ] = useState({})
 

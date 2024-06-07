@@ -226,8 +226,7 @@ const Main = ({ navigation }) => {
         >
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {data.map((item) => (
-              // {mainPolicy.slice(0, 4).map((item) => (
+              {mainPolicy.slice(0, 4).map((item) => (
                 <TouchableOpacity key={item.key} onPress={() => navigation.navigate('policyDetail', { key: item.key })} style={{ marginLeft: 15 }} >
                   <Image
                     source={{ uri: item.img }}
