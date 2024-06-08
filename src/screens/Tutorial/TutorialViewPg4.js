@@ -1,0 +1,463 @@
+import React, { useState, useEffect, useContext } from "react";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import axios from "axios";
+import { UserContext } from "../../components/UserProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import HeaderComponent from "../../components/HeaderComponent";
+import { SERVER_URL } from "../../components/ServerAddress";
+
+function TutorialViewPg4({ navigation }) {
+  const [dbdata, setDbData] = useState([]);
+  const { user } = useContext(UserContext);
+  const [styleChange, setStyleChange] = useState([]);
+  const [clickItem, setClickItem] = useState("");
+
+  const dbControl = (pgname) => {
+    const userPlusChange = {
+      user_id: user.id,
+      user_checkData: styleChange.includes("check")
+        ? styleChange.filter((item) => item !== "check")
+        : styleChange.length > 0
+        ? styleChange
+        : ["check"],
+    };
+    axios
+      .post(`${SERVER_URL}/TVP4/insert`, userPlusChange)
+      .then(() => {
+        navigation.navigate(pgname);
+      })
+      .catch((error) => {
+        console.error("잘못됐어요 ? : ", error);
+      });
+  };
+
+  const nextBtn = () => {
+    dbControl("TVP5");
+    AsyncStorage.removeItem("styleChangePg4");
+  };
+
+  const backBtn = () => {
+    navigation.navigate("TutorialScreen");
+    AsyncStorage.removeItem("styleChangePg4");
+  };
+
+  const beforeBtn = () => {
+    navigation.goBack();
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${SERVER_URL}/TVP4/data`)
+      .then((response) => {
+        const dbdata = response.data;
+        const valueData = response.data.map((item) => item.value);
+        setDbData(dbdata);
+        setStyleChange(valueData);
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
+      });
+  }, []); // DB 불러오기
+
+  useEffect(() => {
+    axios
+      .post(`${SERVER_URL}/TVP4/select`, {
+        user_id: user ? user.id : null,
+      })
+      .then((response) => {
+        const dbdata = response.data;
+        const userdata = dbdata.map((item) => item.value);
+        const user = dbdata.map((item) => item.user_id);
+        if (user.length > 0) {
+          setStyleChange(userdata);
+        }
+      })
+      .catch((error) => {
+        console.error("비동기 작업 중 오류가 발생했습니다:", error);
+      });
+  }, [user]);
+
+  useEffect(() => {
+    const checkItemData = async () => {
+      try {
+        const savedStyleChange = await AsyncStorage.getItem("styleChangePg4");
+        if (savedStyleChange !== null) {
+          setStyleChange(JSON.parse(savedStyleChange));
+        }
+      } catch (error) {
+        console.error("로컬 데이터 불러오기 오류:", error);
+      }
+    };
+
+    checkItemData();
+  }, []);
+
+  useEffect(() => {
+    const saveData = async () => {
+      try {
+        await AsyncStorage.setItem(
+          "styleChangePg4",
+          JSON.stringify(styleChange)
+        );
+      } catch (error) {
+        console.error("로컬 데이터 저장 오류:", error);
+      }
+    };
+    saveData();
+  }, [styleChange]);
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      <HeaderComponent onPress={backBtn} headerText="전세 계약 튜토리얼" />
+      <ScrollView>
+        <View style={{ margin: 25, marginTop: 20, marginBottom: 0 }}>
+          <View
+            style={{
+              backgroundColor: "rgba(45,75,145,1.0)",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 20,
+              width: "18%",
+              padding: 5,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "SB",
+                color: "white",
+                fontSize: 15,
+              }}
+            >
+              STEP 4
+            </Text>
+          </View>
+        </View>
+        <View style={{ margin: 25, marginBottom: 10, marginTop: 5 }}>
+          <Text
+            style={{
+              fontFamily: "B",
+              fontSize: 20,
+            }}
+          >
+            계약 준비하기
+          </Text>
+        </View>
+
+        <View
+          style={{ width: "85%", margin: 10, marginTop: 0, marginBottom: 0 }}
+        >
+          <Text
+            style={{
+              color: "gray",
+              fontSize: 15,
+              fontFamily: "M",
+              margin: 5,
+              marginLeft: 15,
+            }}
+          >
+            계약을 할 때 확인해야할 것들이 있어요.
+          </Text>
+          <Text
+            style={{
+              color: "gray",
+              fontSize: 15,
+              fontFamily: "M",
+              margin: 5,
+              marginLeft: 15,
+            }}
+          >
+            서류별로 어떤 서류인지 확인하고 무엇을 확인해야하는 지 알아보아요.
+          </Text>
+        </View>
+        <View
+          style={{
+            marginTop: 15,
+            marginRight: 10,
+            marginLeft: 10,
+            height: 1,
+            backgroundColor: "rgba(237,237,237,1.0)",
+          }}
+        ></View>
+
+        {[...new Set(dbdata.map((data) => data.title))].map(
+          (title, index) =>
+            title && (
+              <View key={index}>
+                {title !== "서류 확인 공통사항" ? (
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "white",
+                      margin: 25,
+                      marginTop: 15,
+                      marginBottom: title === "등기부등본" ? 0 : 0,
+                      borderRadius: 5,
+                      shadowColor:
+                        clickItem === title
+                          ? "rgba(45, 75, 142,0.3)"
+                          : "rgba(147,147,147,0.7)",
+                      shadowOffset: {
+                        width: 1,
+                        height: 0,
+                      },
+                      shadowOpacity: 5,
+                      shadowRadius: 3,
+                      elevation: 5,
+                    }}
+                    onPress={() => {
+                      setClickItem(clickItem === title ? "" : title);
+                    }}
+                  >
+                    <View
+                      style={{
+                        margin: 20,
+                        marginBottom: clickItem == title ? 28 : 20,
+                      }}
+                    >
+                      <View
+                        style={{
+                          height: 25,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text style={{ fontFamily: "SB", fontSize: 20 }}>
+                          {title}
+                        </Text>
+                        <Icon
+                          name={
+                            clickItem === title ? "expand-less" : "expand-more"
+                          }
+                          size={30}
+                          color={
+                            clickItem === title
+                              ? "rgba(45, 75, 142,0.8)"
+                              : "#979797"
+                          }
+                          style={{ bottom: 2.5 }}
+                        />
+                      </View>
+                      {clickItem === title && (
+                        <View>
+                          <View
+                            style={{
+                              height: 0.9,
+                              backgroundColor: "rgba(238,238,238,1.0)",
+                              marginTop: 20,
+                            }}
+                          ></View>
+                          <View
+                            style={{
+                              marginTop: 20,
+                              marginRight: 20,
+                              marginBottom: -20,
+                            }}
+                          >
+                            {dbdata
+                              .filter((data) => data.title.includes(title))
+                              .map((data, idx) => (
+                                <TouchableOpacity
+                                  key={`${title}-${idx}`}
+                                  onPress={() => {
+                                    setStyleChange((prevState) => {
+                                      if (prevState.includes(data.value)) {
+                                        return prevState.filter(
+                                          (item) => item !== data.value
+                                        );
+                                      } else {
+                                        return [...prevState, data.value];
+                                      }
+                                    });
+                                  }}
+                                  style={{
+                                    flexDirection: "row",
+                                    paddingBottom: 20,
+                                  }}
+                                >
+                                  <Icon
+                                    name={
+                                      styleChange.includes(data.value)
+                                        ? "check-box-outline-blank"
+                                        : "check-box"
+                                    }
+                                    size={18}
+                                    color={
+                                      styleChange.includes(data.value)
+                                        ? "gray"
+                                        : "#2D4B8E"
+                                    }
+                                    style={{ marginTop: 3, marginRight: 5 }}
+                                  />
+                                  <Text
+                                    style={{
+                                      marginTop: 1,
+                                      fontSize: 17,
+                                      fontFamily: "M",
+                                    }}
+                                  >
+                                    {data.value}
+                                  </Text>
+                                </TouchableOpacity>
+                              ))}
+                          </View>
+                        </View>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <View
+                    style={{
+                      backgroundColor: "white",
+                      margin: 25,
+                      marginTop: 20,
+                      marginBottom: title === "등기부등본" ? 150 : 0,
+                      borderRadius: 5,
+                      shadowColor: "rgba(45, 75, 142,0.3)",
+                      shadowOffset: {
+                        width: 1,
+                        height: 0,
+                      },
+                      shadowOpacity: 5,
+                      shadowRadius: 3,
+                      elevation: 5,
+                    }}
+                  >
+                    <View style={{ margin: 20, marginBottom: 28 }}>
+                      <Text style={{ fontFamily: "SB", fontSize: 20 }}>
+                        {title}
+                      </Text>
+                      <View
+                        style={{
+                          height: 0.9,
+                          backgroundColor: "rgba(238,238,238,1.0)",
+                          marginTop: 20,
+                        }}
+                      ></View>
+                      <View
+                        style={{
+                          marginTop: 20,
+                          marginRight: 20,
+                          marginBottom: -20,
+                        }}
+                      >
+                        {dbdata
+                          .filter((data) => data.title.includes(title))
+                          .map((data, idx) => (
+                            <TouchableOpacity
+                              key={`${title}-${idx}`}
+                              onPress={() => {
+                                setStyleChange((prevState) => {
+                                  if (prevState.includes(data.value)) {
+                                    return prevState.filter(
+                                      (item) => item !== data.value
+                                    );
+                                  } else {
+                                    return [...prevState, data.value];
+                                  }
+                                });
+                              }}
+                              style={{
+                                flexDirection: "row",
+                                paddingBottom: 20,
+                                marginRight: 20,
+                                marginTop: 0,
+                                marginLeft: 0,
+                                marginBottom: 0,
+                              }}
+                            >
+                              <Icon
+                                name={
+                                  styleChange.includes(data.value)
+                                    ? "check-box-outline-blank"
+                                    : "check-box"
+                                }
+                                size={18}
+                                color={
+                                  styleChange.includes(data.value)
+                                    ? "gray"
+                                    : "#2D4B8E"
+                                }
+                                style={{ marginTop: 3, marginRight: 5 }}
+                              />
+                              <Text
+                                style={{
+                                  marginTop: 1,
+                                  fontSize: 17,
+                                  fontFamily: "M",
+                                }}
+                              >
+                                {data.value}
+                              </Text>
+                            </TouchableOpacity>
+                          ))}
+                      </View>
+                    </View>
+                  </View>
+                )}
+              </View>
+            )
+        )}
+        <View
+          style={{
+            padding: 10,
+            marginTop: clickItem == "등기부등본" ? 30 : 90,
+            marginBottom: 50,
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+          onPress={backBtn}
+        >
+          <TouchableOpacity
+            style={{
+              width: "42%",
+              marginRight: 14,
+              height: 55,
+              padding: 15,
+              backgroundColor: "#DEDEDE",
+              borderRadius: 30,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={beforeBtn}
+          >
+            <Text
+              style={{
+                color: "rgba(112,112,112,1.0)",
+                fontSize: 20,
+                fontFamily: "B",
+              }}
+            >
+              이전
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: "42%",
+              height: 55,
+              marginLeft: 14,
+              padding: 15,
+              backgroundColor: "#2D4B8E",
+              borderRadius: 30,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={nextBtn}
+          >
+            <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
+              다음
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
+export default TutorialViewPg4;
