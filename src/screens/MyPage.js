@@ -34,6 +34,14 @@ const Main = ({ navigation }) => {
     navigation.navigate("BottomBar");
   };
 
+  const handleMyPage = () => {
+    if (user) {
+      navigation.navigate("mypage");
+    } else {
+      navigation.navigate("LoginScreen");
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View
@@ -59,6 +67,7 @@ const Main = ({ navigation }) => {
             justifyContent: "space-between",
           }}
         >
+          <TouchableOpacity onPress={() => navigation.navigate("Main")}>
           <Image
             style={{
               width: 60,
@@ -68,6 +77,7 @@ const Main = ({ navigation }) => {
             }}
             source={require("../../assets/images/mainLogo.png")}
           />
+          </TouchableOpacity>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity onPress={() => handleMyPage()}>
               <Image

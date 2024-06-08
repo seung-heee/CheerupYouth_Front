@@ -23,6 +23,7 @@ export const policyBox = styled.TouchableOpacity`
   width: 80%;
   
 `;
+
 export const title = styled.Text`
   margin-bottom: 10px;
   font-size: 18px;
@@ -53,13 +54,15 @@ export const DetailHeader = styled.View`
   display: flex;
   flex-direction : row;
   justify-content: space-between;
-  padding: 10px;
+  padding: 15px;
   font-size: 30px;
 `;
 
 export const headerTitle = styled.Text`
   width: 60%;
   text-align: center;
+  font-weight: bold;
+  font-size: 16px;
 `;
 
 export const policyMenu = styled(ScrollView).attrs({
@@ -81,6 +84,8 @@ export const contentBox = styled.View`
 export const contentBoxTitle = styled.Text`
   padding: 5px;
   font-weight: bold;
+  color: #2e4b8f;
+  font-size: 17px;
 `;
 
 export const contentBoxContent = styled.Text`
