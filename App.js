@@ -5,19 +5,27 @@ import Main from "./src/screens/Main";
 import TutorialScreen from "./src/screens/Tutorial/TutorialScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignUp from "./src/screens/SignUp";
-import LawWordList from "./src/screens/LawWordList";
-import LawListSearch from "./src/screens/LawListSearch";
+import LawWordList from "./src/screens/LawWord/LawWordList";
+import LawListSearch from "./src/screens/LawWord/LawListSearch";
 import BottomBar from "./src/components/BottomBar";
 import TVP1 from "./src/screens/Tutorial/TutorialViewPg1";
 import TVP2 from "./src/screens/Tutorial/TutorialViewPg2";
 import TVP3 from "./src/screens/Tutorial/TutorialViewPg3";
 import TVP4 from "./src/screens/Tutorial/TutorialViewPg4";
 import TVP5 from "./src/screens/Tutorial/TutorialViewPg5";
+import TVP6 from "./src/screens/Tutorial/TutorialViewPg6";
 import Login from "./src/components/Id";
 import InfoDetail from "./src/screens/InfoDetail";
 import InfoDetailFull from "./src/screens/InfoDetailFull";
 import PolicyList from "./src/screens/PolicyList";
+
 import { UserProvider } from "./src/components/UserProvider";
+//import policyMain from "./src/screens/policy/policyMain";
+//import policyDetail from './src/screens/policy/policyDetail';
+import MyPage from "./src/screens/MyPage";
+import PolicyMain_fin from "./src/screens/policy/PolicyMain_fin";
+import PolicyDetail_fin from "./src/screens/policy/PolicyDetail_fin";
+import PracAI from "./src/screens/openAI/PracAI";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +51,16 @@ export default function App() {
           <Stack.Screen name="TVP3" component={TVP3} />
           <Stack.Screen name="TVP4" component={TVP4} />
           <Stack.Screen name="TVP5" component={TVP5} />
+          <Stack.Screen name="TVP6" component={TVP6} />
+          {/* 정책 */}
+          <Stack.Screen name="policyMain" component={PolicyMain_fin} />
+          <Stack.Screen name="policyDetail" component={PolicyDetail_fin} />
+          {/* 마이페이지 */}
+          <Stack.Screen name="mypage" component={MyPage} />
+          <Stack.Screen name="infoDetail" component={InfoDetail} />
+          <Stack.Screen name="infoDetailFull" component={InfoDetailFull} />
+          {/* openAI 연습 */}
+          <Stack.Screen name="pracAI" component={PracAI} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserProvider>

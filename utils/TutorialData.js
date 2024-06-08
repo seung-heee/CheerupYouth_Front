@@ -56,6 +56,17 @@ const TutorialData = [
       },
     ],
   },
+  {
+    data: [
+      {
+        nav: "TVP6",
+        title: "STEP",
+        titleN: "➏",
+        name: "특약사항 알아보기",
+        value: "필요한 특약사항과 맞춤형 알림을 알아보아요.",
+      },
+    ],
+  },
 ];
 
 export default TutorialData;

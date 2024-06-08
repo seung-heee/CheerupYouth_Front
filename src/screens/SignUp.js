@@ -1,261 +1,327 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert, TextInput } from "react-native";
 import * as S from "../../style/LoginStyle";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 import { SERVER_URL } from "../components/ServerAddress";
+import HeaderComponent from "../components/HeaderComponent";
 
 const SignUp = () => {
+  const navigation = useNavigation();
   const [Firstname, setFirstname] = useState("");
   const [Lastname, setLastname] = useState("");
-  const [Id, setId] = useState("");
+  const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
-  const [Phone, setPhone] = useState("");
+  const [Contact, setContact] = useState("");
+  const [EmailStatus, setEmailStatus] = useState("");
+  const [EmailStatusColor, setEmailStatusColor] = useState("");
+  const [EmailStyle, setEmailStyle] = useState(true);
+  const [PasswordStatus, setPasswordStatus] = useState("");
+  const [PasswordStatusColor, setPasswordStatusColor] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const SignUp = () => {
+  const showAlert = (msg, onSuccess = null) => {
+    Alert.alert("알림", msg, [{ text: "확인", onPress: onSuccess }]);
+  };
+
+  const checkEmail = () => {
+    if (!Email) {
+      setEmailStatus("이메일을 입력 해주세요.");
+      setEmailStatusColor("red");
+      setEmailStyle(false);
+      return;
+    }
+    if (!Email.includes("@")) {
+      setEmailStatus("이메일 형식을 올바르게 입력해주세요.");
+      setEmailStatusColor("red");
+      setEmailStyle(false);
+      return;
+    }
+
     axios
-      .post(`${SERVER_URL}/users/login`, {
-        first_name: Firstname,
-        last_name: Lastname,
-        id: Id,
-        password: Password,
-        phone: Phone,
+      .post(`${SERVER_URL}/signup/select`, {
+        id: Email,
       })
       .then((response) => {
-        console.log("회원가입완료");
+        const data = response.data;
+        console.log(data);
+        if (data.exists) {
+          setEmailStatus("사용할 수 없는 이메일이에요.");
+          setEmailStatusColor("red");
+        } else {
+          setEmailStatus("사용할 수 있는 이메일이에요!");
+          setEmailStatusColor("green");
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  /*const SignUp = () => {
-    axios.post('http://192.168.35.39:8080/user_info/Signup',{
-      first_name:Firstname,
-      last_name:Lastname,
-      id:Id,
-      password:Password,
-      phone:Phone,
-    })
-    .then(response=>{
-      console.log('회원가입완료')
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-  }*/
+  const validatePassword = (password) => {
+    const regex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$_!%*?&])[A-Za-z\d@$_!%*?&]{6,}$/;
+    return regex.test(password);
+  };
+
+  const checkPassword = (password) => {
+    console.log(password);
+    if (!validatePassword(password)) {
+      setPasswordStatus(
+        "최소 6자리, 영어 대소문자, 숫자, 특수문자 중 1개를 포함해야 합니다."
+      );
+      setPasswordStatusColor("red");
+    } else {
+      setPasswordStatus("사용 가능한 비밀번호에요!");
+      setPasswordStatusColor("green");
+    }
+  };
+
+  const handlePasswordChange = (password) => {
+    setPassword(password);
+    checkPassword(password);
+  };
+
+  const handleSignUp = () => {
+    if (Firstname && Lastname && Email && Password && Contact) {
+      axios
+        .post(`${SERVER_URL}/users/signUp`, {
+          name: Firstname + Lastname,
+          id: Email,
+          password: Password,
+          contact: Contact,
+        })
+        .then((response) => {
+          console.log("회원가입완료");
+          showAlert("회원가입 완료", () => navigation.goBack());
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      showAlert("모든 정보를 입력해 주세요.");
+      console.log("회원가입 불가");
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const backBtn = () => {
+    navigation.navigate("LoginScreen");
+  };
 
   return (
-    <View
-      style={{
-        backgroundColor: "white",
-        paddingBottom: 270,
-        paddingTop: "15%",
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          marginBottom: 15,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-          }}
-        >
-          <Text
-            style={{
-              marginLeft: 10,
-              marginTop: 30,
-              marginBottom: 10,
-              fontSize: 17,
-            }}
-          >
-            이름
-          </Text>
-          <View
-            style={{ flexDirection: "row", paddingStart: 9, marginBottom: 15 }}
-          >
-            <S.Signup_FstName
-              placeholder="성을 입력해주세요." /*value={Firstname} onChangeText={setFirstname}*/
-            ></S.Signup_FstName>
-            <S.Signup_lstName
-              placeholder="이름을 입력해주세요." /*value={Lastname} onChangeText={setLastname}*/
-            ></S.Signup_lstName>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      <HeaderComponent onPress={backBtn} headerText="회원가입" />
+      <View style={{ margin: 25, marginBottom: 0, marginTop: 10 }}>
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ margin: 10, fontSize: 17 }}>이름</Text>
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              style={{
+                backgroundColor: "#F7F7F7",
+                padding: 15,
+                borderRadius: 10,
+                marginVertical: 5,
+                fontSize: 15,
+                width: "40%",
+              }}
+              placeholder="성을 입력해주세요."
+              value={Firstname}
+              onChangeText={setFirstname}
+            />
+            <TextInput
+              style={{
+                backgroundColor: "#f7f7f7",
+                padding: 15,
+                borderRadius: 10,
+                marginVertical: 5,
+                fontSize: 15,
+                marginLeft: "2%",
+                width: "58%",
+              }}
+              placeholder="이름을 입력해주세요."
+              value={Lastname}
+              onChangeText={setLastname}
+            />
           </View>
         </View>
-      </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          marginBottom: 15,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            marginBottom: 15,
-          }}
-        >
-          <Text
-            style={{
-              marginLeft: 10,
-              marginTop: 5,
-              fontSize: 17,
-              marginBottom: 10,
-            }}
-          >
-            아이디
-          </Text>
-          <View
-            style={{
-              marginLeft: 10,
-              flexDirection: "row",
-              paddingEnd: 26,
-            }}
-          >
-            <S.Signup_Id
-              placeholder="아이디를 입력해주세요." /*value={Id} onChangeText={setId}*/
-            ></S.Signup_Id>
-
-            <TouchableOpacity>
-              <S.Id_Duplicate
-                style={{
-                  backgroundColor: "#EEEEEE",
-                  justifyContent: "center",
-                  alignItems: "center", //중복환인칸 속 내부
-                }}
-              >
-                <Text>중복확인</Text>
-              </S.Id_Duplicate>
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ fontSize: 17, margin: 10 }}>이메일</Text>
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              placeholder="이메일을 입력해주세요."
+              value={Email}
+              onChangeText={setEmail}
+              style={{
+                backgroundColor: "#f7f7f7",
+                padding: 15,
+                borderRadius: 10,
+                marginVertical: 5,
+                fontSize: 15,
+                width: "70%",
+              }}
+            />
+            <TouchableOpacity
+              onPress={checkEmail}
+              style={{
+                backgroundColor: "#EEEEEE",
+                justifyContent: "center",
+                alignItems: "center",
+                marginVertical: 5,
+                borderRadius: 10,
+                marginLeft: "2%",
+                width: "28%",
+              }}
+            >
+              <Text>중복확인</Text>
             </TouchableOpacity>
           </View>
 
-          <Text
-            style={{
-              paddingLeft: 20,
-              fontSize: 12,
-            }}
-          >
-            *6~12자 영문/소문자(숫자 조합 가능)
-          </Text>
-        </View>
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          marginBottom: 15,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            marginBottom: 15,
-            paddingStart: 10,
-          }}
-        >
-          <Text
-            style={{
-              marginLeft: 0,
-              marginTop: 5,
-              fontSize: 17,
-              marginBottom: 10,
-            }}
-          >
-            비밀번호
-          </Text>
-          <View
-            style={{
-              flexDirection: "column",
-            }}
-          >
-            <S.Signup_password
-              placeholder="비밀번호를 입력해주세요."
-              secureTextEntry={
-                true
-              } /*value={Password}*/ /*onChangeText={setPassword}*/
-            ></S.Signup_password>
-            <S.Signup_passwordChk
-              placeholder="비밀번호 확인"
-              secureTextEntry={true}
-            ></S.Signup_passwordChk>
-          </View>
-        </View>
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          marginBottom: 15,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            marginBottom: 15,
-          }}
-        >
-          <Text
-            style={{
-              marginLeft: 10,
-              marginTop: 5,
-              fontSize: 17,
-              marginBottom: 10,
-            }}
-          >
-            휴대폰번호
-          </Text>
-          <View
-            style={{
-              flexDirection: "column",
-              paddingLeft: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <S.Signup_Phone
-                placeholder="휴대폰번호를 입력해주세요." /*value={Phone} onChangeText={setPhone}*/
-              ></S.Signup_Phone>
-
-              <S.Auth_get
+          {!EmailStyle && (
+            <View style={{ margin: 10 }}>
+              <Text
                 style={{
-                  backgroundColor: "#EEEEEE",
-                  justifyContent: "center",
-                  alignItems: "center", //인증번호받기 속 내부
-                  marginLeft: 6,
+                  fontSize: 12,
+                  color: EmailStatusColor || "white",
                 }}
               >
-                <Text>인증번호 받기</Text>
-              </S.Auth_get>
+                {EmailStatus}
+              </Text>
             </View>
-            <S.Signup_Auth placeholder="인증번호를 입력해주세요."></S.Signup_Auth>
+          )}
+        </View>
+
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ fontSize: 17, margin: 10 }}>비밀번호</Text>
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              style={{
+                backgroundColor: "#f7f7f7",
+                padding: 15,
+                borderRadius: 10,
+                marginVertical: 5,
+                fontSize: 15,
+                width: "80%",
+              }}
+              placeholder="비밀번호를 입력해주세요."
+              secureTextEntry={!passwordVisible}
+              value={Password}
+              onChangeText={handlePasswordChange} // 비밀번호 변경 시 handlePasswordChange 호출
+            />
+            <View
+              style={{
+                backgroundColor: "#f7f7f7",
+                marginVertical: 5,
+                borderRadius: 10,
+                width: "25%",
+                marginLeft: "-5%",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <TouchableOpacity onPress={togglePasswordVisibility}>
+                <Text style={{ fontSize: 35 }}>
+                  {passwordVisible ? "🙉" : "🙈"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {Password && (
+            <View style={{ margin: 10 }}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: PasswordStatusColor || "white",
+                }}
+              >
+                {PasswordStatus}
+              </Text>
+            </View>
+          )}
+
+          <View>
+            <TextInput
+              style={{
+                backgroundColor: "#f7f7f7",
+                padding: 15,
+                borderRadius: 10,
+                marginVertical: 5,
+                fontSize: 15,
+                width: "100%",
+              }}
+              placeholder="비밀번호 확인"
+              secureTextEntry={true}
+            />
           </View>
         </View>
-      </View>
 
-      <S.Signup_Finish
-        style={{
-          backgroundColor: "#2D4B8E",
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            width: "100%", // 전체 너비를 차지하도록 수정
-            alignItems: "center", // 수평 정렬
-            justifyContent: "center", // 수직 정렬
-            borderRadius: 10,
-            height: 45,
-          }}
-          onPress={() => SignUp()}
-        >
-          <Text style={{ color: "white", fontSize: 15 }}>회원가입 완료</Text>
-        </TouchableOpacity>
-      </S.Signup_Finish>
+        <View>
+          <Text style={{ fontSize: 17, margin: 10 }}>휴대폰번호</Text>
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              style={{
+                backgroundColor: "#f7f7f7",
+                padding: 15,
+                borderRadius: 10,
+                marginVertical: 5,
+                fontSize: 15,
+                width: "70%",
+              }}
+              placeholder="휴대폰번호를 입력해주세요."
+              value={Contact}
+              onChangeText={setContact}
+            />
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                backgroundColor: "#EEEEEE",
+                justifyContent: "center",
+                alignItems: "center",
+                marginVertical: 5,
+                borderRadius: 10,
+                marginLeft: "2%",
+                width: "28%",
+              }}
+            >
+              <Text>인증번호 받기</Text>
+            </TouchableOpacity>
+          </View>
+          <TextInput
+            style={{
+              backgroundColor: "#f7f7f7",
+              padding: 15,
+              borderRadius: 10,
+              marginVertical: 5,
+              fontSize: 15,
+              width: "100%",
+            }}
+            placeholder="인증번호를 입력해주세요."
+          />
+        </View>
+
+        <View style={{ alignItems: "center", marginTop: 100 }}>
+          <TouchableOpacity
+            style={{
+              width: "90%",
+              height: 55,
+              padding: 15,
+              backgroundColor: "#2D4B8E",
+              borderRadius: 30,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={handleSignUp}
+          >
+            <Text style={{ fontSize: 18, fontFamily: "B", color: "white" }}>
+              회원가입 완료
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };

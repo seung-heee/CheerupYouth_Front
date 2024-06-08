@@ -30,7 +30,7 @@ export const MainText = styled.Text`
   font-weight: bold;
   color: #2e4b8f;
   padding: 5px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 `;
 
 export const TitleText = styled.Text`
@@ -57,4 +57,6 @@ export const BlueButtonBox = styled.View`
   background-color: #2e4b8f;
   border-radius: 8px;
   padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 `;

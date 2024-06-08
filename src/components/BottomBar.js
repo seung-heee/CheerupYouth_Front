@@ -1,11 +1,14 @@
 import React, { useContext, useCallback } from "react";
+import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Main from "../screens/Main";
 import Community from "../screens/Community";
 import MyPage from "../screens/MyPage";
+
 import { useFocusEffect } from "@react-navigation/native";
 import { UserContext } from "../components/UserProvider";
+
 const Tab = createBottomTabNavigator();
 
 const BottomBar = ({ navigation }) => {
@@ -28,7 +31,10 @@ const BottomBar = ({ navigation }) => {
         component={Main}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home" color={color} size={size} />
+            <Image
+              source={require("../../assets/images/icon-Home.png")} // 이미지의 경로
+              style={{ tintColor: color, width: size, height: size }}
+            />
           ),
         }}
       />
@@ -37,7 +43,10 @@ const BottomBar = ({ navigation }) => {
         component={Community}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="people" color={color} size={size} />
+            <Image
+              source={require("../../assets/images/icon-11.png")} // 이미지의 경로
+              style={{ tintColor: color, width: size, height: size }}
+            />
           ),
         }}
       />
@@ -46,7 +55,10 @@ const BottomBar = ({ navigation }) => {
         component={MyPage}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="person" color={color} size={size} />
+            <Image
+              source={require("../../assets/images/icon-03.png")} // 이미지의 경로
+              style={{ tintColor: color, width: size, height: size }}
+            />
           ),
         }}
       />
