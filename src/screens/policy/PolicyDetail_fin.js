@@ -6,6 +6,7 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SERVER_URL } from "../../components/ServerAddress";
+import MatchAI from './MatchAI';
 
 const PolicyDetail_fin = ({route, navigation}) => {
   const { key } = route.params;
@@ -13,15 +14,9 @@ const PolicyDetail_fin = ({route, navigation}) => {
   const [ isSupportedOpen, setIsSupportedOpen ] = useState(false);
   const [ isExcludedOpen, setIsExcludedOpen ] = useState(false);
   
-  const handlePress = () => {
-    console.log('아이템 클릭됨!');
-    // 추가적인 로직을 여기에 작성합니다.
-  };
-
   const getSelectPolicy = async () => {
     try {
       const response = await axios.get(`${SERVER_URL}/policy/${key}`);
-      console.log(response.data)
       setPolicy(response.data)
     } catch (error) {
       console.error(error);
@@ -30,7 +25,6 @@ const PolicyDetail_fin = ({route, navigation}) => {
   
   useEffect(()=>{
     getSelectPolicy()
-    console.log(policy.img)
   }, [key])
 
   return (
@@ -165,8 +159,7 @@ const PolicyDetail_fin = ({route, navigation}) => {
           >
           <TouchableOpacity style={styles.modalBackground} activeOpacity={1} onPressOut={() => setIsSupportedOpen(false)}>
             <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>지원대상 매칭</Text>
-              <Text style={styles.modalContent}>지원대상 매칭 내용</Text>
+              <MatchAI policyKey={key} />
               <TouchableOpacity style={styles.closeButton} onPress={() => setIsSupportedOpen(false)}>
                 <Text style={styles.closeButtonText}>X</Text>
               </TouchableOpacity>
