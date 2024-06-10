@@ -116,62 +116,71 @@ function TutorialViewPg6({ navigation }) {
             height: 1,
             backgroundColor: "rgba(237,237,237,1.0)",
           }}
-        ></View>
+        />
 
         <>
           {TutorialPg6Data[0].data.map((item, index) => (
-            <View
-              key={index}
-              style={{
-                backgroundColor: "white",
-                margin: 25,
-                marginTop: 15,
-                marginBottom: 0,
-                borderRadius: 5,
-                shadowColor: "rgba(147,147,147,0.7)",
-                shadowOffset: {
-                  width: 1,
-                  height: 0,
-                },
-                shadowOpacity: 5,
-                shadowRadius: 3,
-                elevation: 5,
-              }}
-            >
-              <View style={{ margin: 20 }}>
-                <View style={{ height: 25 }}>
-                  <Text style={{ fontFamily: "SB", fontSize: 20 }}>
-                    {item.name}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    height: 0.9,
-                    backgroundColor: "rgba(238,238,238,1.0)",
-                    marginTop: 20,
-                  }}
-                ></View>
-
-                <View
-                  style={{ marginTop: 20, marginRight: 10, marginBottom: -20 }}
-                >
-                  {item.details.map((detail, detailIndex) => (
-                    <TouchableOpacity
-                      key={detailIndex}
-                      style={{ marginBottom: 20, flexDirection: "row" }}
-                      onPress={() => toggleItem(detailIndex)}
-                    >
-                      <Text style={{ fontSize: 15, fontFamily: "R" }}>
-                        {detailIndex + 1}.{"  "}
-                      </Text>
-                      <Text style={{ fontSize: 15, fontFamily: "R" }}>
-                        {clickedItems[detailIndex]
-                          ? detail.value
-                          : detail.title}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
+            <View key={index}>
+              <View style={{ margin: 20, marginTop: 10 }}>
+                {item.details.map((detail, detailIndex) => (
+                  <TouchableOpacity
+                    key={detailIndex}
+                    style={{
+                      backgroundColor: "white",
+                      padding: 25,
+                      marginHorizontal: 10,
+                      marginVertical: 15,
+                      marginBottom: 0,
+                      borderRadius: 5,
+                      shadowColor: clickedItems[detailIndex]
+                        ? "rgba(45, 75, 142,0.6)"
+                        : "rgba(147,147,147,0.6)",
+                      shadowOffset: {
+                        width: 1,
+                        height: 0,
+                      },
+                      shadowOpacity: 5,
+                      shadowRadius: 3,
+                      elevation: 5,
+                    }}
+                    onPress={() => toggleItem(detailIndex)}
+                  >
+                    {clickedItems[detailIndex] ? (
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontSize: 17, fontFamily: "B" }}>
+                          {detailIndex + 1}.{"  "}
+                        </Text>
+                        <View style={{ marginRight: 15 }}>
+                          <Text
+                            style={{
+                              fontSize: 17,
+                              fontFamily: "B",
+                              color: "rgba(45, 75, 142,1)",
+                            }}
+                          >
+                            {detail.title}
+                          </Text>
+                          <View style={{ marginTop: 10, marginLeft: -20 }}>
+                            <Text style={{ fontSize: 15, fontFamily: "R" }}>
+                              {detail.value}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    ) : (
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={{ fontSize: 17, fontFamily: "B" }}>
+                          {detailIndex + 1}.{"  "}
+                        </Text>
+                        <View style={{ marginRight: 15 }}>
+                          <Text style={{ fontSize: 17, fontFamily: "B" }}>
+                            {detail.title}
+                          </Text>
+                        </View>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                ))}
               </View>
             </View>
           ))}
