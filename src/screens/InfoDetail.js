@@ -23,7 +23,7 @@ const InfoDetail = ({ navigation, route }) => {
   const [married, setMarried] = useState("");
   const [gender, setGender] = useState("");
   const [birthDate, setBirthDate] = useState(new Date());
-  const [selectedIncome, setSelectedIncome] = useState(null);
+  const [selectedIncome, setSelectedIncome] = useState("");
 
   const [consentGiven, setConsentGiven] = useState(false); //개인정보 동의
   const [selectedCity, setSelectedCity] = useState(null); //시/도
@@ -52,43 +52,29 @@ const InfoDetail = ({ navigation, route }) => {
 
   const handleIncomeSelect = (income) => {
     setSelectedIncome(income);
+    console.log(income)
   };
 
-  const InfoDetailSubmit = () => {
-    console.log("보내는 데이터:", {
-      Id: userId,
-      Name: name,
-      Married: married,
-      Gender: gender,
-      BirthDate: birthDate,
-      Income: income,
-      ConsentGiven: consentGiven,
-      City: selectedCity,
-      District: selectedDistrict,
-    });
-    //서버 연결은 안되는데 콘솔에서는 정보 받아옴.
-
-    navigation.navigate("infoDetailFull");
-    axios
-      .post(`${SERVER_URL}/users/insert`, {
-        id: userId,
+  const InfoDetailSubmit = async () => {
+    try {
+      const id = await AsyncStorage.getItem("id");
+      const response = await axios.post(`${SERVER_URL}/users/insert`, {
+        id: id,
         Name: name,
         Married: married,
         Gender: gender,
         BirthDate: birthDate,
-        Income: income,
+        Income: selectedIncome,
         ConsentGiven: consentGiven,
         City: selectedCity,
         District: selectedDistrict,
-      })
-      .then((response) => {
-        console.log("회원정보 입력 완료");
-      })
-      .catch((error) => {
-        console.log("에러 발생:", error);
       });
+      console.log("회원정보 입력 완료", response);
+      navigation.navigate("infoDetailFull");
+    } catch (error) {
+      console.log("에러 발생:", error);
+    }
   };
-
   // const handleSubmit = () => {
   //   if (!name || !gender || !birthDate || !income) {
   //     Alert.alert("모든 항목을 입력하세요.");
@@ -128,6 +114,7 @@ const InfoDetail = ({ navigation, route }) => {
           setSelectedDistrict(data[0].District);
           setBirthDate(new Date(data[0].BirthDate));
         }
+        console.log(selectedIncome)
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
@@ -267,7 +254,7 @@ const InfoDetail = ({ navigation, route }) => {
             <RNPickerSelect
               onValueChange={handleIncomeSelect}
               items={incomeOptions}
-              placeholder={{ label: "소득 구간을 선택하세요", value: null }}
+              placeholder={{ label: selectedIncome || "소득 구간을 선택하세요", value: null }}
               value={selectedIncome}
             />
           </View>

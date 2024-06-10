@@ -106,7 +106,7 @@ export const policyModalStyle = styled.View`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: 'red';
   border-radius: 10px; 
-  width: 80%; 
+  width: 50%;
 `

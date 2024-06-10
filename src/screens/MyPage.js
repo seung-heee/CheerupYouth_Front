@@ -5,6 +5,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../components/UserProvider";
 //import BottomTabNavigationApp from "./BottomBar";
+import { useNavigation } from '@react-navigation/native';
+
 
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -15,7 +17,7 @@ const Main = ({ navigation }) => {
 
   const handleLogout = () => {
     logout();
-    navigation.navigate("BottomBar");
+    navigation.navigate('BottomBar');
   };
 
   const LogoutBtn = async () => {
@@ -117,7 +119,7 @@ const Main = ({ navigation }) => {
               textAlign: "center",
             }}
           >
-            {user ? user.name : "로그인"}
+            {user ? user.name : "묘사"}
           </Text>
         </View>
         <View style={{ marginBottom: 10, marginHorizontal: 25 }}>
@@ -131,7 +133,7 @@ const Main = ({ navigation }) => {
               borderBottomWidth: 1,
               borderColor: "#626262",
             }}
-            onPress={() => navigation.navigate("InfoDetail")}
+            onPress={() => navigation.navigate("infoDetail")}
           >
             <Icon name="edit" size={20} color="#626262" />
             <Text
@@ -154,7 +156,7 @@ const Main = ({ navigation }) => {
               borderBottomWidth: 1,
               borderColor: "#626262",
             }}
-            onPress={() => navigation.navigate("InfoDetailFull")}
+            onPress={() => navigation.navigate("infoDetailFull")}
           >
             <Icon name="user" size={20} color="#626262" />
             <Text
