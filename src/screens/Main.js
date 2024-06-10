@@ -11,7 +11,7 @@ import SearchScreen from "../components/SearchScreen";
 
 const Main = ({ navigation }) => {
   const { user } = useContext(UserContext);
-
+  console.log(user);
   // const { userDataP, setUserDataP } = useContext(UserContext);
   // const { userDataPlusP } = useContext(UserContext);
 
@@ -75,7 +75,7 @@ const Main = ({ navigation }) => {
     {
       id: 2,
       imageSource: require("../../assets/images/icon-22.png"),
-      title: "전세 계약 튜토리얼",
+      title: "전세 계약    튜토리얼",
       url: "TutorialScreen",
     },
     {
