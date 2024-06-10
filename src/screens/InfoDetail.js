@@ -209,35 +209,6 @@ const InfoDetail = ({ navigation, route }) => {
             />
           </View>
         </View>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ marginRight: 10 }}>
-            <View style={styles.Picker}>
-              <RNPickerSelect
-                onValueChange={handleCityChange}
-                items={cities}
-                placeholder={{ label: "시/도", value: null }}
-                value={selectedCity}
-              />
-            </View>
-          </View>
-
-          <View style={styles.Picker}>
-            <RNPickerSelect
-              onValueChange={handleDistrictChange}
-              items={
-                selectedCity
-                  ? districts[selectedCity].map((d) => ({
-                      label: d,
-                      value: d,
-                    }))
-                  : []
-              }
-              placeholder={{ label: "구/군", value: null }}
-              value={selectedDistrict}
-              disabled={!selectedCity}
-            />
-          </View>
-        </View>
       </S.Box>
       <S.LastBox>
         <S.TitleText>월소득</S.TitleText>

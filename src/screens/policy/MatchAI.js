@@ -13,7 +13,6 @@ const MatchAI = ({ policyKey }) => {
   const [error, setError] = useState(null);
   // 사용자 정보 저장 변수
   const [userChat, setUserChat] = useState('');
-
   const [users, setUsers] = useState(null);
   const [infoDetail, setInfoDetail] = useState(null);
   const [infoDetailFull, setInfoDetailFull] = useState(null);
@@ -104,17 +103,17 @@ const MatchAI = ({ policyKey }) => {
 
     try {
       const requestData = {
-        model: 'gpt-3.5-turbo',
+        // model: 'gpt-3.5-turbo',
+        model: 'gpt-4',
         messages: [
           { "role": "system", "content": "You are a helpful assistant who matches user conditions with appropriate housing policies." },
           { "role": "user", "content": "To tell you my conditions, please let me know if they match the conditions of the following policy" },
           { "role": "assistant", "content": "Of course. Please give me specific information such as where you live, year of birth, gender, marital status, etc" },
           { role: 'user', content: userChatText }, // 사용자 조건
           { role: 'user', content: policyChatText }, // 정책 조건
-          { role: 'user', content: "답변 형식은 '조건 설명 - 이유 - 일치/불일치'" }, // 정책 조건
-          { role: 'user', content: "마지막은 일치 혹은 불일치 단어로 끝나도록 해줘'" }, // 정책 조건
+          { role: 'user', content: "답변 형식은 각 조건에 순서대로 번호를 달고 설명을 해줘, 조건마다 간격을 두어 알아보기 쉽도록 해줘" },
+          { role: 'user', content: "마지막 결과로 가능 / 불가능을 알려줘" },
         ],
-        max_tokens: 300,
         temperature: 0.7,
         top_p: 1.0
       };
@@ -143,7 +142,7 @@ const MatchAI = ({ policyKey }) => {
   return (
     <View>
       <Text>{response}</Text>
-      <Button title="시도" onPress={fetchMemberInfo} />
+      <Button title="매칭하기" onPress={fetchMemberInfo} />
       {/* {error && <Text style={{color: 'red'}}>{error}</Text>} */}
       <Text style={{ fontSize: 12, color: 'red', textAlign: 'right' }}>
         제공된 정보는 참고 자료로만 사용하시고, 전적으로 신뢰하지 마시기 바랍니다.
