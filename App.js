@@ -17,15 +17,15 @@ import TVP6 from "./src/screens/Tutorial/TutorialViewPg6";
 import Login from "./src/components/Id";
 import InfoDetail from "./src/screens/InfoDetail";
 import InfoDetailFull from "./src/screens/InfoDetailFull";
+import InfoSet from "./src/screens/InfoSet";
 import PolicyList from "./src/screens/PolicyList";
 import OnBoardingPage from "./src/screens/OnBoardingPage";
 
 import { UserProvider } from "./src/components/UserProvider";
-//import policyMain from "./src/screens/policy/policyMain";
-//import policyDetail from './src/screens/policy/policyDetail';
+
 import MyPage from "./src/screens/MyPage";
-import PolicyMain_fin from "./src/screens/policy/PolicyMain_fin";
-import PolicyDetail_fin from "./src/screens/policy/PolicyDetail_fin";
+import PolicyMain_fin from "./src/screens/Policy/PolicyMain_fin";
+import PolicyDetail_fin from "./src/screens/Policy/PolicyDetail_fin";
 import PracAI from "./src/screens/openAI/PracAI";
 
 const Stack = createStackNavigator();
@@ -59,8 +59,9 @@ export default function App() {
           <Stack.Screen name="policyDetail" component={PolicyDetail_fin} />
           {/* 마이페이지 */}
           <Stack.Screen name="mypage" component={MyPage} />
-          <Stack.Screen name="infoDetail" component={InfoDetail} />
-          <Stack.Screen name="infoDetailFull" component={InfoDetailFull} />
+          <Stack.Screen name="InfoDetail" component={InfoDetail} />
+          <Stack.Screen name="InfoDetailFull" component={InfoDetailFull} />
+          <Stack.Screen name="InfoSet" component={InfoSet} />
           {/* openAI 연습 */}
           <Stack.Screen name="pracAI" component={PracAI} />
         </Stack.Navigator>
