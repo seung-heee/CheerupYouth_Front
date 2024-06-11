@@ -189,7 +189,7 @@ function TutorialViewPg6({ navigation }) {
           <View
             style={{
               backgroundColor: "white",
-              margin: 25,
+              margin: 29,
               marginTop: 15,
               marginBottom: 0,
               borderRadius: 5,

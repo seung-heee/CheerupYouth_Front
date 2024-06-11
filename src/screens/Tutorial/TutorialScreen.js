@@ -54,7 +54,7 @@ const TutorialScreen = ({ navigation }) => {
                 marginTop: 20,
                 margin: 25,
                 height: 115,
-                marginBottom: item.name === "특약사항 알아보기" ? 50 : -8,
+                marginBottom: item.name === "특약사항 알아보기" ? 20 : -8,
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: 8,

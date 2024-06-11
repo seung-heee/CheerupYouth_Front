@@ -24,8 +24,8 @@ import OnBoardingPage from "./src/screens/OnBoardingPage";
 import { UserProvider } from "./src/components/UserProvider";
 
 import MyPage from "./src/screens/MyPage";
-import PolicyMain_fin from "./src/screens/Policy/PolicyMain_fin";
-import PolicyDetail_fin from "./src/screens/Policy/PolicyDetail_fin";
+import PolicyMain_fin from "./src/screens/policy/PolicyMain_fin";
+import PolicyDetail_fin from "./src/screens/policy/PolicyDetail_fin";
 import PracAI from "./src/screens/openAI/PracAI";
 
 const Stack = createStackNavigator();
