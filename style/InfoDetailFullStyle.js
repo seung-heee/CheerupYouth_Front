@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #f2f3f8;
+  background-color: #ffffff;
   padding-horizontal: 20px;
-  margin-top: 50px;
 `;
 
 export const OptionsContainer = styled.View`

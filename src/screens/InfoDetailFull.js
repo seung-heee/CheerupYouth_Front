@@ -12,6 +12,8 @@ import { UserContext } from "../components/UserProvider";
 import { SERVER_URL } from "../components/ServerAddress";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import HeaderComponent from "../components/HeaderComponent";
+
 const InfoDetailFull = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const [selectedOptionsEdu, setSelectedOptionsEdu] = useState([]);
@@ -45,7 +47,7 @@ const InfoDetailFull = ({ navigation }) => {
       console.error("에러 발생:", error);
     }
   };
-  
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       const id = await AsyncStorage.getItem("id");
@@ -75,11 +77,15 @@ const InfoDetailFull = ({ navigation }) => {
   return (
     <ScrollView>
       <S.Container>
+        <HeaderComponent
+          onPress={() => navigation.goBack()}
+          headerText="상세 정보 입력하기"
+        />
         <S.MainText>
           {user.name}님의 현재상황과 {"\n"}가장 알맞는 상황은 어떤 것인가요?
         </S.MainText>
 
-        <S.TitleText>학력</S.TitleText>
+        <S.TitleText>최종 학력</S.TitleText>
         <S.OptionsContainer>
           {OptionsEdu.map((option, index) => (
             <S.Option
@@ -130,7 +136,7 @@ const InfoDetailFull = ({ navigation }) => {
           ))}
         </S.OptionsContainer>
 
-        <S.TitleText>특화 분야 (중복선택 가능)</S.TitleText>
+        <S.TitleText>대상 특성 (중복선택 가능)</S.TitleText>
         <S.OptionsContainer>
           {OptionsTarget.map((option, index) => (
             <S.Option

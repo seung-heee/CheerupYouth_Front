@@ -16,102 +16,61 @@ import axios from "axios";
 import { SERVER_URL } from "../components/ServerAddress";
 import { UserContext } from "../components/UserProvider";
 
-const InfoDetail = ({ navigation, route }) => {
+import HeaderComponent from "../components/HeaderComponent";
+
+const InfoSet = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
   const [name, setName] = useState(user.name);
   const [married, setMarried] = useState("");
   const [gender, setGender] = useState("");
   const [birthDate, setBirthDate] = useState(new Date());
-  const [selectedIncome, setSelectedIncome] = useState(null);
-
-  const [consentGiven, setConsentGiven] = useState(false); //개인정보 동의
+  const [selectedIncome, setSelectedIncome] = useState("");
   const [selectedCity, setSelectedCity] = useState(null); //시/도
   const [selectedDistrict, setSelectedDistrict] = useState(null); //null 이었는데 일단 바꿈
-  // const { userDataP, setUserDataP } = useContext(UserContext);
+  const [selectedOptionsEdu, setSelectedOptionsEdu] = useState([]);
+  const [selectedOptionsCareer, setSelectedOptionsCareer] = useState([]);
+  const [selectedOptionsMember, setSelectedOptionsMember] = useState([]);
+  const [selectedOptionsTarget, setSelectedOptionsTarget] = useState([]);
 
   const userId = user.id;
 
-  const handleBirthDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || birthDate;
-    setBirthDate(currentDate);
-  };
-
-  const handleConsentToggle = () => {
-    setConsentGiven(!consentGiven);
-  };
-
-  const handleCityChange = (city) => {
-    setSelectedCity(city);
-    setSelectedDistrict(null);
-  };
-
-  const handleDistrictChange = (district) => {
-    setSelectedDistrict(district);
-  };
-
-  const handleIncomeSelect = (income) => {
-    setSelectedIncome(income);
-  };
-
-  const InfoDetailSubmit = () => {
-    console.log("보내는 데이터:", {
-      Id: userId,
-      Name: name,
-      Married: married,
-      Gender: gender,
-      BirthDate: birthDate,
-      Income: income,
-      ConsentGiven: consentGiven,
-      City: selectedCity,
-      District: selectedDistrict,
-    });
-    //서버 연결은 안되는데 콘솔에서는 정보 받아옴.
-
-    navigation.navigate("infoDetailFull");
-    axios
-      .post(`${SERVER_URL}/users/insert`, {
-        id: userId,
-        Name: name,
-        Married: married,
-        Gender: gender,
-        BirthDate: birthDate,
-        Income: income,
-        ConsentGiven: consentGiven,
-        City: selectedCity,
-        District: selectedDistrict,
-      })
-      .then((response) => {
-        console.log("회원정보 입력 완료");
-      })
-      .catch((error) => {
-        console.log("에러 발생:", error);
-      });
-  };
-
   useEffect(() => {
-    if (user && user.name) {
-      setName(user.name);
-    }
-
     const fetchUserDetails = async () => {
       try {
         const id = await AsyncStorage.getItem("id");
-        const response = await axios.get(`${SERVER_URL}/users/select`, {
-          params: {
-            userId: id,
-          },
-        });
-        const data = response.data;
-        console.log("User details:", data);
+        const [response1, response2] = await Promise.all([
+          axios.get(`${SERVER_URL}/users/select`, {
+            params: {
+              userId: id,
+            },
+          }),
+          axios.get(`${SERVER_URL}/users/selectFull`, {
+            params: {
+              userId: id,
+            },
+          }),
+        ]);
 
-        if (data && data.length > 0) {
-          setName(data[0].Name);
-          setMarried(data[0].Married);
-          setGender(data[0].Gender);
-          setSelectedIncome(data[0].Income);
-          setSelectedCity(data[0].City);
-          setSelectedDistrict(data[0].District);
-          setBirthDate(new Date(data[0].BirthDate));
+        const data1 = response1.data;
+        const data2 = response2.data;
+        console.log("User details (basic):", data1);
+        console.log("User details (full):", data2);
+
+        if (data1 && data1.length > 0) {
+          setName(data1[0].Name);
+          setMarried(data1[0].Married);
+          setGender(data1[0].Gender);
+          setSelectedIncome(data1[0].Income);
+          setSelectedCity(data1[0].City);
+          setSelectedDistrict(data1[0].District);
+          setBirthDate(new Date(data1[0].BirthDate));
+        }
+
+        if (data2 && data2.length > 0) {
+          setSelectedOptionsEdu(data2[0].HighestEducation);
+          setSelectedOptionsCareer(data2[0].CurrentJob);
+          setSelectedOptionsMember(data2[0].ResidentialStatus);
+          setSelectedOptionsTarget(data2[0].Special);
         }
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -119,69 +78,75 @@ const InfoDetail = ({ navigation, route }) => {
     };
 
     fetchUserDetails();
-  }, []);
+  }, [userId]);
+
+  const formattedDate = new Intl.DateTimeFormat("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(birthDate);
 
   return (
     <S.Container>
-      <View>
-        <S.MainText>정보 수정</S.MainText>
-      </View>
+      <HeaderComponent
+        onPress={() => navigation.goBack()}
+        headerText="내 정보 확인하기"
+      />
+      <View style={{ paddingVertical: 10 }} />
+
       <S.Box>
         <S.TitleText>이름</S.TitleText>
-        <TextInput
-          onChangeText={setName}
-          value={name}
-          placeholder="이름"
-          returnKeyType="done"
-        />
+        <Text>{name}</Text>
       </S.Box>
       <S.Box>
         <S.TitleText>결혼유무</S.TitleText>
+        <Text>{married}</Text>
       </S.Box>
       <S.Box>
         <S.TitleText>성별</S.TitleText>
+        <Text>{gender}</Text>
       </S.Box>
       <S.Box>
         <S.TitleText>생년월일</S.TitleText>
+        <Text>
+          {new Intl.DateTimeFormat("ko-KR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }).format(birthDate)}
+        </Text>
       </S.Box>
       <S.Box>
         <S.TitleText>월소득</S.TitleText>
+        <Text>{selectedIncome}</Text>
+      </S.Box>
+      <S.Box>
+        <S.TitleText>거주지역</S.TitleText>
+        <Text>
+          {selectedCity} {selectedDistrict}
+        </Text>
       </S.Box>
       <S.Box>
         <S.TitleText>최종 학력</S.TitleText>
+        <Text>{selectedOptionsEdu}</Text>
       </S.Box>
 
       <S.Box>
         <S.TitleText>현재 직업</S.TitleText>
+        <Text>{selectedOptionsCareer}</Text>
       </S.Box>
 
       <S.Box>
-        <S.TitleText>생년월일</S.TitleText>
+        <S.TitleText>주거 상태</S.TitleText>
+        <Text>{selectedOptionsMember}</Text>
       </S.Box>
 
       <S.LastBox>
-        <S.TitleText>대상특성</S.TitleText>
+        <S.TitleText>대상 특성</S.TitleText>
+        <Text>{selectedOptionsTarget}</Text>
       </S.LastBox>
-
-      <S.BlueButtonBox style={{ marginTop: 20 }}>
-        <TouchableOpacity onPress={() => InfoDetailSubmit()}>
-          <S.BlueButtonText>수정</S.BlueButtonText>
-        </TouchableOpacity>
-      </S.BlueButtonBox>
     </S.Container>
   );
 };
 
-const styles = StyleSheet.create({
-  Picker: {
-    padding: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#c4c3c3",
-    marginTop: 5,
-    marginBottom: 10,
-    //backgroundColor: "white",
-  },
-});
-
-export default InfoDetail;
+export default InfoSet;

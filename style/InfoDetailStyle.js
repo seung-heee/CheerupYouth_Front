@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #f2f3f8;
+  background-color: #ffffff;
   padding-horizontal: 20px;
-  margin-top: 50px;
 `;
 
 export const MainText = styled.Text`
@@ -12,7 +11,7 @@ export const MainText = styled.Text`
   font-weight: bold;
   color: #2e4b8f;
   padding: 5px;
-  margin-top: 50px;
+  margin-top: 10px;
   margin-bottom: 20px;
 `;
 
