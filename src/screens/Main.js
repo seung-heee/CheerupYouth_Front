@@ -132,7 +132,7 @@ const Main = ({ navigation }) => {
               marginTop: 60,
               marginHorizontal: 15,
             }}
-            source={require("../../assets/images/mainLogo.png")}
+            source={require("../../assets/images/logoword.png")}
           />
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity onPress={() => handleMyPage()}>
