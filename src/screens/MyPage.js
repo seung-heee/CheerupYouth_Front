@@ -142,17 +142,14 @@ const Main = ({ navigation }) => {
             >
               <TouchableOpacity
                 onPress={() => navigation.navigate("InfoDetail")}
+                style={{ flexDirection: "row", alignItems: "center" }} // 추가된 부분
               >
                 <Icon name="edit" size={20} color="#626262" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate("InfoDetail")}
-              >
                 <Text
                   style={{
                     color: "#626262",
                     fontWeight: "bold",
-                    marginLeft: 10,
+                    marginLeft: 10, // 조정된 부분
                   }}
                 >
                   상세정보 수정
@@ -164,7 +161,7 @@ const Main = ({ navigation }) => {
               style={{
                 borderBottomWidth: 1,
                 borderColor: "#626262",
-                marginTop: 20,
+                marginTop: 25,
               }}
             />
           </View>
@@ -176,18 +173,19 @@ const Main = ({ navigation }) => {
                 justifyContent: "center",
               }}
             >
-              <TouchableOpacity onPress={() => navigation.navigate("InfoSet")}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("InfoSet")}
+                style={{ flexDirection: "row", alignItems: "center" }} // 추가된 부분
+              >
                 <Icon name="user" size={20} color="#626262" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("InfoSet")}>
                 <Text
                   style={{
                     color: "#626262",
                     fontWeight: "bold",
-                    marginLeft: 10,
+                    marginLeft: 10, // 조정된 부분
                   }}
                 >
-                  내 정보 관리
+                  내 정보 확인
                 </Text>
               </TouchableOpacity>
             </View>
@@ -195,7 +193,7 @@ const Main = ({ navigation }) => {
               style={{
                 borderBottomWidth: 1,
                 borderColor: "#626262",
-                marginTop: 20,
+                marginTop: 25,
               }}
             />
           </View>
@@ -209,16 +207,15 @@ const Main = ({ navigation }) => {
               }}
             >
               <TouchableOpacity
-                onPress={() => navigation.navigate("InfoDetail")}
+                onPress={handleLogout}
+                style={{ flexDirection: "row", alignItems: "center" }} // 추가된 부분
               >
                 <Icon name="sign-out" size={20} color="#626262" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleLogout}>
                 <Text
                   style={{
                     color: "#626262",
                     fontWeight: "bold",
-                    marginLeft: 10,
+                    marginLeft: 10, // 조정된 부분
                   }}
                 >
                   로그아웃

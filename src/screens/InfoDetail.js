@@ -16,6 +16,7 @@ import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
 import { SERVER_URL } from "../components/ServerAddress";
 import { UserContext } from "../components/UserProvider";
+import HeaderComponent from "../components/HeaderComponent";
 
 const InfoDetail = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
@@ -70,7 +71,7 @@ const InfoDetail = ({ navigation, route }) => {
         District: selectedDistrict,
       });
       console.log("회원정보 입력 완료", response);
-      navigation.navigate("infoDetailFull");
+      navigation.navigate("InfoDetailFull");
     } catch (error) {
       console.log("에러 발생:", error);
     }
@@ -125,6 +126,10 @@ const InfoDetail = ({ navigation, route }) => {
 
   return (
     <S.Container>
+      <HeaderComponent
+        onPress={() => navigation.goBack()}
+        headerText="상세 정보 입력하기"
+      />
       <View>
         <S.MainText>
           정보를 입력하시면 {"\n"}
@@ -188,7 +193,7 @@ const InfoDetail = ({ navigation, route }) => {
               <RNPickerSelect
                 onValueChange={handleCityChange}
                 items={cities}
-                placeholder={{ label: "시/도", value: null }}
+                placeholder={{ label: "시/도", value: null, color: "gray" }}
                 value={selectedCity}
                 textInputProps={{ style: { fontSize: 15 } }} // 글씨 크기 지정
               />
@@ -206,7 +211,7 @@ const InfoDetail = ({ navigation, route }) => {
                     }))
                   : []
               }
-              placeholder={{ label: "구/군", value: null }}
+              placeholder={{ label: "구/군", value: null, color: "gray" }}
               value={selectedDistrict}
               disabled={!selectedCity}
               textInputProps={{ style: { fontSize: 15 } }} // 글씨 크기 지정
@@ -232,6 +237,7 @@ const InfoDetail = ({ navigation, route }) => {
               placeholder={{
                 label: selectedIncome || "소득 구간을 선택하세요",
                 value: null,
+                color: "gray",
               }}
               value={selectedIncome}
               textInputProps={{ style: { fontSize: 15 } }} // 글씨 크기 지정
@@ -247,7 +253,6 @@ const InfoDetail = ({ navigation, route }) => {
         style={{
           alignItems: "center",
           padding: 5,
-          marginTop: 20,
           marginBottom: 20,
         }}
       >
@@ -263,7 +268,7 @@ const InfoDetail = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
 
-      <View
+      {/* <View
         style={{ alignItems: "center", justifyContent: "center", padding: 15 }}
       >
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -273,7 +278,7 @@ const InfoDetail = ({ navigation, route }) => {
             다음에 입력하기
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <S.BlueButtonBox>
         <TouchableOpacity onPress={() => InfoDetailSubmit()}>
           <S.BlueButtonText>다음</S.BlueButtonText>
