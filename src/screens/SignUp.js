@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Alert, TextInput } from "react-native";
-import * as S from "../../style/LoginStyle";
+import { View, Text, TouchableOpacity, Alert, TextInput, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { SERVER_URL } from "../components/ServerAddress";
@@ -41,24 +40,24 @@ const SignUp = () => {
     }
 
     axios
-    .post(`${SERVER_URL}/users/checkEmail`, {Email})
-    .then((response) => {
-      const data = response.data;
-      console.log(data);
-      if (data.exists) {
-        setEmailStatus("사용할 수 없는 이메일이에요.");
-        setEmailStatusColor("red");
-        setEmailStyle(false);
-      } else {
-        setEmailStatus("사용할 수 있는 이메일이에요!");
-        setEmailStatusColor("green");
-        setEmailStyle(true);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+      .post(`${SERVER_URL}/users/checkEmail`, { Email })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        if (data.exists) {
+          setEmailStatus("사용할 수 없는 이메일이에요.");
+          setEmailStatusColor("red");
+          setEmailStyle(false);
+        } else {
+          setEmailStatus("사용할 수 있는 이메일이에요!");
+          setEmailStatusColor("green");
+          setEmailStyle(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const validatePassword = (password) => {
     const regex =
@@ -79,21 +78,18 @@ const SignUp = () => {
     }
   };
 
-  
-
   const handlePasswordChange = (password) => {
     setPassword(password);
     checkPassword(password);
   };
 
-  const handleConfirmPasswordChange = (password) => { // 비밀번호 확인 변경 핸들러 추가
+  const handleConfirmPasswordChange = (password) => {
     setConfirmPassword(password);
   };
 
-
   const handleSignUp = () => {
     if (Firstname && Lastname && Email && Password && ConfirmPassword && Contact) {
-      if (Password !== ConfirmPassword) { // 비밀번호와 비밀번호 확인 값이 일치하는지 확인
+      if (Password !== ConfirmPassword) {
         showAlert("비밀번호가 일치하지 않아요!");
         return;
       }
@@ -126,229 +122,211 @@ const SignUp = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
-      <HeaderComponent onPress={backBtn} headerText="회원가입" />
-      <View style={{ margin: 25, marginBottom: 0, marginTop: 10 }}>
-        <View style={{ marginBottom: 30 }}>
-          <Text style={{ margin: 10, fontSize: 17 }}>이름</Text>
-          <View style={{ flexDirection: "row" }}>
-            <TextInput
-              style={{
-                backgroundColor: "#F7F7F7",
-                padding: 15,
-                borderRadius: 10,
-                marginVertical: 5,
-                fontSize: 15,
-                width: "40%",
-              }}
-              placeholder="성을 입력해주세요."
-              value={Firstname}
-              onChangeText={setFirstname}
-            />
-            <TextInput
-              style={{
-                backgroundColor: "#f7f7f7",
-                padding: 15,
-                borderRadius: 10,
-                marginVertical: 5,
-                fontSize: 15,
-                marginLeft: "2%",
-                width: "58%",
-              }}
-              placeholder="이름을 입력해주세요."
-              value={Lastname}
-              onChangeText={setLastname}
-            />
-          </View>
-        </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={{ flex: 1, backgroundColor: "white" }}>
+          <HeaderComponent onPress={backBtn} headerText="회원가입" />
+          <View style={{ margin: 25, marginBottom: 0, marginTop: 10 }}>
+            <View style={{ marginBottom: 30 }}>
+              <Text style={{ margin: 10, fontSize: 17 }}>이름</Text>
+              <View style={{ flexDirection: "row" }}>
+                <TextInput
+                  style={{
+                    backgroundColor: "#F7F7F7",
+                    padding: 15,
+                    borderRadius: 10,
+                    marginVertical: 5,
+                    fontSize: 15,
+                    width: "40%",
+                  }}
+                  placeholder="성을 입력해주세요."
+                  value={Firstname}
+                  onChangeText={setFirstname}
+                />
+                <TextInput
+                  style={{
+                    backgroundColor: "#f7f7f7",
+                    padding: 15,
+                    borderRadius: 10,
+                    marginVertical: 5,
+                    fontSize: 15,
+                    marginLeft: "2%",
+                    width: "58%",
+                  }}
+                  placeholder="이름을 입력해주세요."
+                  value={Lastname}
+                  onChangeText={setLastname}
+                />
+              </View>
+            </View>
 
-        <View style={{ marginBottom: 5 }}>
-          <Text style={{ fontSize: 17, margin: 10 }}>이메일</Text>
-          <View style={{ flexDirection: "row" }}>
-            <TextInput
-              placeholder="이메일을 입력해주세요."
-              value={Email}
-              onChangeText={setEmail}
-              style={{
-                backgroundColor: "#f7f7f7",
-                padding: 15,
-                borderRadius: 10,
-                marginVertical: 5,
-                fontSize: 15,
-                width: "70%",
-              }}
-            />
-            <TouchableOpacity
-              onPress={checkEmail}
-              style={{
-                backgroundColor: "#EEEEEE",
-                justifyContent: "center",
-                alignItems: "center",
-                marginVertical: 5,
-                borderRadius: 10,
-                marginLeft: "2%",
-                width: "28%",
-              }}
-            >
-              <Text>중복확인</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={{ marginBottom: 5 }}>
+              <Text style={{ fontSize: 17, margin: 10 }}>이메일</Text>
+              <View style={{ flexDirection: "row" }}>
+                <TextInput
+                  placeholder="이메일을 입력해주세요."
+                  value={Email}
+                  onChangeText={setEmail}
+                  style={{
+                    backgroundColor: "#f7f7f7",
+                    padding: 15,
+                    borderRadius: 10,
+                    marginVertical: 5,
+                    fontSize: 15,
+                    width: "70%",
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={checkEmail}
+                  style={{
+                    backgroundColor: "#EEEEEE",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginVertical: 5,
+                    borderRadius: 10,
+                    marginLeft: "2%",
+                    width: "28%",
+                  }}
+                >
+                  <Text>중복확인</Text>
+                </TouchableOpacity>
+              </View>
 
-          <View style={{ margin: 10 }}>
-            <Text
-              style={{
-                fontSize: 12,
-                color: EmailStatusColor || "white",
-              }}
-            >
-              {EmailStatus}
-            </Text>
-          </View>
-        </View>
+              <View style={{ margin: 10 }}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: EmailStatusColor || "white",
+                  }}
+                >
+                  {EmailStatus}
+                </Text>
+              </View>
+            </View>
 
-        <View style={{ marginBottom: 10 }}>
-          <Text style={{ fontSize: 17, margin: 10 }}>비밀번호</Text>
-          <View style={{ flexDirection: "row" }}>
-            <TextInput
-              style={{
-                backgroundColor: "#f7f7f7",
-                padding: 15,
-                borderRadius: 10,
-                marginVertical: 5,
-                fontSize: 15,
-                width: "80%",
-              }}
-              placeholder="비밀번호를 입력해주세요."
-              secureTextEntry={!passwordVisible}
-              value={Password}
-              onChangeText={handlePasswordChange} // 비밀번호 변경 시 handlePasswordChange 호출
-            />
-            <View
-              style={{
-                backgroundColor: "#f7f7f7",
-                marginVertical: 5,
-                borderRadius: 10,
-                width: "25%",
-                marginLeft: "-5%",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <TouchableOpacity onPress={togglePasswordVisibility}>
-                <Text style={{ fontSize: 35 }}>
-                  {passwordVisible ?  <Icon name="eye-outline" size={35}/> : <Icon name="eye-off-outline" size={35}/>}
+            <View style={{ marginBottom: 10 }}>
+              <Text style={{ fontSize: 17, margin: 10 }}>비밀번호</Text>
+              <View style={{ flexDirection: "row" }}>
+                <TextInput
+                  style={{
+                    backgroundColor: "#f7f7f7",
+                    padding: 15,
+                    borderRadius: 10,
+                    marginVertical: 5,
+                    fontSize: 15,
+                    width: "80%",
+                  }}
+                  placeholder="비밀번호를 입력해주세요."
+                  secureTextEntry={!passwordVisible}
+                  value={Password}
+                  onChangeText={handlePasswordChange}
+                />
+                <View
+                  style={{
+                    backgroundColor: "#f7f7f7",
+                    marginVertical: 5,
+                    borderRadius: 10,
+                    width: "25%",
+                    marginLeft: "-5%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <TouchableOpacity onPress={togglePasswordVisibility}>
+                    <Text style={{ fontSize: 35 }}>
+                      {passwordVisible ? <Icon name="eye-outline" size={35} /> : <Icon name="eye-off-outline" size={35} />}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              {Password && (
+                <View style={{ margin: 10 }}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: PasswordStatusColor || "white",
+                    }}
+                  >
+                    {PasswordStatus}
+                  </Text>
+                </View>
+              )}
+
+              <View>
+                <TextInput
+                  style={{
+                    backgroundColor: "#f7f7f7",
+                    padding: 15,
+                    borderRadius: 10,
+                    marginVertical: 5,
+                    fontSize: 15,
+                    width: "100%",
+                  }}
+                  placeholder="비밀번호 확인"
+                  secureTextEntry={true}
+                  value={ConfirmPassword}
+                  onChangeText={handleConfirmPasswordChange}
+                />
+              </View>
+
+              {ConfirmPassword !== "" && (
+                Password === ConfirmPassword ? (
+                  <Text style={{ color: "green", marginLeft: 10 }}>
+                    비밀번호가 같아요!
+                  </Text>
+                ) : (
+                  <Text style={{ color: "red", marginLeft: 10 }}>
+                    비밀번호가 달라요!
+                  </Text>
+                )
+              )}
+            </View>
+
+            <View style={{ marginBottom: 30 }}>
+              <Text style={{ fontSize: 17, margin: 10 }}>휴대폰번호</Text>
+              <View style={{ flexDirection: "row" }}>
+                <TextInput
+                  style={{
+                    backgroundColor: "#f7f7f7",
+                    padding: 15,
+                    borderRadius: 10,
+                    marginVertical: 5,
+                    fontSize: 15,
+                    width: "100%",
+                  }}
+                  placeholder="휴대폰번호를 입력해주세요."
+                  value={Contact}
+                  onChangeText={setContact}
+                  keyboardType="phone-pad"
+                />
+              </View>
+            </View>
+
+            <View style={{ alignItems: "center", marginTop: 100 }}>
+              <TouchableOpacity
+                style={{
+                  width: "90%",
+                  height: 55,
+                  padding: 15,
+                  backgroundColor: "#2D4B8E",
+                  borderRadius: 30,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={handleSignUp}
+              >
+                <Text style={{ fontSize: 18, fontFamily: "B", color: "white" }}>
+                  회원가입 완료
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
-          {Password && (
-            <View style={{ margin: 10 }}>
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: PasswordStatusColor || "white",
-                }}
-              >
-                {PasswordStatus}
-              </Text>
-            </View>
-          )}
-
-          <View>
-              <TextInput
-              style={{
-                backgroundColor: "#f7f7f7",
-                padding: 15,
-                borderRadius: 10,
-                marginVertical: 5,
-                fontSize: 15,
-                width: "100%",
-              }}
-              placeholder="비밀번호 확인"
-              secureTextEntry={true}
-              value={ConfirmPassword} // ConfirmPassword 값 추가
-              onChangeText={handleConfirmPasswordChange} // ConfirmPassword 변경 핸들러 추가
-              />
-            </View>
-
-              {ConfirmPassword !== "" && ( // ConfirmPassword 값이 비어있지 않을 때만 메시지를 표시
-              Password === ConfirmPassword ? (
-                <Text style={{ color: "green", marginLeft: 10 }}>
-                  비밀번호가 같아요!
-                </Text>
-              ) : (
-                <Text style={{ color: "red", marginLeft: 10 }}>
-                  비밀번호가 달라요!
-                </Text>
-              )
-            )}
-
-            </View>
-
-        <View style={{ marginTop: 30 }}>
-          <Text style={{ fontSize: 17, margin: 10 }}>휴대폰번호</Text>
-          <View style={{ flexDirection: "row" }}>
-            <TextInput
-              style={{
-                backgroundColor: "#f7f7f7",
-                padding: 15,
-                borderRadius: 10,
-                marginVertical: 5,
-                fontSize: 15,
-                width: "100%",
-              }}
-              placeholder="휴대폰번호를 입력해주세요."
-              value={Contact}
-              onChangeText={setContact}
-            />
-            {/* <TouchableOpacity
-              onPress={() => {}}
-              style={{
-                backgroundColor: "#EEEEEE",
-                justifyContent: "center",
-                alignItems: "center",
-                marginVertical: 5,
-                borderRadius: 10,
-                marginLeft: "2%",
-                width: "28%",
-              }}
-            >
-              <Text>인증번호 받기</Text>
-            </TouchableOpacity> */}
-          </View>
-          {/* <TextInput
-            style={{
-              backgroundColor: "#f7f7f7",
-              padding: 15,
-              borderRadius: 10,
-              marginVertical: 5,
-              fontSize: 15,
-              width: "100%",
-            }}
-            placeholder="인증번호를 입력해주세요."
-          /> */}
         </View>
-
-        <View style={{ alignItems: "center", marginTop: 100 }}>
-          <TouchableOpacity
-            style={{
-              width: "90%",
-              height: 55,
-              padding: 15,
-              backgroundColor: "#2D4B8E",
-              borderRadius: 30,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={handleSignUp}
-          >
-            <Text style={{ fontSize: 18, fontFamily: "B", color: "white" }}>
-              회원가입 완료
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
