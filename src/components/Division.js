@@ -5,8 +5,8 @@ import * as S from "../../style/LoginStyle";
 const Division = () => {
   return (
     <S.DivisionContainer>
-      <S.Line />
-      <S.DivisionText>소셜 계정을 통해 로그인</S.DivisionText>
+      {/* <S.Line />
+      <S.DivisionText>소셜 계정을 통해 로그인</S.DivisionText> */}
     </S.DivisionContainer>
   );
 };

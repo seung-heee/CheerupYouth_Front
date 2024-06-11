@@ -223,6 +223,7 @@ export const StyledImage = styled.Image`
 
 export const MainContainer = styled(View)`
   flex: 1;
+  marginVertical: 90px;
 `;
 
 export const MainLogoContainer = styled.View`

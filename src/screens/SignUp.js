@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { SERVER_URL } from "../components/ServerAddress";
 import HeaderComponent from "../components/HeaderComponent";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const SignUp = () => {
   const navigation = useNavigation();
@@ -12,6 +13,7 @@ const SignUp = () => {
   const [Lastname, setLastname] = useState("");
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
   const [Contact, setContact] = useState("");
   const [EmailStatus, setEmailStatus] = useState("");
   const [EmailStatusColor, setEmailStatusColor] = useState("");
@@ -39,24 +41,24 @@ const SignUp = () => {
     }
 
     axios
-      .post(`${SERVER_URL}/signup/select`, {
-        id: Email,
-      })
-      .then((response) => {
-        const data = response.data;
-        console.log(data);
-        if (data.exists) {
-          setEmailStatus("사용할 수 없는 이메일이에요.");
-          setEmailStatusColor("red");
-        } else {
-          setEmailStatus("사용할 수 있는 이메일이에요!");
-          setEmailStatusColor("green");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+    .post(`${SERVER_URL}/users/checkEmail`, {Email})
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+      if (data.exists) {
+        setEmailStatus("사용할 수 없는 이메일이에요.");
+        setEmailStatusColor("red");
+        setEmailStyle(false);
+      } else {
+        setEmailStatus("사용할 수 있는 이메일이에요!");
+        setEmailStatusColor("green");
+        setEmailStyle(true);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
   const validatePassword = (password) => {
     const regex =
@@ -77,15 +79,26 @@ const SignUp = () => {
     }
   };
 
+  
+
   const handlePasswordChange = (password) => {
     setPassword(password);
     checkPassword(password);
   };
 
+  const handleConfirmPasswordChange = (password) => { // 비밀번호 확인 변경 핸들러 추가
+    setConfirmPassword(password);
+  };
+
+
   const handleSignUp = () => {
-    if (Firstname && Lastname && Email && Password && Contact) {
+    if (Firstname && Lastname && Email && Password && ConfirmPassword && Contact) {
+      if (Password !== ConfirmPassword) { // 비밀번호와 비밀번호 확인 값이 일치하는지 확인
+        showAlert("비밀번호가 일치하지 않아요!");
+        return;
+      }
       axios
-        .post(`${SERVER_URL}/users/signUp`, {
+        .post(`${SERVER_URL}/users/signup`, {
           name: Firstname + Lastname,
           id: Email,
           password: Password,
@@ -116,7 +129,7 @@ const SignUp = () => {
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <HeaderComponent onPress={backBtn} headerText="회원가입" />
       <View style={{ margin: 25, marginBottom: 0, marginTop: 10 }}>
-        <View style={{ marginBottom: 10 }}>
+        <View style={{ marginBottom: 30 }}>
           <Text style={{ margin: 10, fontSize: 17 }}>이름</Text>
           <View style={{ flexDirection: "row" }}>
             <TextInput
@@ -149,7 +162,7 @@ const SignUp = () => {
           </View>
         </View>
 
-        <View style={{ marginBottom: 10 }}>
+        <View style={{ marginBottom: 5 }}>
           <Text style={{ fontSize: 17, margin: 10 }}>이메일</Text>
           <View style={{ flexDirection: "row" }}>
             <TextInput
@@ -181,18 +194,16 @@ const SignUp = () => {
             </TouchableOpacity>
           </View>
 
-          {!EmailStyle && (
-            <View style={{ margin: 10 }}>
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: EmailStatusColor || "white",
-                }}
-              >
-                {EmailStatus}
-              </Text>
-            </View>
-          )}
+          <View style={{ margin: 10 }}>
+            <Text
+              style={{
+                fontSize: 12,
+                color: EmailStatusColor || "white",
+              }}
+            >
+              {EmailStatus}
+            </Text>
+          </View>
         </View>
 
         <View style={{ marginBottom: 10 }}>
@@ -225,7 +236,7 @@ const SignUp = () => {
             >
               <TouchableOpacity onPress={togglePasswordVisibility}>
                 <Text style={{ fontSize: 35 }}>
-                  {passwordVisible ? "🙉" : "🙈"}
+                  {passwordVisible ?  <Icon name="eye-outline" size={35}/> : <Icon name="eye-off-outline" size={35}/>}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -244,7 +255,7 @@ const SignUp = () => {
           )}
 
           <View>
-            <TextInput
+              <TextInput
               style={{
                 backgroundColor: "#f7f7f7",
                 padding: 15,
@@ -255,11 +266,26 @@ const SignUp = () => {
               }}
               placeholder="비밀번호 확인"
               secureTextEntry={true}
-            />
-          </View>
-        </View>
+              value={ConfirmPassword} // ConfirmPassword 값 추가
+              onChangeText={handleConfirmPasswordChange} // ConfirmPassword 변경 핸들러 추가
+              />
+            </View>
 
-        <View>
+              {ConfirmPassword !== "" && ( // ConfirmPassword 값이 비어있지 않을 때만 메시지를 표시
+              Password === ConfirmPassword ? (
+                <Text style={{ color: "green", marginLeft: 10 }}>
+                  비밀번호가 같아요!
+                </Text>
+              ) : (
+                <Text style={{ color: "red", marginLeft: 10 }}>
+                  비밀번호가 달라요!
+                </Text>
+              )
+            )}
+
+            </View>
+
+        <View style={{ marginTop: 30 }}>
           <Text style={{ fontSize: 17, margin: 10 }}>휴대폰번호</Text>
           <View style={{ flexDirection: "row" }}>
             <TextInput
@@ -269,13 +295,13 @@ const SignUp = () => {
                 borderRadius: 10,
                 marginVertical: 5,
                 fontSize: 15,
-                width: "70%",
+                width: "100%",
               }}
               placeholder="휴대폰번호를 입력해주세요."
               value={Contact}
               onChangeText={setContact}
             />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {}}
               style={{
                 backgroundColor: "#EEEEEE",
@@ -288,9 +314,9 @@ const SignUp = () => {
               }}
             >
               <Text>인증번호 받기</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
-          <TextInput
+          {/* <TextInput
             style={{
               backgroundColor: "#f7f7f7",
               padding: 15,
@@ -300,7 +326,7 @@ const SignUp = () => {
               width: "100%",
             }}
             placeholder="인증번호를 입력해주세요."
-          />
+          /> */}
         </View>
 
         <View style={{ alignItems: "center", marginTop: 100 }}>
