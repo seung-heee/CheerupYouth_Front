@@ -88,10 +88,12 @@ const InfoSet = ({ navigation, route }) => {
 
   return (
     <S.Container>
-      <HeaderComponent
-        onPress={() => navigation.goBack()}
-        headerText="내 정보 확인하기"
-      />
+      <View style={{ marginHorizontal: -20 }}>
+        <HeaderComponent
+          onPress={() => navigation.goBack()}
+          headerText="내 정보 확인하기"
+        />
+      </View>
       <View style={{ paddingVertical: 10 }} />
 
       <S.Box>
