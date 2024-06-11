@@ -13,7 +13,7 @@ import { SERVER_URL } from "../components/ServerAddress";
 
 const Main = ({ navigation }) => {
   const { user } = useContext(UserContext);
-  const [ mainPolicy, setMainPolicy ] = useState([])
+  const [mainPolicy, setMainPolicy] = useState([]);
 
   const getPolicy = async () => {
     try {
@@ -25,21 +25,21 @@ const Main = ({ navigation }) => {
     } catch (error) {
       if (error.response) {
         // 서버가 응답했지만 상태 코드가 2xx 범위가 아닙니다.
-        console.error('Response error:', error.response.data);
+        console.error("Response error:", error.response.data);
       } else if (error.request) {
         // 요청이 이루어졌지만 응답을 받지 못했습니다.
-        console.error('Request error:', error.request);
+        console.error("Request error:", error.request);
       } else {
         // 요청을 설정하는 동안 발생한 문제
-        console.error('Error:', error.message);
+        console.error("Error:", error.message);
       }
-      console.error('Error config:', error.config, error.message);
+      console.error("Error config:", error.config, error.message);
     }
-  }
+  };
 
   useEffect(() => {
-    getPolicy()
-  }, [])
+    getPolicy();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -227,7 +227,13 @@ const Main = ({ navigation }) => {
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               {mainPolicy.slice(0, 4).map((item) => (
-                <TouchableOpacity key={item.key} onPress={() => navigation.navigate('policyDetail', { key: item.key })} style={{ height: 170, width: 120, marginLeft: 15 }} >
+                <TouchableOpacity
+                  key={item.key}
+                  onPress={() => {
+                    navigation.navigate("policyMain", { key: item.key });
+                  }}
+                  style={{ height: 170, width: 120, marginLeft: 15 }}
+                >
                   <Image
                     source={{ uri: item.img }}
                     style={{ width: 120, height: 120, borderRadius: 10 }}
@@ -270,7 +276,9 @@ const Main = ({ navigation }) => {
           </View>
         </View> */}
 
-        <View style={{ margin: 15, padding: 5, marginBottom: 0 }}>
+        <View
+          style={{ margin: 15, padding: 5, marginBottom: 0, marginTop: "10%" }}
+        >
           <Text style={{ marginBottom: 5, fontWeight: "bold", fontSize: 18 }}>
             복잡한 부동산 계약
           </Text>

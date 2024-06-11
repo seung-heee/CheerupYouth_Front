@@ -6,7 +6,7 @@ const HeaderComponent = ({ onPress, headerText }) => {
     <View
       style={{
         backgroundColor: "white",
-        paddingTop: 70,
+        paddingTop: 60,
         marginBottom: 1,
         shadowColor: "rgba(180,180,180,0.4)",
         shadowOffset: {
@@ -24,9 +24,9 @@ const HeaderComponent = ({ onPress, headerText }) => {
             style={{
               width: 20,
               height: 20,
-              marginTop: 7,
+              marginTop: 9,
               marginLeft: 14,
-              marginBottom: 20,
+              marginBottom: 15,
             }}
             source={require("../../assets/images/arrowLeft.png")}
           />
@@ -35,8 +35,8 @@ const HeaderComponent = ({ onPress, headerText }) => {
           style={{
             fontSize: 20,
             fontFamily: "M",
-            marginTop: 4,
-            marginLeft: 15,
+            marginTop: 7,
+            marginLeft: 20,
           }}
         >
           {headerText}

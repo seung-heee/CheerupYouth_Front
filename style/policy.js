@@ -1,27 +1,26 @@
-import React from 'react';
-import { ScrollView } from 'react-native'; // ScrollView를 react-native로부터 정확히 임포트
-import styled from 'styled-components/native';
+import React from "react";
+import { ScrollView } from "react-native"; // ScrollView를 react-native로부터 정확히 임포트
+import styled from "styled-components/native";
 
 export const Container = styled(ScrollView).attrs({
-  showsHorizontalScrollIndicator: false // 스크롤 인디케이터 숨기기
+  showsHorizontalScrollIndicator: false, // 스크롤 인디케이터 숨기기
 })`
   display: flex;
   flex-direction: column;
-  padding-top: 50px;
+
   color: #2e4b8f;
-  backgroundColor: #fff;
+  backgroundcolor: #fff;
 `;
 
 export const policyBox = styled.TouchableOpacity`
   display: flex;
-  flex-direction : row;
+  flex-direction: row;
   padding: 10px 15px;
   border-radius: 10px;
   justify-content: center;
   align-items: center;
   margin: 3px auto;
   width: 80%;
-  
 `;
 
 export const title = styled.Text`
@@ -52,7 +51,7 @@ export const policyImg = styled.Image`
 // 세부사항
 export const DetailHeader = styled.View`
   display: flex;
-  flex-direction : row;
+  flex-direction: row;
   justify-content: space-between;
   padding: 15px;
   font-size: 30px;
@@ -67,10 +66,10 @@ export const headerTitle = styled.Text`
 
 export const policyMenu = styled(ScrollView).attrs({
   horizontal: true, // 가로 스크롤 활성화
-  showsHorizontalScrollIndicator: false // 스크롤 인디케이터 숨기기
+  showsHorizontalScrollIndicator: false, // 스크롤 인디케이터 숨기기
 })`
   display: flex;
-  flex-direction : row;
+  flex-direction: row;
 `;
 
 export const policyText = styled.Text`
@@ -82,14 +81,16 @@ export const contentBox = styled.View`
 `;
 
 export const contentBoxTitle = styled.Text`
-  padding: 5px;
-  font-weight: bold;
+  padding: 5px 10px;
+  font-family: "B";
   color: #2e4b8f;
-  font-size: 17px;
+  font-size: 20px;
 `;
 
 export const contentBoxContent = styled.Text`
-  padding: 2px 5px;
+  padding: 2px 12px;
+  font-family: "R";
+  font-size: 17px;
 `;
 
 export const contentSideBox = styled.View`
@@ -99,19 +100,19 @@ export const contentSideBox = styled.View`
   padding-bottom: 3px;
 `;
 
-export const contentChecked= styled.Text`
+export const contentChecked = styled.Text`
   padding-top: 3px;
   color: blue;
 `;
 
 export const policyModalStyle = styled.View`
   padding: 20px;
-  margin: auto; 
+  margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: 'red';
-  border-radius: 10px; 
+  background-color: "red";
+  border-radius: 10px;
   width: 50%;
-`
+`;
