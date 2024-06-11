@@ -66,6 +66,6 @@ export default function App() {
           <Stack.Screen name="pracAI" component={PracAI} />
         </Stack.Navigator>
       </NavigationContainer>
-    </UserProvider>
+    </UserProvider> 
   );
 }

@@ -215,7 +215,7 @@ const Main = ({ navigation }) => {
           <Text style={{ marginTop: 5, color: "gray" }}>
             나의 정보를 입력하시면 더욱 자세한 맞춤 정보를 확인할 수 있어요.
           </Text>
-          {/* <TouchableOpacity onPress={() => navigation.navigate('pracAI')}><Text>openAI 연습</Text></TouchableOpacity> */}
+          <TouchableOpacity onPress={() => navigation.navigate('pracAI')}><Text>openAI 연습</Text></TouchableOpacity>
         </View>
 
         <View
