@@ -18,6 +18,7 @@ import Login from "./src/components/Id";
 import InfoDetail from "./src/screens/InfoDetail";
 import InfoDetailFull from "./src/screens/InfoDetailFull";
 import PolicyList from "./src/screens/PolicyList";
+import OnBoardingPage from "./src/screens/OnBoardingPage";
 
 import { UserProvider } from "./src/components/UserProvider";
 //import policyMain from "./src/screens/policy/policyMain";
@@ -31,11 +32,12 @@ export default function App() {
     <UserProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="BottomBar"
+          initialRouteName="OnBoardingPage"
           screenOptions={{
             headerShown: false, // 상단헤더 숨기기
           }} //첫 경로를 bottombar을 사용해서 메인페이지에만 나오게 함.
         >
+          <Stack.Screen name="OnBoardingPage" component={OnBoardingPage} />
           <Stack.Screen name="Main" component={Main} />
           <Stack.Screen name="BottomBar" component={BottomBar} />
           <Stack.Screen name="TutorialScreen" component={TutorialScreen} />
