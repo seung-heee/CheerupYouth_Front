@@ -57,29 +57,6 @@ const Main = ({ navigation }) => {
     }
   };
 
-  const data = [
-    {
-      id: 1,
-      imageSource: require("../../assets/images/cdm.jpg"),
-      title: "청년 부동산 중개보수 및 이사비 지원 1",
-    },
-    {
-      id: 2,
-      imageSource: require("../../assets/images/cdm.jpg"),
-      title: "청년 부동산 중개보수 및 이사비 지원 2",
-    },
-    {
-      id: 3,
-      imageSource: require("../../assets/images/cdm.jpg"),
-      title: "청년 부동산 중개보수 및 이사비 지원 3",
-    },
-    {
-      id: 4,
-      imageSource: require("../../assets/images/cdm.jpg"),
-      title: "청년 부동산 중개보수 및 이사비 지원 4",
-    },
-  ];
-
   const btnData = [
     {
       id: 1,
@@ -215,7 +192,7 @@ const Main = ({ navigation }) => {
           <Text style={{ marginTop: 5, color: "gray" }}>
             나의 정보를 입력하시면 더욱 자세한 맞춤 정보를 확인할 수 있어요.
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('pracAI')}><Text>openAI 연습</Text></TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('pracAI')}><Text>openAI 연습</Text></TouchableOpacity> */}
         </View>
 
         <View

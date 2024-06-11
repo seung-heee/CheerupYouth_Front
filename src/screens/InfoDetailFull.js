@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, TouchableOpacity, Text } from "react-native";
+import { View, ScrollView, TouchableOpacity, Text } from "react-native";
 import * as S from "../../style/InfoDetailFullStyle";
 import {
   OptionsEdu,
@@ -77,10 +77,12 @@ const InfoDetailFull = ({ navigation }) => {
   return (
     <ScrollView>
       <S.Container>
-        <HeaderComponent
-          onPress={() => navigation.goBack()}
-          headerText="상세 정보 입력하기"
-        />
+        <View style={{ marginHorizontal: -20 }}>
+          <HeaderComponent
+            onPress={() => navigation.goBack()}
+            headerText="상세 정보 입력하기"
+          />
+        </View>
         <S.MainText>
           {user.name}님의 현재상황과 {"\n"}가장 알맞는 상황은 어떤 것인가요?
         </S.MainText>

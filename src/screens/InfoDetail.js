@@ -126,10 +126,12 @@ const InfoDetail = ({ navigation, route }) => {
 
   return (
     <S.Container>
-      <HeaderComponent
-        onPress={() => navigation.goBack()}
-        headerText="상세 정보 입력하기"
-      />
+      <View style={{ marginHorizontal: -20 }}>
+        <HeaderComponent
+          onPress={() => navigation.goBack()}
+          headerText="상세 정보 입력하기"
+        />
+      </View>
       <View>
         <S.MainText>
           정보를 입력하시면 {"\n"}
