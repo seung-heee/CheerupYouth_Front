@@ -22,7 +22,7 @@ const PolicyDetail_fin = ({route, navigation}) => {
       console.error(error);
     }
   }
-  
+
   useEffect(()=>{
     getSelectPolicy()
   }, [key])
@@ -32,29 +32,23 @@ const PolicyDetail_fin = ({route, navigation}) => {
       {/* 세부정책 헤더 */}
       <P.DetailHeader>
         <TouchableOpacity onPress={() => navigation.navigate('policyMain')}>
-          <Text>뒤</Text>
+          <Image
+            style={{
+              width: 18,
+              height: 18,
+            }}
+            source={require("../../../assets/images/icon-07.png")} />
         </TouchableOpacity>
         <P.headerTitle>{policy.title}</P.headerTitle>
-        <Text></Text>
+        <Icon onPress={() => setIsSupportedOpen(true)} name="wechat" size={25} color="#2E4B8F" />
       </P.DetailHeader>
-      
-      <P.policyMenu>
-        {policy.sub_title && <P.policyText>사업목적</P.policyText>}
-        {policy.content?.supported_target&& <P.policyText>지원대상</P.policyText>}
-        {policy.content?.excluded_target && <P.policyText>제외대상</P.policyText>}
-        {policy.content?.surpported_contents && <P.policyText>지원내용</P.policyText>}
-        {policy.content?.supported_period && <P.policyText>지원기간</P.policyText>}
-        {policy.content?.Application_period && <P.policyText>신청기간</P.policyText>}
-        {policy.content?.way && <P.policyText>신청방법</P.policyText>}
-        {policy.content?.submission_papers && <P.policyText>제출서류</P.policyText>}
-      </P.policyMenu>
 
       {policy.img && (
         <>
-        <View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Image
             source={{ uri: policy.img }}
-            style={{ width: 200, height: 200, resizeMode: 'contain' }}
+            style={{ width: '100%', height: 350, resizeMode: 'contain' }}
             onError={() => console.log('Failed to load image')}
           />
         </View>
@@ -77,7 +71,6 @@ const PolicyDetail_fin = ({route, navigation}) => {
               }} 
             >
               <P.contentBoxTitle>지원대상</P.contentBoxTitle>
-              <Icon onPress={() => setIsSupportedOpen(true)} name="wechat" size={25} color="#2E4B8F" />
             </View>
             <P.contentBoxContent>{policy.content?.supported_target}</P.contentBoxContent>
             {Object.keys(policy.supported)
@@ -86,7 +79,6 @@ const PolicyDetail_fin = ({route, navigation}) => {
                 // if (!policy.supported[key]) return null;
                 return (
                 <P.contentBoxContent>
-
                   {policy.supported[key]}
                 </P.contentBoxContent>
               )})
@@ -104,21 +96,19 @@ const PolicyDetail_fin = ({route, navigation}) => {
               }} 
             >
               <P.contentBoxTitle>제외대상</P.contentBoxTitle>
-              <Icon onPress={() => setIsExcludedOpen(true)} name="wechat" size={25} color="#2E4B8F" />
             </View>
             {Object.keys(policy.excluded)
               .filter(key => key.startsWith('conditions'))
               .map(key => {
-                // if (!policy.excluded[key]) return null;
-
+                if (!policy.excluded[key]) return null; // null 또는 undefined인 경우 아무것도 렌더링하지 않음
                 return (
-                  <>
-                  <P.contentBoxContent>
+                  <P.contentBoxContent key={key}>
                     {policy.excluded[key]}
                   </P.contentBoxContent>
-                  </>
-              )})
+                );
+              })
             }
+
           </P.contentBox>
         )}
 
@@ -160,9 +150,17 @@ const PolicyDetail_fin = ({route, navigation}) => {
           <TouchableOpacity style={styles.modalBackground} activeOpacity={1} onPressOut={() => setIsSupportedOpen(false)}>
             <View style={styles.modalContainer}>
               <MatchAI policyKey={key} />
-              <TouchableOpacity style={styles.closeButton} onPress={() => setIsSupportedOpen(false)}>
-                <Text style={styles.closeButtonText}>X</Text>
-              </TouchableOpacity>
+              <View style={styles.modalTop}>
+                <Text style={styles.modalTitle}>매칭 결과</Text>
+                <TouchableOpacity style={styles.closeButton} onPress={() => setIsSupportedOpen(false)}>
+                  <Image
+                  style={{
+                    width: 15,
+                    height: 15,
+                  }}
+                  source={require("../../../assets/images/icon-06.png")} />
+                </TouchableOpacity>
+              </View>
             </View>
           </TouchableOpacity>
         </Modal>
@@ -182,12 +180,19 @@ const PolicyDetail_fin = ({route, navigation}) => {
               <Text style={styles.modalTitle}>제외대상 매칭</Text>
               <Text style={styles.modalContent}>제외대상 매칭 내용</Text>
               <TouchableOpacity style={styles.closeButton} onPress={() => setIsExcludedOpen(false)}>
-                <Text style={styles.closeButtonText}>X</Text>
+                <Image
+                  style={{
+                    width: 20,
+                    height: 20,
+                    margin: 14,
+                  }}
+                  source={require("../../../assets/images/icon-04.png")} />
               </TouchableOpacity>
             </View>
           </TouchableOpacity>
         </Modal>
       </View>
+      <View style={{ paddingBottom: 70 }}><Text></Text></View>
     </P.Container>
   );
 };
@@ -208,29 +213,35 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '90%',
-    height: '50%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
+    paddingTop: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
   modalTitle: {
-    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2e4b8f',
+    fontSize: '17px',
+    fontSize: 22,
     marginBottom: 10,
   },
   modalContent: {
     fontSize: 16,
     marginBottom: 20,
   },
-  closeButton: {
+  modalTop: {
     position: 'absolute',
     top: 10,
     right: 10,
+    left: 10, // 추가하여 양 옆으로 요소가 배치되도록 함
+    flexDirection: 'row',
     padding: 10,
+    justifyContent: 'space-between',
   },
   closeButtonText: {
-    fontSize: 18,
+    fontSize: 20,
     color: 'black',
   },
 });

@@ -98,13 +98,14 @@ const PolicyMain_fin = ({ navigation }) => {
       <PolicyTop allPolicy={allPolicy} setFilteredPolicy={setFilteredPolicy} />
       {filteredPolicy.map((policy) => (
         <P.policyBox key={policy.key} onPress={() => navigation.navigate('policyDetail', { key: policy.key })}>
-          <Image source={{ uri: policy.img }} style={{ width: '30%', height: 100 }} />
+          <Image source={{ uri: policy.img }} style={{ width: '30%', height: 100}} />
           <View style={{ marginLeft: 10 }}>
             <P.title>{policy.title}</P.title>
             <P.subtitle>{policy.sub_title}</P.subtitle>
           </View>
         </P.policyBox>
       ))}
+      <View style={{ paddingBottom: 70 }}><Text></Text></View>
     </P.Container>
   );
 };

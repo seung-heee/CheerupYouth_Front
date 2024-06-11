@@ -17,7 +17,9 @@ function TutorialViewPg4({ navigation }) {
   const [dbdata, setDbData] = useState([]);
   const { user } = useContext(UserContext);
   const [styleChange, setStyleChange] = useState([]);
-  const [clickItem, setClickItem] = useState("");
+  const [clickItems, setClickItems] = useState([]);
+
+  console.log("styleChange", styleChange);
 
   const dbControl = (pgname) => {
     const userPlusChange = {
@@ -73,12 +75,14 @@ function TutorialViewPg4({ navigation }) {
       })
       .then((response) => {
         const dbdata = response.data;
-        const userdata = dbdata.map((item) => item.value);
+        console.log("dbdata", dbdata);
+        const userdata = dbdata.map((item) => item.user_checkData);
         const user = dbdata.map((item) => item.user_id);
         if (user.length > 0) {
           setStyleChange(userdata);
         }
       })
+
       .catch((error) => {
         console.error("비동기 작업 중 오류가 발생했습니다:", error);
       });
@@ -112,6 +116,14 @@ function TutorialViewPg4({ navigation }) {
     };
     saveData();
   }, [styleChange]);
+
+  const toggleItem = (title) => {
+    setClickItems((prevState) =>
+      prevState.includes(title)
+        ? prevState.filter((item) => item !== title)
+        : [...prevState, title]
+    );
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -198,10 +210,9 @@ function TutorialViewPg4({ navigation }) {
                       marginTop: 15,
                       marginBottom: title === "등기부등본" ? 0 : 0,
                       borderRadius: 5,
-                      shadowColor:
-                        clickItem === title
-                          ? "rgba(45, 75, 142,0.3)"
-                          : "rgba(147,147,147,0.7)",
+                      shadowColor: clickItems.includes(title)
+                        ? "rgba(45, 75, 142,0.3)"
+                        : "rgba(147,147,147,0.7)",
                       shadowOffset: {
                         width: 1,
                         height: 0,
@@ -210,14 +221,12 @@ function TutorialViewPg4({ navigation }) {
                       shadowRadius: 3,
                       elevation: 5,
                     }}
-                    onPress={() => {
-                      setClickItem(clickItem === title ? "" : title);
-                    }}
+                    onPress={() => toggleItem(title)}
                   >
                     <View
                       style={{
                         margin: 20,
-                        marginBottom: clickItem == title ? 28 : 20,
+                        marginBottom: clickItems.includes(title) ? 28 : 20,
                       }}
                     >
                       <View
@@ -232,18 +241,20 @@ function TutorialViewPg4({ navigation }) {
                         </Text>
                         <Icon
                           name={
-                            clickItem === title ? "expand-less" : "expand-more"
+                            clickItems.includes(title)
+                              ? "expand-less"
+                              : "expand-more"
                           }
                           size={30}
                           color={
-                            clickItem === title
+                            clickItems.includes(title)
                               ? "rgba(45, 75, 142,0.8)"
                               : "#979797"
                           }
                           style={{ bottom: 2.5 }}
                         />
                       </View>
-                      {clickItem === title && (
+                      {clickItems.includes(title) && (
                         <View>
                           <View
                             style={{
@@ -406,7 +417,7 @@ function TutorialViewPg4({ navigation }) {
         <View
           style={{
             padding: 10,
-            marginTop: clickItem == "등기부등본" ? 30 : 90,
+            marginTop: clickItems.includes("등기부등본") ? 30 : 90,
             marginBottom: 50,
             width: "100%",
             flexDirection: "row",
