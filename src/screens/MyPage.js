@@ -5,8 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../components/UserProvider";
 //import BottomTabNavigationApp from "./BottomBar";
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation } from "@react-navigation/native";
 
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -17,7 +16,7 @@ const Main = ({ navigation }) => {
 
   const handleLogout = () => {
     logout();
-    navigation.navigate('BottomBar');
+    navigation.navigate("BottomBar");
   };
 
   const LogoutBtn = async () => {
@@ -32,6 +31,14 @@ const Main = ({ navigation }) => {
       console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
     }
     navigation.navigate("BottomBar");
+  };
+
+  const handleMyPage = () => {
+    if (user) {
+      navigation.navigate("mypage");
+    } else {
+      navigation.navigate("LoginScreen");
+    }
   };
 
   return (
@@ -59,15 +66,17 @@ const Main = ({ navigation }) => {
             justifyContent: "space-between",
           }}
         >
-          <Image
-            style={{
-              width: 60,
-              height: 40,
-              marginTop: 60,
-              marginHorizontal: 15,
-            }}
-            source={require("../../assets/images/mainLogo.png")}
-          />
+          <TouchableOpacity onPress={() => navigation.navigate("Main")}>
+            <Image
+              style={{
+                width: 60,
+                height: 40,
+                marginTop: 60,
+                marginHorizontal: 15,
+              }}
+              source={require("../../assets/images/mainLogo.png")}
+            />
+          </TouchableOpacity>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity onPress={() => handleMyPage()}>
               <Image
@@ -123,74 +132,100 @@ const Main = ({ navigation }) => {
           </Text>
         </View>
         <View style={{ marginBottom: 10, marginHorizontal: 25 }}>
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center", // 이 부분 수정
-              justifyContent: "center", // 추가
-              backgroundColor: "transparent",
-              padding: 20,
-              borderBottomWidth: 1,
-              borderColor: "#626262",
-            }}
-            onPress={() => navigation.navigate("infoDetail")}
-          >
-            <Icon name="edit" size={20} color="#626262" />
-            <Text
+          <View style={{ paddingVertical: 15 }}>
+            <View
               style={{
-                color: "#626262",
-                fontWeight: "bold",
-                marginLeft: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              상세정보 수정
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center", // 이 부분 수정
-              justifyContent: "center", // 추가
-              backgroundColor: "transparent",
-              padding: 20,
-              borderBottomWidth: 1,
-              borderColor: "#626262",
-            }}
-            onPress={() => navigation.navigate("infoDetailFull")}
-          >
-            <Icon name="user" size={20} color="#626262" />
-            <Text
+              <TouchableOpacity
+                onPress={() => navigation.navigate("InfoDetail")}
+              >
+                <Icon name="edit" size={20} color="#626262" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("InfoDetail")}
+              >
+                <Text
+                  style={{
+                    color: "#626262",
+                    fontWeight: "bold",
+                    marginLeft: 10,
+                  }}
+                >
+                  상세정보 수정
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View
               style={{
-                color: "#626262",
-                fontWeight: "bold",
-                marginLeft: 10,
+                borderBottomWidth: 1,
+                borderColor: "#626262",
+                marginTop: 20,
+              }}
+            />
+          </View>
+          <View style={{ paddingVertical: 15 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              내 정보 관리
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center", // 이 부분 수정
-              justifyContent: "center", // 추가
-              backgroundColor: "transparent",
-              padding: 20,
-              borderBottomWidth: 0,
-            }}
-            onPress={handleLogout}
-          >
-            <Icon name="sign-out" size={20} color="#626262" />
-            <Text
+              <TouchableOpacity onPress={() => navigation.navigate("InfoSet")}>
+                <Icon name="user" size={20} color="#626262" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("InfoSet")}>
+                <Text
+                  style={{
+                    color: "#626262",
+                    fontWeight: "bold",
+                    marginLeft: 10,
+                  }}
+                >
+                  내 정보 관리
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View
               style={{
-                color: "#626262",
-                fontWeight: "bold",
-                marginLeft: 10,
+                borderBottomWidth: 1,
+                borderColor: "#626262",
+                marginTop: 20,
+              }}
+            />
+          </View>
+
+          <View style={{ paddingVertical: 15 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              로그아웃
-            </Text>
-          </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("InfoDetail")}
+              >
+                <Icon name="sign-out" size={20} color="#626262" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleLogout}>
+                <Text
+                  style={{
+                    color: "#626262",
+                    fontWeight: "bold",
+                    marginLeft: 10,
+                  }}
+                >
+                  로그아웃
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </View>
     </View>

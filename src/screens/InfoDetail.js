@@ -52,7 +52,7 @@ const InfoDetail = ({ navigation, route }) => {
 
   const handleIncomeSelect = (income) => {
     setSelectedIncome(income);
-    console.log(income)
+    console.log(income);
   };
 
   const InfoDetailSubmit = async () => {
@@ -114,7 +114,7 @@ const InfoDetail = ({ navigation, route }) => {
           setSelectedDistrict(data[0].District);
           setBirthDate(new Date(data[0].BirthDate));
         }
-        console.log(selectedIncome)
+        console.log(selectedIncome);
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
@@ -134,6 +134,7 @@ const InfoDetail = ({ navigation, route }) => {
       <S.Box>
         <S.TitleText>이름</S.TitleText>
         <TextInput
+          style={{ fontSize: 15 }}
           onChangeText={setName}
           value={name}
           placeholder="이름"
@@ -180,6 +181,7 @@ const InfoDetail = ({ navigation, route }) => {
       </S.Box>
       <S.Box>
         <S.TitleText>거주지역</S.TitleText>
+
         <View style={{ flexDirection: "row" }}>
           <View style={{ marginRight: 10 }}>
             <View style={styles.Picker}>
@@ -188,6 +190,7 @@ const InfoDetail = ({ navigation, route }) => {
                 items={cities}
                 placeholder={{ label: "시/도", value: null }}
                 value={selectedCity}
+                textInputProps={{ style: { fontSize: 15 } }} // 글씨 크기 지정
               />
             </View>
           </View>
@@ -206,35 +209,7 @@ const InfoDetail = ({ navigation, route }) => {
               placeholder={{ label: "구/군", value: null }}
               value={selectedDistrict}
               disabled={!selectedCity}
-            />
-          </View>
-        </View>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ marginRight: 10 }}>
-            <View style={styles.Picker}>
-              <RNPickerSelect
-                onValueChange={handleCityChange}
-                items={cities}
-                placeholder={{ label: "시/도", value: null }}
-                value={selectedCity}
-              />
-            </View>
-          </View>
-
-          <View style={styles.Picker}>
-            <RNPickerSelect
-              onValueChange={handleDistrictChange}
-              items={
-                selectedCity
-                  ? districts[selectedCity].map((d) => ({
-                      label: d,
-                      value: d,
-                    }))
-                  : []
-              }
-              placeholder={{ label: "구/군", value: null }}
-              value={selectedDistrict}
-              disabled={!selectedCity}
+              textInputProps={{ style: { fontSize: 15 } }} // 글씨 크기 지정
             />
           </View>
         </View>
@@ -254,8 +229,12 @@ const InfoDetail = ({ navigation, route }) => {
             <RNPickerSelect
               onValueChange={handleIncomeSelect}
               items={incomeOptions}
-              placeholder={{ label: selectedIncome || "소득 구간을 선택하세요", value: null }}
+              placeholder={{
+                label: selectedIncome || "소득 구간을 선택하세요",
+                value: null,
+              }}
               value={selectedIncome}
+              textInputProps={{ style: { fontSize: 15 } }} // 글씨 크기 지정
             />
           </View>
         </S.Row>
@@ -307,12 +286,8 @@ const InfoDetail = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   Picker: {
     padding: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#c4c3c3",
     marginTop: 5,
     marginBottom: 10,
-    //backgroundColor: "white",
   },
 });
 

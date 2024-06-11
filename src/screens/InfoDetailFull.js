@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { UserContext } from "../components/UserProvider";
 import { SERVER_URL } from "../components/ServerAddress";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const InfoDetailFull = ({ navigation }) => {
   const { user } = useContext(UserContext);
@@ -27,32 +28,31 @@ const InfoDetailFull = ({ navigation }) => {
         : [option]
     );
   };
+  const InfoDetailFullSubmit = async () => {
+    const id = await AsyncStorage.getItem("id");
 
-  const InfoDetailFullSubmit = () => {
-    axios
-      .post(`${SERVER_URL}/users/insertFull`, {
-        id: userId,
+    try {
+      const response = await axios.post(`${SERVER_URL}/users/insertFull`, {
+        id: id,
         HighestEducation: selectedOptionsEdu,
         CurrentJob: selectedOptionsCareer,
         ResidentialStatus: selectedOptionsMember,
         Special: selectedOptionsTarget,
-      })
-      .then((response) => {
-        console.log("회원정보 입력 완료");
-      })
-      .catch((error) => {
-        console.log("에러 발생:", error);
       });
-
-    navigation.navigate("mypage"); // 로그인 성공시 메인으로 이동
+      console.log("회원정보 입력 완료", response.data);
+      navigation.navigate("mypage"); // 로그인 성공시 메인으로 이동
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
   };
-
+  
   useEffect(() => {
     const fetchUserDetails = async () => {
+      const id = await AsyncStorage.getItem("id");
       try {
         const response = await axios.get(`${SERVER_URL}/users/selectFull`, {
           params: {
-            userId: userId,
+            userId: id,
           },
         });
         const data = response.data;
@@ -79,7 +79,7 @@ const InfoDetailFull = ({ navigation }) => {
           {user.name}님의 현재상황과 {"\n"}가장 알맞는 상황은 어떤 것인가요?
         </S.MainText>
 
-        <S.TitleText>최종 학력</S.TitleText>
+        <S.TitleText>학력</S.TitleText>
         <S.OptionsContainer>
           {OptionsEdu.map((option, index) => (
             <S.Option
@@ -130,7 +130,7 @@ const InfoDetailFull = ({ navigation }) => {
           ))}
         </S.OptionsContainer>
 
-        <S.TitleText>대상 특성 (중복선택 가능)</S.TitleText>
+        <S.TitleText>특화 분야 (중복선택 가능)</S.TitleText>
         <S.OptionsContainer>
           {OptionsTarget.map((option, index) => (
             <S.Option

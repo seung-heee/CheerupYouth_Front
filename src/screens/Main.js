@@ -90,7 +90,7 @@ const Main = ({ navigation }) => {
     {
       id: 2,
       imageSource: require("../../assets/images/icon-22.png"),
-      title: "전세 계약 튜토리얼",
+      title: "전세 계약    튜토리얼",
       url: "TutorialScreen",
     },
     {
@@ -132,7 +132,7 @@ const Main = ({ navigation }) => {
               marginTop: 60,
               marginHorizontal: 15,
             }}
-            source={require("../../assets/images/mainLogo.png")}
+            source={require("../../assets/images/logoword.png")}
           />
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity onPress={() => handleMyPage()}>
@@ -215,7 +215,7 @@ const Main = ({ navigation }) => {
           <Text style={{ marginTop: 5, color: "gray" }}>
             나의 정보를 입력하시면 더욱 자세한 맞춤 정보를 확인할 수 있어요.
           </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('pracAI')}><Text>openAI 연습</Text></TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => navigation.navigate('pracAI')}><Text>openAI 연습</Text></TouchableOpacity> */}
         </View>
 
         <View
@@ -227,7 +227,7 @@ const Main = ({ navigation }) => {
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               {mainPolicy.slice(0, 4).map((item) => (
-                <TouchableOpacity key={item.key} onPress={() => navigation.navigate('policyDetail', { key: item.key })} style={{ marginLeft: 15 }} >
+                <TouchableOpacity key={item.key} onPress={() => navigation.navigate('policyDetail', { key: item.key })} style={{ height: 170, width: 120, marginLeft: 15 }} >
                   <Image
                     source={{ uri: item.img }}
                     style={{ width: 120, height: 120, borderRadius: 10 }}
