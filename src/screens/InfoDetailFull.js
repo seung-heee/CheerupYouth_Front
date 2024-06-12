@@ -75,7 +75,7 @@ const InfoDetailFull = ({ navigation }) => {
   }, [userId]);
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <S.Container>
         <View style={{ marginHorizontal: -20 }}>
           <HeaderComponent

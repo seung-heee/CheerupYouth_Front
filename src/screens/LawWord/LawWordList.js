@@ -123,6 +123,7 @@ function LawWordList({ navigation }) {
           {search ? (
             <View>
               <SectionList
+                showsVerticalScrollIndicator={false}
                 sections={filteredData}
                 renderItem={({ item }) => (
                   <View style={{ marginBottom: 10, marginTop: 10 }}>
@@ -187,6 +188,7 @@ function LawWordList({ navigation }) {
           ) : (
             <View>
               <SectionList
+                showsVerticalScrollIndicator={false}
                 sections={LawWordListData}
                 renderItem={({ item }) => (
                   <View style={{ marginBottom: 10, marginTop: 10 }}>

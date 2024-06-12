@@ -123,7 +123,10 @@ const PolicyMain_fin = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <HeaderComponent onPress={beforeBtn} headerText="나만의 맞춤 정책" />
       <PolicyTop allPolicy={allPolicy} setFilteredPolicy={setFilteredPolicy} />
-      <ScrollView style={{ flex: 1, marginBottom: 10 }}>
+      <ScrollView
+        style={{ flex: 1, marginBottom: 10 }}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={{ margin: 5, padding: 5 }}>
           {filteredPolicy.map((policy) => (
             <P.policyBox
