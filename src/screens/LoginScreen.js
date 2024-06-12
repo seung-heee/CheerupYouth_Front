@@ -33,8 +33,8 @@ const LoginScreen = ({ navigation }) => {
       console.log(token, user, "로그인");
       login(token, user);
       Alert.alert(
-        "환영합니다!",
-        "로그인에 성공했어요! \n맞춤 지원정책을 찾아보세요!",
+        "환영합니다!🎊",
+        "나의 정보를 입력하고 \n맞춤 지원정책을 찾아보세요!",
         [
           {
             text: "확인",

@@ -50,6 +50,7 @@ const MatchAI = ({ policyKey }) => {
 
   useEffect(() => {
     fetchMemberInfo();
+    console.log(OPENAI_API_KEY)
   }, [key]);
 
   const fetchPolicyInfo = async (city) => {
@@ -111,10 +112,10 @@ const MatchAI = ({ policyKey }) => {
     setPolicyChat(policyChatText);
     setUserChat(userChatText);
 
-    try {
+    try { 
       const requestData = {
         model: "gpt-3.5-turbo",
-        //model: 'gpt-4',
+        // model: 'gpt-4',
         messages: [
           {
             role: "system",
