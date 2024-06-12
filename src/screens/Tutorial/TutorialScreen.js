@@ -43,7 +43,10 @@ const TutorialScreen = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <HeaderComponent onPress={beforeBtn} headerText="전세 계약 튜토리얼" />
 
-      <ScrollView style={{ flex: 1, marginBottom: 10 }}>
+      <ScrollView
+        style={{ flex: 1, marginBottom: 10 }}
+        showsVerticalScrollIndicator={false}
+      >
         <SectionList
           scrollEnabled={false}
           sections={TutorialData}

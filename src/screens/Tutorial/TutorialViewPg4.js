@@ -128,7 +128,7 @@ function TutorialViewPg4({ navigation }) {
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <HeaderComponent onPress={backBtn} headerText="전세 계약 튜토리얼" />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ margin: 25, marginTop: 20, marginBottom: 0 }}>
           <View
             style={{

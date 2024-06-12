@@ -136,6 +136,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         </>
       )}
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{ paddingTop: 10, marginBottom: 20, backgroundColor: "white" }}
       >
         <View

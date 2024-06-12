@@ -184,7 +184,7 @@ const Main = ({ navigation }) => {
           </View>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ margin: 15, padding: 5 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold", color: "#2E4B8F" }}>
             {user ? user.name : "묘사"} 님의 맞춤 정책 추천
