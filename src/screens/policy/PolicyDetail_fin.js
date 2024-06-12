@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import * as P from "../../../style/policy";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { ScrollView } from "react-native-gesture-handler";
@@ -184,14 +184,11 @@ const PolicyDetail_fin = ({ route, navigation }) => {
             </P.contentBoxContent>
             {Object.keys(policy.supported)
               .filter((key) => key.startsWith("conditions"))
-              .map((key) => {
-                // if (!policy.supported[key]) return null;
-                return (
-                  <P.contentBoxContent>
-                    {policy.supported[key]}
-                  </P.contentBoxContent>
-                );
-              })}
+              .map((key, index) => (
+                <P.contentBoxContent key={index}>
+                  {policy.supported[key]}
+                </P.contentBoxContent>
+              ))}
             <View
               style={{
                 marginTop: 15,
@@ -215,12 +212,13 @@ const PolicyDetail_fin = ({ route, navigation }) => {
             >
               <P.contentBoxTitle>제외대상</P.contentBoxTitle>
             </View>
+
             {Object.keys(policy.excluded)
               .filter((key) => key.startsWith("conditions"))
-              .map((key) => {
+              .map((key, index) => {
                 if (!policy.excluded[key]) return null; // null 또는 undefined인 경우 아무것도 렌더링하지 않음
                 return (
-                  <P.contentBoxContent key={key}>
+                  <P.contentBoxContent key={index}>
                     {policy.excluded[key]}
                   </P.contentBoxContent>
                 );

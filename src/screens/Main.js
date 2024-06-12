@@ -61,19 +61,19 @@ const Main = ({ navigation }) => {
     {
       id: 1,
       imageSource: require("../../assets/images/icon-25.png"),
-      title: "나만의 맞춤 정책",
+      title: "나만의\n맞춤 정책",
       url: "policyMain",
     },
     {
       id: 2,
       imageSource: require("../../assets/images/icon-22.png"),
-      title: "전세 계약    튜토리얼",
+      title: "전세 계약\n튜토리얼",
       url: "TutorialScreen",
     },
     {
       id: 3,
       imageSource: require("../../assets/images/icon-13.png"),
-      title: "부동산 용어 리스트",
+      title: "부동산\n용어 리스트",
       url: "LawWordList",
     },
   ];
