@@ -42,7 +42,7 @@ const InfoDetailFull = ({ navigation }) => {
         Special: selectedOptionsTarget,
       });
       console.log("회원정보 입력 완료", response.data);
-      navigation.navigate("mypage"); // 로그인 성공시 메인으로 이동
+      navigation.navigate("BottomBar"); // 로그인 성공시 메인으로 이동
     } catch (error) {
       console.error("에러 발생:", error);
     }

@@ -66,7 +66,7 @@ const Main = ({ navigation }) => {
             justifyContent: "space-between",
           }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate("Main")}>
+          <TouchableOpacity onPress={() => navigation.navigate("BottomBar")}>
             <Image
               style={{
                 width: 60,
