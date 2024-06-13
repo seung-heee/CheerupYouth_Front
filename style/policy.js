@@ -26,7 +26,7 @@ export const policyBox = styled.TouchableOpacity`
 export const title = styled.Text`
   margin-bottom: 10px;
   font-size: 18px;
-  font-weight: bold;
+  font-family: B;
   word-break: keep-all;
 `;
 export const match = styled.Text`
@@ -43,6 +43,7 @@ export const match = styled.Text`
 export const subtitle = styled.Text`
   word-break: keep-all;
   font-size: 13px;
+  font-family: R;
 `;
 export const policyImg = styled.Image`
   width: 100px;
@@ -89,7 +90,7 @@ export const contentBoxTitle = styled.Text`
 
 export const contentBoxContent = styled.Text`
   padding: 2px 12px;
-  font-family: "R";
+  font-family: R;
   font-size: 17px;
 `;
 

@@ -10,11 +10,11 @@ import Header from "../components/Hearder";
 import SearchScreen from "../components/SearchScreen";
 import axios from "axios";
 import { SERVER_URL } from "../components/ServerAddress";
+import * as Font from "expo-font";
 
 const Main = ({ navigation }) => {
   const { user } = useContext(UserContext);
   const [mainPolicy, setMainPolicy] = useState([]);
-
   const getPolicy = async () => {
     try {
       const response = await axios.get(`${SERVER_URL}/policy`);
@@ -83,7 +83,7 @@ const Main = ({ navigation }) => {
         style={{
           backgroundColor: "white",
           width: "100%",
-          height: "35%",
+          height: "25%",
           padding: 5,
           borderRadius: 10,
           shadowColor: "rgba(180,180,180,0.4)",
@@ -140,105 +140,71 @@ const Main = ({ navigation }) => {
             style={{
               marginBottom: 5,
               fontSize: 20,
-              fontWeight: "bold",
+              fontFamily: "B",
               color: "#2E4B8F",
             }}
           >
             안녕하세요. {user ? user.name : "묘사"}님
           </Text>
-          <Text style={{ fontSize: 20, fontWeight: "bold", color: "#2E4B8F" }}>
-            부동산 정보와 정책을 검색해보세요.
+          <Text style={{ fontSize: 20, fontFamily: "B", color: "#2E4B8F" }}>
+            청년독립만세에 오신 걸 환영합니다.
           </Text>
-        </View>
-        <View
-          style={{
-            margin: 15,
-            width: "90%",
-            backgroundColor: "white",
-            height: "20%",
-            borderRadius: 5,
-            justifyContent: "center",
-            shadowColor: "#2E4B8F",
-            shadowOffset: {
-              width: 1,
-              height: 0,
-            },
-            shadowOpacity: 1,
-            shadowRadius: 3,
-            elevation: 3,
-          }}
-        >
-          <View style={{ flexDirection: "row" }}>
-            <Image
-              style={{
-                width: 20,
-                height: 20,
-                margin: 14,
-              }}
-              source={require("../../assets/images/icon-04.png")}
-            />
-            <TextInput
-              style={{ backgroundColor: "white", width: "80%", fontSize: 16 }}
-              placeholder="검색어를 입력해 주세요."
-            />
-          </View>
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ margin: 15, padding: 5 }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold", color: "#2E4B8F" }}>
+        <View style={{ margin: 20 }}>
+          <Text style={{ fontSize: 20, fontFamily: "B", color: "#2E4B8F" }}>
             {user ? user.name : "묘사"} 님의 맞춤 정책 추천
           </Text>
-          <Text style={{ marginTop: 5, color: "gray" }}>
+          <Text style={{ marginTop: 5, color: "gray", fontFamily: "SB" }}>
             나의 정보를 입력하시면 더욱 자세한 맞춤 정보를 확인할 수 있어요.
           </Text>
           {/* <TouchableOpacity onPress={() => navigation.navigate('pracAI')}><Text>openAI 연습</Text></TouchableOpacity> */}
         </View>
-
         <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+          style={{ flexDirection: "row", marginTop: 10, paddingHorizontal: 5 }}
         >
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {mainPolicy.slice(0, 4).map((item) => (
-                <TouchableOpacity
-                  key={item.key}
-                  onPress={() => {
-                    navigation.navigate("policyMain", { key: item.key });
-                  }}
-                  style={{ height: 170, width: 120, marginLeft: 15 }}
-                >
-                  <Image
-                    source={{ uri: item.img }}
-                    style={{ width: 120, height: 120, borderRadius: 10 }}
-                  />
-                  <View style={{ maxWidth: 120 }}>
-                    <S.perButton onPress={() => {}}>
-                      <Text style={{ marginTop: 5 }}>{item.title}</Text>
-                    </S.perButton>
-                  </View>
-                </TouchableOpacity>
-              ))}
-              <View
-                style={{
-                  marginHorizontal: 15,
-                  paddingRight: 5,
-                  marginBottom: 25,
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: "center" }}
+          >
+            {mainPolicy.slice(0, 4).map((item) => (
+              <TouchableOpacity
+                key={item.key}
+                onPress={() => {
+                  navigation.navigate("policyMain", { key: item.key });
                 }}
+                style={{ height: 180, width: 120, marginLeft: 15 }}
               >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("policyMain")}
-                >
-                  <Text style={{ fontWeight: "bold" }}>정책 더보기⮕</Text>
-                </TouchableOpacity>
-              </View>
+                <Image
+                  source={{ uri: item.img }}
+                  style={{ width: 120, height: 120, borderRadius: 10 }}
+                />
+                <View style={{ maxWidth: 120 }}>
+                  <View>
+                    <Text style={{ marginTop: 10, fontFamily: "SB" }}>
+                      {item.title}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+            <View
+              style={{
+                marginHorizontal: 15,
+                paddingRight: 5,
+                marginBottom: 25,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => navigation.navigate("policyMain")}
+              >
+                <Text style={{ fontWeight: "bold" }}>정책 더보기⮕</Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </View>
-
         {/* <View
           style={{
             marginVertical: 15,
@@ -252,14 +218,25 @@ const Main = ({ navigation }) => {
             />
           </View>
         </View> */}
-
-        <View
-          style={{ margin: 15, padding: 5, marginBottom: 0, marginTop: "10%" }}
-        >
-          <Text style={{ marginBottom: 5, fontWeight: "bold", fontSize: 18 }}>
+        <View style={{ margin: 20 }}>
+          <Text
+            style={{
+              marginBottom: 5,
+              fontFamily: "B",
+              fontSize: 18,
+              color: "#2E4B8F",
+            }}
+          >
             복잡한 부동산 계약
           </Text>
-          <Text style={{ marginBottom: 5, fontWeight: "bold", fontSize: 18 }}>
+          <Text
+            style={{
+              marginBottom: 5,
+              fontFamily: "B",
+              fontSize: 18,
+              color: "#2E4B8F",
+            }}
+          >
             조금 더 쉽게 준비해요!
           </Text>
         </View>
@@ -272,7 +249,7 @@ const Main = ({ navigation }) => {
               }}
               style={{
                 backgroundColor: "white",
-                marginHorizontal: item.id === 2 ? 0 : 25,
+                marginHorizontal: item.id === 2 ? 0 : 20,
                 padding: 13,
                 width: "25%",
                 borderRadius: 5,
@@ -289,7 +266,7 @@ const Main = ({ navigation }) => {
             >
               <View style={{ justifyContent: "center" }}>
                 <Text
-                  style={{ fontSize: 15, fontFamily: "B", color: "#2E4B8F" }}
+                  style={{ fontSize: 15, fontFamily: "SB", color: "#2E4B8F" }}
                 >
                   {item.title}
                 </Text>

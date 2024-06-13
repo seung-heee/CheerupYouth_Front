@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -20,7 +20,9 @@ const PolicyDetail_fin = ({ route, navigation }) => {
   const [policy, setPolicy] = useState({});
   const [isSupportedOpen, setIsSupportedOpen] = useState(false);
   const [isExcludedOpen, setIsExcludedOpen] = useState(false);
-  console.log(policy);
+  const scrollViewRef = useRef(null);
+  const supportedRef = useRef(null);
+
   const getSelectPolicy = async () => {
     try {
       const response = await axios.get(`${SERVER_URL}/policy/${key}`);
@@ -34,8 +36,17 @@ const PolicyDetail_fin = ({ route, navigation }) => {
     getSelectPolicy();
   }, [key]);
 
+  const btnSection = [
+    { title: "사업목적", ref: "sub_title" },
+    { title: "지원대상", ref: "supported" },
+    { title: "제외대상", ref: "excluded" },
+    { title: "지원내용", ref: "content" },
+    { title: "지원기간", ref: "supported_period" },
+    { title: "신청기간", ref: "Application_period " },
+    { title: "신청방법", ref: "way" },
+  ];
   return (
-    <View style={{ flex: 1, display: "flex", backgroundColor: "white" }}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* 세부정책 헤더 */}
       <View
         style={{
@@ -93,35 +104,34 @@ const PolicyDetail_fin = ({ route, navigation }) => {
           />
         </View>
       </View>
+
       <View
-        style={{
-          marginTop: 5,
-          flexDirection: "row",
-          backgroundColor: "white",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        style={{ flexDirection: "row", marginTop: 10, paddingHorizontal: 15 }}
       >
-        <Text style={{ padding: 15, fontFamily: "R", fontSize: 15 }}>
-          사업목적
-        </Text>
-        <Text style={{ padding: 15, fontFamily: "R", fontSize: 15 }}>
-          지원대상
-        </Text>
-        <Text style={{ padding: 15, fontFamily: "R", fontSize: 15 }}>
-          제외대상
-        </Text>
-        <Text style={{ padding: 15, fontFamily: "R", fontSize: 15 }}>
-          지원내용
-        </Text>
-        <Text style={{ padding: 15, fontFamily: "R", fontSize: 15 }}>
-          신청방법
-        </Text>
+        <ScrollView
+          horizontal
+          contentContainerStyle={{ alignItems: "center" }}
+          showsHorizontalScrollIndicator={false}
+        >
+          {btnSection.map((item) => (
+            <TouchableOpacity
+              onPress={() => {}}
+              key={item.title}
+              style={{ marginVertical: 10, marginHorizontal: 15 }}
+            >
+              <Text style={{ fontFamily: "SB", fontSize: 15 }}>
+                {item.title}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
+
       {policy.img && (
         <>
           <View
             style={{
+              marginTop: 10,
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: "white",
@@ -129,20 +139,19 @@ const PolicyDetail_fin = ({ route, navigation }) => {
           >
             <Image
               source={{ uri: policy.img }}
-              style={{ width: "100%", height: 300, resizeMode: "contain" }}
+              style={{ width: "100%", height: 250, resizeMode: "contain" }}
               onError={() => console.log("Failed to load image")}
             />
           </View>
         </>
       )}
       <ScrollView
+        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
-        style={{ paddingTop: 10, marginBottom: 20, backgroundColor: "white" }}
+        style={{ marginBottom: 20 }}
       >
-        <View
-          style={{ marginHorizontal: 15, marginVertical: 10, width: "70%" }}
-        >
-          <Text style={{ fontFamily: "B", fontSize: 18 }}>{policy.title}</Text>
+        <View style={{ marginHorizontal: 15, marginTop: 20, width: "70%" }}>
+          <Text style={{ fontFamily: "SB", fontSize: 18 }}>{policy.title}</Text>
         </View>
         <View
           style={{
@@ -170,7 +179,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         )}
 
         {policy.supported && (
-          <P.contentBox>
+          <P.contentBox ref={supportedRef}>
             <View
               style={{
                 flex: 1,
@@ -315,8 +324,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         )}
       </ScrollView>
 
-      {/* 지원대상 모달창 */}
-      <View style={styles.container}>
+      {/* <View style={styles.container}>
         <Modal
           visible={isSupportedOpen}
           onShow={() => console.log("지원대상 모달창")}
@@ -351,7 +359,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         </Modal>
       </View>
 
-      {/* 제외대상 모달창 */}
+      
       <View style={styles.container}>
         <Modal
           visible={isExcludedOpen}
@@ -384,7 +392,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
             </View>
           </TouchableOpacity>
         </Modal>
-      </View>
+      </View> */}
     </View>
   );
 };

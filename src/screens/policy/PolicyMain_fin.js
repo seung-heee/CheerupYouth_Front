@@ -127,25 +127,42 @@ const PolicyMain_fin = ({ navigation }) => {
         style={{ flex: 1, marginBottom: 10 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ margin: 5, padding: 5 }}>
-          {filteredPolicy.map((policy) => (
-            <P.policyBox
-              key={policy.key}
-              onPress={() =>
-                navigation.navigate("policyDetail", { key: policy.key })
-              }
-            >
-              <Image
-                source={{ uri: policy.img }}
-                style={{ width: "30%", height: 100 }}
-              />
-              <View style={{ marginLeft: 10 }}>
-                <P.title>{policy.title}</P.title>
-                <P.subtitle>{policy.sub_title}</P.subtitle>
-              </View>
-            </P.policyBox>
-          ))}
-        </View>
+        {filteredPolicy.map((policy) => (
+          <View>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  margin: 15,
+                  width: "70%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                key={policy.key}
+                onPress={() =>
+                  navigation.navigate("policyDetail", { key: policy.key })
+                }
+              >
+                <Image
+                  source={{ uri: policy.img }}
+                  style={{ width: "30%", height: 100, borderRadius: 10 }}
+                />
+                <View style={{ marginLeft: 10 }}>
+                  <P.title>{policy.title}</P.title>
+                  <P.subtitle>{policy.sub_title}</P.subtitle>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                marginRight: 10,
+                marginLeft: 10,
+                height: 1,
+                backgroundColor: "rgba(237,237,237,1.0)",
+              }}
+            />
+          </View>
+        ))}
       </ScrollView>
     </View>
   );

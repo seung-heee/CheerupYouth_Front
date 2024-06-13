@@ -20,39 +20,33 @@ const PolicyTop = ({ navigation, allPolicy, setFilteredPolicy }) => {
   }, [text, allPolicy]);
 
   return (
-    <View
-      style={{
-        margin: 15,
-        marginBottom: 5,
-        width: "90%",
-        backgroundColor: "white",
-        borderRadius: 5,
-        justifyContent: "center",
-        shadowColor: "#2E4B8F",
-        shadowOffset: {
-          width: 1,
-          height: 0,
-        },
-        shadowOpacity: 1,
-        shadowRadius: 3,
-        elevation: 3,
-      }}
-    >
+    <View style={{ margin: 20, marginBottom: 5, marginTop: 10 }}>
       <View style={{ flexDirection: "row" }}>
-        <Image
-          style={{
-            width: 20,
-            height: 20,
-            margin: 14,
-          }}
-          source={require("../../assets/images/icon-04.png")}
-        />
         <TextInput
-          style={{ backgroundColor: "white", width: "80%", fontSize: 16 }}
-          placeholder="검색어를 입력해 주세요."
+          style={{
+            backgroundColor: "#F7F7F7",
+            width: "90%",
+            padding: 15,
+            marginVertical: 5,
+            borderRadius: 5,
+          }}
+          placeholder="검색어를 입력해주세요."
           value={text}
           onChangeText={setText}
         />
+        <View
+          style={{
+            width: "15%",
+            marginLeft: "-5%",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#F7F7F7",
+            marginVertical: 5,
+            borderRadius: 5,
+          }}
+        >
+          <Icon size={20} name={"search"} color={"#898989"} />
+        </View>
       </View>
     </View>
   );
