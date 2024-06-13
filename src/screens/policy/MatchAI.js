@@ -7,6 +7,7 @@ import { OPENAI_API_KEY } from "@env";
 import { SERVER_URL } from "../../components/ServerAddress";
 
 const MatchAI = ({ policyKey }) => {
+  console.log(OPENAI_API_KEY);
   const key = policyKey;
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(true);

@@ -75,14 +75,14 @@ const InfoDetailFull = ({ navigation }) => {
   }, [userId]);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <S.Container>
-        <View style={{ marginHorizontal: -20 }}>
-          <HeaderComponent
-            onPress={() => navigation.goBack()}
-            headerText="상세 정보 입력하기"
-          />
-        </View>
+    <S.Container>
+      <View style={{ marginHorizontal: -20 }}>
+        <HeaderComponent
+          onPress={() => navigation.goBack()}
+          headerText="상세 정보 입력하기"
+        />
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <S.MainText>
           {user.name}님의 현재상황과 {"\n"}가장 알맞는 상황은 어떤 것인가요?
         </S.MainText>
@@ -159,8 +159,8 @@ const InfoDetailFull = ({ navigation }) => {
             <S.BlueButtonText>완료</S.BlueButtonText>
           </TouchableOpacity>
         </S.BlueButtonBox>
-      </S.Container>
-    </ScrollView>
+      </ScrollView>
+    </S.Container>
   );
 };
 

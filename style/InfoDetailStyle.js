@@ -11,7 +11,7 @@ export const MainText = styled.Text`
   font-weight: bold;
   color: #2e4b8f;
   padding: 5px;
-  margin-top: 10px;
+  margin-top: 15px;
   margin-bottom: 20px;
 `;
 
