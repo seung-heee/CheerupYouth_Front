@@ -6,8 +6,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../components/UserProvider";
 //import BottomTabNavigationApp from "./BottomBar";
 import { useNavigation } from "@react-navigation/native";
-
 import Icon from "react-native-vector-icons/FontAwesome";
+// import Icon from "react-native-vector-icons/MaterialIcons";
 
 const Main = ({ navigation }) => {
   const { user, logout } = useContext(UserContext);
@@ -19,23 +19,23 @@ const Main = ({ navigation }) => {
     navigation.navigate("BottomBar");
   };
 
-  const LogoutBtn = async () => {
-    try {
-      await AsyncStorage.removeItem("userData");
-      await AsyncStorage.removeItem("styleChange");
-      await AsyncStorage.removeItem("styleChangePg3");
-      await AsyncStorage.removeItem("styleChangePg4");
-      console.log("userData가 삭제되었습니다.");
-      setUserDataP(null);
-    } catch (error) {
-      console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
-    }
-    navigation.navigate("BottomBar");
-  };
+  // const LogoutBtn = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem("userData");
+  //     await AsyncStorage.removeItem("styleChange");
+  //     await AsyncStorage.removeItem("styleChangePg3");
+  //     await AsyncStorage.removeItem("styleChangePg4");
+  //     console.log("userData가 삭제되었습니다.");
+  //     setUserDataP(null);
+  //   } catch (error) {
+  //     console.error("데이터를 삭제하는 중 오류가 발생했습니다:", error);
+  //   }
+  //   navigation.navigate("BottomBar");
+  // };
 
   const handleMyPage = () => {
     if (user) {
-      navigation.navigate("mypage");
+      navigation.navigate("BottomBar");
     } else {
       navigation.navigate("LoginScreen");
     }
@@ -106,25 +106,28 @@ const Main = ({ navigation }) => {
           style={{
             alignItems: "center",
             justifyContent: "center",
-            marginBottom: 30,
+            marginBottom: 20,
+            marginTop: 30,
           }}
         >
-          <Image
+          {/* <Image
             style={{
               alignItems: "center",
               justifyContent: "center",
               width: 100,
               height: 100,
-              borderRadius: 50,
               marginVertical: 20,
+              borderRadius: 50,
             }}
-            source={require("../../assets/images/adaptive-icon.png")}
-          />
+            source={require("../../assets/images/profile.png")}
+          /> */}
+          <Icon name="user-circle" size={100} color="#2E4B8F" />
           <Text
             style={{
               fontSize: 20,
               fontWeight: "bold",
               marginBottom: 20,
+              marginTop: 20,
               textAlign: "center",
             }}
           >

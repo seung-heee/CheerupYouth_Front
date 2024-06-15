@@ -7,34 +7,15 @@ import {
   Image,
   SectionList,
 } from "react-native";
-
 import TutorialData from "../../../utils/TutorialData";
 import HeaderComponent from "../../components/HeaderComponent";
 import * as Font from "expo-font";
 import { UserContext } from "../../components/UserProvider";
 
 const TutorialScreen = ({ navigation }) => {
-  const [fontLoaded, setFontLoaded] = useState(false);
   const { user } = useContext(UserContext);
 
   console.log(user);
-  useEffect(() => {
-    const loadFont = async () => {
-      await Font.loadAsync({
-        M: require("../../../assets/fonts/AppleSDGothicNeoM.ttf"),
-        B: require("../../../assets/fonts/AppleSDGothicNeoB.ttf"),
-        SB: require("../../../assets/fonts/AppleSDGothicNeoSB.ttf"),
-        R: require("../../../assets/fonts/AppleSDGothicNeoR.ttf"),
-      });
-      setFontLoaded(true);
-    };
-
-    loadFont();
-  }, []);
-
-  if (!fontLoaded) {
-    return null; // or render a loading indicator
-  }
 
   const beforeBtn = () => {
     navigation.goBack();

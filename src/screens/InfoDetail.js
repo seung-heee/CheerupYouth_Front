@@ -18,6 +18,8 @@ import { SERVER_URL } from "../components/ServerAddress";
 import { UserContext } from "../components/UserProvider";
 import HeaderComponent from "../components/HeaderComponent";
 
+import Icon from "react-native-vector-icons/FontAwesome";
+
 const InfoDetail = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
   const [name, setName] = useState(user.name);
@@ -258,11 +260,22 @@ const InfoDetail = ({ navigation, route }) => {
           marginBottom: 20,
         }}
       >
-        <TouchableOpacity onPress={handleConsentToggle}>
+        <TouchableOpacity
+          onPress={handleConsentToggle}
+          style={{ flexDirection: "row", alignItems: "center" }}
+        >
+          <Icon
+            name="check-circle"
+            size={20}
+            style={{
+              color: consentGiven ? "#2e4b8f" : "#626262",
+            }}
+          />
           <Text
             style={{
               color: consentGiven ? "#2e4b8f" : "#626262",
               fontWeight: "bold",
+              marginLeft: 7,
             }}
           >
             [필수] 개인정보 수집 및 이용 동의

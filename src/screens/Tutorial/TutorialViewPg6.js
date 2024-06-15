@@ -296,7 +296,7 @@ function TutorialViewPg6({ navigation }) {
             onPress={nextBtn}
           >
             <Text style={{ fontSize: 20, fontFamily: "B", color: "white" }}>
-              다음
+              완료
             </Text>
           </TouchableOpacity>
         </View>

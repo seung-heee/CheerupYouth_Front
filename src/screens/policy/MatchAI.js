@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Button } from "react-native";
+import { View, Button, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { OPENAI_API_KEY } from "@env";
 import { SERVER_URL } from "../../components/ServerAddress";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
-const MatchAI = ({ policyKey }) => {
+const MatchAI = ({ policyKey, setIsSupportedOpen }) => {
+  console.log(OPENAI_API_KEY);
   const key = policyKey;
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,6 @@ const MatchAI = ({ policyKey }) => {
 
   useEffect(() => {
     fetchMemberInfo();
-    console.log(OPENAI_API_KEY)
   }, [key]);
 
   const fetchPolicyInfo = async (city) => {
@@ -112,10 +113,10 @@ const MatchAI = ({ policyKey }) => {
     setPolicyChat(policyChatText);
     setUserChat(userChatText);
 
-    try { 
+    try {
       const requestData = {
         model: "gpt-3.5-turbo",
-        // model: 'gpt-4',
+        // model: 'gpt-4o',
         messages: [
           {
             role: "system",
@@ -137,9 +138,9 @@ const MatchAI = ({ policyKey }) => {
           {
             role: "user",
             content:
-              "답변 형식은 각 조건에 순서대로 번호를 달고 설명을 해줘, 조건마다 간격을 두어 알아보기 쉽도록 해줘",
+              "답변 형식은 각 조건에 간략한 설명을 더한 뒤 조건에 만족하는지 알려줘",
           },
-          { role: "user", content: "마지막 결과로 가능 / 불가능을 알려줘" },
+          { role: "user", content: "마지막엔 최종적으로 이 정책에 부합한지 알려줘" },
         ],
         temperature: 0.7,
         top_p: 1.0,
@@ -170,6 +171,26 @@ const MatchAI = ({ policyKey }) => {
   };
 
   return (
+    <>
+    <View style={styles.modalTop}>
+      <View style={styles.modalTopContainer}>
+        <Text style={styles.modalTitle}>AI 정책 매칭</Text>
+        <Icon name="loop" size={18} color="#2E4B8F" onPress={fetchMemberInfo} />
+      </View>
+      <TouchableOpacity
+        style={styles.closeButton}
+        onPress={() => setIsSupportedOpen(false)}
+      >
+        <Image
+          style={{
+            width: 15,
+            height: 15,
+          }}
+          source={require("../../../assets/images/icon-06.png")}
+        />
+      </TouchableOpacity>
+    </View>
+
     <View>
       <Text>{response}</Text>
       <Button title="매칭하기" onPress={fetchMemberInfo} />
@@ -179,7 +200,37 @@ const MatchAI = ({ policyKey }) => {
         바랍니다.
       </Text>
     </View>
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  modalTop: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    left: 10, // 추가하여 양 옆으로 요소가 배치되도록 함
+    flexDirection: "row",
+    padding: 10,
+    justifyContent: "space-between",
+  },
+  modalTopContainer : {
+    flexDirection: 'row', // 가로 배치
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  modalTitle: {
+    fontWeight: "bold",
+    color: "#2e4b8f",
+    fontSize: "17px",
+    fontSize: 22,
+    paddingRight: 5,
+  },
+  closeButtonText: {
+    fontSize: 20,
+    color: "black",
+  },
+});
 
 export default MatchAI;
