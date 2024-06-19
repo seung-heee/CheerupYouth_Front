@@ -6,12 +6,12 @@ import {
   Image,
   Modal,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import * as P from "../../../style/policy";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { ScrollView } from "react-native-gesture-handler";
 import { SERVER_URL } from "../../components/ServerAddress";
 import MatchAI from "./MatchAI";
 
@@ -22,6 +22,12 @@ const PolicyDetail_fin = ({ route, navigation }) => {
   const [isExcludedOpen, setIsExcludedOpen] = useState(false);
   const scrollViewRef = useRef(null);
   const supportedRef = useRef(null);
+  const excludedRef = useRef(null);
+  const purposeRef = useRef(null);
+  const contentRef = useRef(null);
+  const supportedPeriodRef = useRef(null);
+  const applicationPeriodRef = useRef(null);
+  const wayRef = useRef(null);
 
   const getSelectPolicy = async () => {
     try {
@@ -36,15 +42,30 @@ const PolicyDetail_fin = ({ route, navigation }) => {
     getSelectPolicy();
   }, [key]);
 
+  const scrollToSection = (ref) => {
+    if (ref.current) {
+      ref.current.measureLayout(
+        scrollViewRef.current,
+        (x, y) => {
+          scrollViewRef.current?.scrollTo({ y: y - 0, animated: true });
+        },
+        () => {
+          console.error("Failed to measure layout.");
+        }
+      );
+    }
+  };
+
   const btnSection = [
-    { title: "사업목적", ref: "sub_title" },
-    { title: "지원대상", ref: "supported" },
-    { title: "제외대상", ref: "excluded" },
-    { title: "지원내용", ref: "content" },
-    { title: "지원기간", ref: "supported_period" },
-    { title: "신청기간", ref: "Application_period " },
-    { title: "신청방법", ref: "way" },
+    { title: "사업목적", ref: purposeRef },
+    { title: "지원대상", ref: supportedRef },
+    { title: "제외대상", ref: excludedRef },
+    { title: "지원내용", ref: contentRef },
+    { title: "지원기간", ref: supportedPeriodRef },
+    { title: "신청기간", ref: applicationPeriodRef },
+    { title: "신청방법", ref: wayRef },
   ];
+
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* 세부정책 헤더 */}
@@ -115,7 +136,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         >
           {btnSection.map((item) => (
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => scrollToSection(item.ref)}
               key={item.title}
               style={{ marginVertical: 10, marginHorizontal: 15 }}
             >
@@ -128,22 +149,20 @@ const PolicyDetail_fin = ({ route, navigation }) => {
       </View>
 
       {policy.img && (
-        <>
-          <View
-            style={{
-              marginTop: 10,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "white",
-            }}
-          >
-            <Image
-              source={{ uri: policy.img }}
-              style={{ width: "100%", height: 250, resizeMode: "contain" }}
-              onError={() => console.log("Failed to load image")}
-            />
-          </View>
-        </>
+        <View
+          style={{
+            marginTop: 10,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white",
+          }}
+        >
+          <Image
+            source={{ uri: policy.img }}
+            style={{ width: "100%", height: 250, resizeMode: "contain" }}
+            onError={() => console.log("Failed to load image")}
+          />
+        </View>
       )}
       <ScrollView
         ref={scrollViewRef}
@@ -163,7 +182,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
           }}
         />
         {policy.sub_title && (
-          <P.contentBox>
+          <P.contentBox ref={purposeRef}>
             <P.contentBoxTitle>사업목적</P.contentBoxTitle>
             <P.contentBoxContent>{policy.sub_title}</P.contentBoxContent>
             <View
@@ -183,8 +202,8 @@ const PolicyDetail_fin = ({ route, navigation }) => {
             <View
               style={{
                 flex: 1,
-                flexDirection: "row", // 가로 배치
-                alignItems: "center", // 세로 중앙 정렬
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
               <P.contentBoxTitle>지원대상</P.contentBoxTitle>
@@ -212,12 +231,12 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         )}
 
         {policy.excluded && (
-          <P.contentBox>
+          <P.contentBox ref={excludedRef}>
             <View
               style={{
                 flex: 1,
-                flexDirection: "row", // 가로 배치
-                alignItems: "center", // 세로 중앙 정렬
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
               <P.contentBoxTitle>제외대상</P.contentBoxTitle>
@@ -226,7 +245,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
             {Object.keys(policy.excluded)
               .filter((key) => key.startsWith("conditions"))
               .map((key, index) => {
-                if (!policy.excluded[key]) return null; // null 또는 undefined인 경우 아무것도 렌더링하지 않음
+                if (!policy.excluded[key]) return null;
                 return (
                   <P.contentBoxContent key={index}>
                     {policy.excluded[key]}
@@ -246,7 +265,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         )}
 
         {policy.content?.surpported_contents && (
-          <P.contentBox>
+          <P.contentBox ref={contentRef}>
             <P.contentBoxTitle>지원내용</P.contentBoxTitle>
             <P.contentBoxContent>
               {policy.content?.surpported_contents}
@@ -263,7 +282,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
           }}
         />
         {policy.content?.supported_period && (
-          <P.contentBox>
+          <P.contentBox ref={supportedPeriodRef}>
             <P.contentBoxTitle>지원기간</P.contentBoxTitle>
             <P.contentBoxContent>
               {policy.content?.supported_period}
@@ -281,7 +300,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         )}
 
         {policy.content?.Application_period && (
-          <P.contentBox>
+          <P.contentBox ref={applicationPeriodRef}>
             <P.contentBoxTitle>신청기간</P.contentBoxTitle>
             <P.contentBoxContent>
               {policy.content?.Application_period}
@@ -299,7 +318,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
         )}
 
         {policy.content?.way && (
-          <P.contentBox>
+          <P.contentBox ref={wayRef}>
             <P.contentBoxTitle>신청방법</P.contentBoxTitle>
             <P.contentBoxContent>{policy.content?.way}</P.contentBoxContent>
             <View
@@ -329,7 +348,7 @@ const PolicyDetail_fin = ({ route, navigation }) => {
           visible={isSupportedOpen}
           onShow={() => console.log("AI 정책 매칭")}
           onRequestClose={() => setIsSupportedOpen(false)}
-          transparent={true} // 필요에 따라 true로 설정할 수 있습니다.
+          transparent={true}
           style={{ alignItems: "center" }}
         >
           <TouchableOpacity
@@ -353,13 +372,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // 배경을 반투명하게 설정
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalBackground: {
     flex: 1,
-    justifyContent: "center", // 화면 상단에 위치시키기
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // 배경을 반투명하게 설정
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
     width: "90%",
