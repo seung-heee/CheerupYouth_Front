@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Button, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { OPENAI_API_KEY } from "@env";
 import { SERVER_URL } from "../../components/ServerAddress";
-import Icon from "react-native-vector-icons/MaterialIcons";
+// import Icon from "react-native-vector-icons/MaterialIcons";
+import Icon from "react-native-vector-icons/AntDesign";
 
 const MatchAI = ({ policyKey, setIsSupportedOpen }) => {
   console.log(OPENAI_API_KEY);
   const key = policyKey;
   const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   // 사용자 정보 저장 변수
   const [userChat, setUserChat] = useState("");
@@ -113,6 +114,7 @@ const MatchAI = ({ policyKey, setIsSupportedOpen }) => {
     setPolicyChat(policyChatText);
     setUserChat(userChatText);
 
+    setLoading(true);
     try {
       const requestData = {
         model: "gpt-3.5-turbo",
@@ -135,12 +137,12 @@ const MatchAI = ({ policyKey, setIsSupportedOpen }) => {
           },
           { role: "user", content: userChatText }, // 사용자 조건
           { role: "user", content: policyChatText }, // 정책 조건
-          {
-            role: "user",
-            content:
-              "답변 형식은 각 조건에 간략한 설명을 더한 뒤 조건에 만족하는지 알려줘",
-          },
-          { role: "user", content: "마지막엔 최종적으로 이 정책에 부합한지 알려줘" },
+            {
+              role: "user",
+              content:
+                "답변 형식은 각 조건에 순서대로 번호를 달고 설명을 해줘, 조건마다 간격을 두어 알아보기 쉽도록 해줘",
+            },
+            { role: "user", content: "마지막 결과로 가능 / 불가능을 알려줘 최종 가능하면 check 이모티콘, 불일치하면 X 이모티콘" },
         ],
         temperature: 0.7,
         top_p: 1.0,
@@ -167,39 +169,50 @@ const MatchAI = ({ policyKey, setIsSupportedOpen }) => {
         "Error:",
         error.response ? error.response.data : error.message
       ); // 상세 오류 로그
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-    <View style={styles.modalTop}>
-      <View style={styles.modalTopContainer}>
-        <Text style={styles.modalTitle}>AI 정책 매칭</Text>
-        <Icon name="loop" size={18} color="#2E4B8F" onPress={fetchMemberInfo} />
+      <View style={styles.modalTop}>
+        <View style={styles.modalTopContainer}>
+          <Text style={styles.modalTitle}>AI 정책 매칭</Text>
+          <Icon name="reload1" size={18} color="#2E4B8F" onPress={fetchMemberInfo} />
+        </View>
+        <TouchableOpacity
+          style={styles.closeButton}
+          onPress={() => setIsSupportedOpen(false)}
+        >
+          <Image
+            style={{
+              width: 15,
+              height: 15,
+            }}
+            source={require("../../../assets/images/icon-06.png")}
+          />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.closeButton}
-        onPress={() => setIsSupportedOpen(false)}
-      >
-        <Image
-          style={{
-            width: 15,
-            height: 15,
-          }}
-          source={require("../../../assets/images/icon-06.png")}
-        />
-      </TouchableOpacity>
-    </View>
 
-    <View>
-      <Text>{response}</Text>
-      <Button title="매칭하기" onPress={fetchMemberInfo} />
-      {/* {error && <Text style={{color: 'red'}}>{error}</Text>} */}
-      <Text style={{ fontSize: 12, color: "red", textAlign: "right" }}>
-        제공된 정보는 참고 자료로만 사용하시고, 전적으로 신뢰하지 마시기
-        바랍니다.
-      </Text>
-    </View>
+      <View>
+        {loading ? (
+          <ActivityIndicator 
+          size="large" 
+          color="#2e4b8f" 
+          style={{ padding: 20 }} 
+        />
+        
+        ) : (
+          <Text style={{ paddingTop: 20, paddingBottom: 20 }} >{response}</Text>
+        )}
+        {/* <Button title="매칭하기" onPress={fetchMemberInfo} /> */}
+        {/* {error && <Text style={{color: 'red'}}>{error}</Text>} */}
+        <Text style={{ fontSize: 12, color: "red", textAlign: "right" }}>
+          제공된 정보는 참고 자료로만 사용하시고, 전적으로 신뢰하지 마시기
+          바랍니다.
+        </Text>
+      </View>
     </>
   );
 };
@@ -223,7 +236,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontWeight: "bold",
     color: "#2e4b8f",
-    fontSize: "17px",
     fontSize: 22,
     paddingRight: 5,
   },
